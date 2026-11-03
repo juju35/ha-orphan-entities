@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Prikazuje entitete koje njihova integracija više ne obezbeđuje, kako biste mogli da ih uklonite odjednom.",
+        "data": {
+          "scan_interval": "Interval skeniranja",
+          "grace_period": "Period čekanja nakon pokretanja",
+          "stale_hours": "Zastareo nakon",
+          "include_unknown": "Uključi nepoznate entitete",
+          "ignored_integrations": "Ignorisane integracije",
+          "ignored_entities": "Ignorisani entiteti"
+        },
+        "data_description": {
+          "scan_interval": "Minuti između dva skeniranja. Registar entiteta se skenira i nekoliko sekundi nakon svake izmene.",
+          "grace_period": "Minuti nakon pokretanja Home Assistant-a pre prvog skeniranja, dok integracije podešavaju svoje entitete.",
+          "stale_hours": "Broj sati tokom kojih entitet koji njegova integracija još obezbeđuje mora biti nedostupan (ili nepoznat) da bi bio prikazan. 0 prikazuje samo entitete koji se više ne obezbeđuju.",
+          "include_unknown": "Prikaži i entitete koji su toliko dugo nepoznati. Dugmad, scene i događaji, nepoznati po prirodi, nikada se ne prikazuju.",
+          "ignored_integrations": "Integracije čiji se entiteti nikada ne prikazuju. Unesite domen da biste dodali neku koja nije na listi.",
+          "ignored_entities": "Entiteti koji se nikada ne prikazuju (ID-ovi entiteta). Kartica ih dodaje ovde svojim dugmetom Ignoriši."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities je već podešen.",
+      "single_instance_allowed": "Orphan Entities je već podešen."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcije za Orphan Entities",
+        "data": {
+          "scan_interval": "Interval skeniranja",
+          "grace_period": "Period čekanja nakon pokretanja",
+          "stale_hours": "Zastareo nakon",
+          "include_unknown": "Uključi nepoznate entitete",
+          "ignored_integrations": "Ignorisane integracije",
+          "ignored_entities": "Ignorisani entiteti"
+        },
+        "data_description": {
+          "scan_interval": "Minuti između dva skeniranja. Registar entiteta se skenira i nekoliko sekundi nakon svake izmene.",
+          "grace_period": "Minuti nakon pokretanja Home Assistant-a pre prvog skeniranja, dok integracije podešavaju svoje entitete.",
+          "stale_hours": "Broj sati tokom kojih entitet koji njegova integracija još obezbeđuje mora biti nedostupan (ili nepoznat) da bi bio prikazan. 0 prikazuje samo entitete koji se više ne obezbeđuju.",
+          "include_unknown": "Prikaži i entitete koji su toliko dugo nepoznati. Dugmad, scene i događaji, nepoznati po prirodi, nikada se ne prikazuju.",
+          "ignored_integrations": "Integracije čiji se entiteti nikada ne prikazuju. Unesite domen da biste dodali neku koja nije na listi.",
+          "ignored_entities": "Entiteti koji se nikada ne prikazuju (ID-ovi entiteta). Kartica ih dodaje ovde svojim dugmetom Ignoriši."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Skeniraj sada"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Osiroćeni entiteti",
+        "state_attributes": {
+          "entities": {
+            "name": "Entiteti"
+          },
+          "counts": {
+            "name": "Brojevi"
+          },
+          "removed": {
+            "name": "Uklonjeni"
+          },
+          "stale_hours": {
+            "name": "Zastareo nakon"
+          },
+          "include_unknown": {
+            "name": "Uključi nepoznate"
+          },
+          "ignored_integrations": {
+            "name": "Ignorisane integracije"
+          },
+          "ignored_entities": {
+            "name": "Ignorisani entiteti"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Poslednje skeniranje"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Skeniraj osiroćene entitete",
+      "description": "Pretražuje registar entiteta u potrazi za entitetima koje njihova integracija više ne obezbeđuje."
+    },
+    "remove": {
+      "name": "Ukloni osiroćene entitete",
+      "description": "Uklanja iz registra entiteta entitete koje je prikazalo poslednje skeniranje.",
+      "fields": {
+        "entities": {
+          "name": "Entiteti",
+          "description": "ID-ovi entiteta za uklanjanje. Svaki mora biti na listi osiroćenih entiteta."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignoriši entitete",
+      "description": "Dodaje entitete u ignorisane entitete: više se ne prikazuju.",
+      "fields": {
+        "entities": {
+          "name": "Entiteti",
+          "description": "ID-ovi entiteta za ignorisanje."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities nije učitan." },
+    "starting": { "message": "Home Assistant se još pokreće: prvo skeniranje počinje kada istekne period čekanja." },
+    "no_entities": { "message": "Nema entiteta za uklanjanje." },
+    "too_many": { "message": "Najviše {max} entiteta odjednom." },
+    "not_orphan": { "message": "Nisu na listi osiroćenih entiteta: {entities}. Skenirajte ponovo i pokušajte opet." },
+    "not_registered": { "message": "Nisu u registru entiteta: {entities}." }
+  }
+}

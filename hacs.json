@@ -1,0 +1,8 @@
+{
+  "name": "Orphan Entities",
+  "content_in_root": false,
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "orphan_entities.zip",
+  "homeassistant": "2024.12.0"
+}

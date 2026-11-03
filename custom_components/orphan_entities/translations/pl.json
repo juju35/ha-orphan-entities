@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Wyświetla encje, których ich integracja już nie dostarcza, aby można je było usunąć zbiorczo.",
+        "data": {
+          "scan_interval": "Interwał skanowania",
+          "grace_period": "Okres karencji po uruchomieniu",
+          "stale_hours": "Nieaktualna po",
+          "include_unknown": "Uwzględniaj nieznane encje",
+          "ignored_integrations": "Ignorowane integracje",
+          "ignored_entities": "Ignorowane encje"
+        },
+        "data_description": {
+          "scan_interval": "Minuty między dwoma skanowaniami. Rejestr encji jest też skanowany kilka sekund po każdej zmianie.",
+          "grace_period": "Minuty od uruchomienia Home Assistant do pierwszego skanowania, gdy integracje konfigurują swoje encje.",
+          "stale_hours": "Liczba godzin, przez które encja nadal dostarczana przez swoją integrację musi być niedostępna (lub nieznana), aby została wyświetlona. 0 wyświetla tylko encje, które nie są już dostarczane.",
+          "include_unknown": "Wyświetlaj też encje nieznane przez ten sam czas. Przyciski, sceny i zdarzenia, z natury nieznane, nigdy nie są wyświetlane.",
+          "ignored_integrations": "Integracje, których encje nigdy nie są wyświetlane. Wpisz domenę, aby dodać integrację, której nie ma na liście.",
+          "ignored_entities": "Encje, które nigdy nie są wyświetlane (identyfikatory encji). Karta dodaje je tutaj przyciskiem Ignoruj."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities jest już skonfigurowany.",
+      "single_instance_allowed": "Orphan Entities jest już skonfigurowany."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Orphan Entities",
+        "data": {
+          "scan_interval": "Interwał skanowania",
+          "grace_period": "Okres karencji po uruchomieniu",
+          "stale_hours": "Nieaktualna po",
+          "include_unknown": "Uwzględniaj nieznane encje",
+          "ignored_integrations": "Ignorowane integracje",
+          "ignored_entities": "Ignorowane encje"
+        },
+        "data_description": {
+          "scan_interval": "Minuty między dwoma skanowaniami. Rejestr encji jest też skanowany kilka sekund po każdej zmianie.",
+          "grace_period": "Minuty od uruchomienia Home Assistant do pierwszego skanowania, gdy integracje konfigurują swoje encje.",
+          "stale_hours": "Liczba godzin, przez które encja nadal dostarczana przez swoją integrację musi być niedostępna (lub nieznana), aby została wyświetlona. 0 wyświetla tylko encje, które nie są już dostarczane.",
+          "include_unknown": "Wyświetlaj też encje nieznane przez ten sam czas. Przyciski, sceny i zdarzenia, z natury nieznane, nigdy nie są wyświetlane.",
+          "ignored_integrations": "Integracje, których encje nigdy nie są wyświetlane. Wpisz domenę, aby dodać integrację, której nie ma na liście.",
+          "ignored_entities": "Encje, które nigdy nie są wyświetlane (identyfikatory encji). Karta dodaje je tutaj przyciskiem Ignoruj."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Skanuj teraz"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Osierocone encje",
+        "state_attributes": {
+          "entities": {
+            "name": "Encje"
+          },
+          "counts": {
+            "name": "Liczniki"
+          },
+          "removed": {
+            "name": "Usunięte"
+          },
+          "stale_hours": {
+            "name": "Nieaktualna po"
+          },
+          "include_unknown": {
+            "name": "Uwzględniaj nieznane"
+          },
+          "ignored_integrations": {
+            "name": "Ignorowane integracje"
+          },
+          "ignored_entities": {
+            "name": "Ignorowane encje"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Ostatnie skanowanie"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Skanuj w poszukiwaniu osieroconych encji",
+      "description": "Przeszukuje rejestr encji w poszukiwaniu encji, których ich integracja już nie dostarcza."
+    },
+    "remove": {
+      "name": "Usuń osierocone encje",
+      "description": "Usuwa z rejestru encji encje wyświetlone przez ostatnie skanowanie.",
+      "fields": {
+        "entities": {
+          "name": "Encje",
+          "description": "Identyfikatory encji do usunięcia. Każda musi znajdować się na liście osieroconych encji."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignoruj encje",
+      "description": "Dodaje encje do ignorowanych encji: nie są już wyświetlane.",
+      "fields": {
+        "entities": {
+          "name": "Encje",
+          "description": "Identyfikatory encji do zignorowania."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities nie jest wczytany." },
+    "starting": { "message": "Home Assistant wciąż się uruchamia: pierwsze skanowanie nastąpi po zakończeniu okresu karencji." },
+    "no_entities": { "message": "Brak encji do usunięcia." },
+    "too_many": { "message": "Maksymalnie {max} encji naraz." },
+    "not_orphan": { "message": "Nie ma na liście osieroconych encji: {entities}. Przeskanuj ponownie i spróbuj jeszcze raz." },
+    "not_registered": { "message": "Nie ma w rejestrze encji: {entities}." }
+  }
+}

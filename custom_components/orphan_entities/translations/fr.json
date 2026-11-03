@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Liste les entités que leur intégration ne fournit plus, pour pouvoir les supprimer en masse.",
+        "data": {
+          "scan_interval": "Intervalle d'analyse",
+          "grace_period": "Délai de grâce après le démarrage",
+          "stale_hours": "Obsolète après",
+          "include_unknown": "Inclure les entités inconnues",
+          "ignored_integrations": "Intégrations ignorées",
+          "ignored_entities": "Entités ignorées"
+        },
+        "data_description": {
+          "scan_interval": "Minutes entre deux analyses. Le registre des entités est aussi analysé quelques secondes après chaque modification.",
+          "grace_period": "Minutes après le démarrage de Home Assistant avant la première analyse, le temps que les intégrations créent leurs entités.",
+          "stale_hours": "Heures pendant lesquelles une entité encore fournie par son intégration doit avoir été indisponible (ou inconnue) pour être listée. 0 ne liste que les entités qui ne sont plus fournies.",
+          "include_unknown": "Lister aussi les entités inconnues depuis aussi longtemps. Les boutons, scènes et événements, inconnus par nature, ne sont jamais listés.",
+          "ignored_integrations": "Intégrations dont les entités ne sont jamais listées. Saisissez un domaine pour en ajouter une qui n'est pas dans la liste.",
+          "ignored_entities": "Entités jamais listées (ID d'entité). La carte les ajoute ici avec son bouton Ignorer."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities est déjà configuré.",
+      "single_instance_allowed": "Orphan Entities est déjà configuré."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options d'Orphan Entities",
+        "data": {
+          "scan_interval": "Intervalle d'analyse",
+          "grace_period": "Délai de grâce après le démarrage",
+          "stale_hours": "Obsolète après",
+          "include_unknown": "Inclure les entités inconnues",
+          "ignored_integrations": "Intégrations ignorées",
+          "ignored_entities": "Entités ignorées"
+        },
+        "data_description": {
+          "scan_interval": "Minutes entre deux analyses. Le registre des entités est aussi analysé quelques secondes après chaque modification.",
+          "grace_period": "Minutes après le démarrage de Home Assistant avant la première analyse, le temps que les intégrations créent leurs entités.",
+          "stale_hours": "Heures pendant lesquelles une entité encore fournie par son intégration doit avoir été indisponible (ou inconnue) pour être listée. 0 ne liste que les entités qui ne sont plus fournies.",
+          "include_unknown": "Lister aussi les entités inconnues depuis aussi longtemps. Les boutons, scènes et événements, inconnus par nature, ne sont jamais listés.",
+          "ignored_integrations": "Intégrations dont les entités ne sont jamais listées. Saisissez un domaine pour en ajouter une qui n'est pas dans la liste.",
+          "ignored_entities": "Entités jamais listées (ID d'entité). La carte les ajoute ici avec son bouton Ignorer."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Analyser maintenant"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Entités orphelines",
+        "state_attributes": {
+          "entities": {
+            "name": "Entités"
+          },
+          "counts": {
+            "name": "Décomptes"
+          },
+          "removed": {
+            "name": "Supprimées"
+          },
+          "stale_hours": {
+            "name": "Obsolète après"
+          },
+          "include_unknown": {
+            "name": "Inclure les inconnues"
+          },
+          "ignored_integrations": {
+            "name": "Intégrations ignorées"
+          },
+          "ignored_entities": {
+            "name": "Entités ignorées"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Dernière analyse"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Rechercher les entités orphelines",
+      "description": "Recherche dans le registre des entités celles que leur intégration ne fournit plus."
+    },
+    "remove": {
+      "name": "Supprimer les entités orphelines",
+      "description": "Supprime du registre des entités les entités listées par la dernière analyse.",
+      "fields": {
+        "entities": {
+          "name": "Entités",
+          "description": "ID des entités à supprimer. Chacune doit figurer dans la liste des entités orphelines."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignorer des entités",
+      "description": "Ajoute des entités aux entités ignorées : elles ne sont plus listées.",
+      "fields": {
+        "entities": {
+          "name": "Entités",
+          "description": "ID des entités à ignorer."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities n'est pas chargé." },
+    "starting": { "message": "Home Assistant est encore en cours de démarrage : la première analyse aura lieu à la fin du délai de grâce." },
+    "no_entities": { "message": "Aucune entité à supprimer." },
+    "too_many": { "message": "{max} entités au maximum à la fois." },
+    "not_orphan": { "message": "Absentes de la liste des entités orphelines : {entities}. Relancez une analyse et réessayez." },
+    "not_registered": { "message": "Absentes du registre des entités : {entities}." }
+  }
+}

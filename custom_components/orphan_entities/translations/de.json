@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Listet die Entitäten auf, die ihre Integration nicht mehr bereitstellt, damit du sie gesammelt entfernen kannst.",
+        "data": {
+          "scan_interval": "Scanintervall",
+          "grace_period": "Karenzzeit nach dem Start",
+          "stale_hours": "Veraltet nach",
+          "include_unknown": "Unbekannte Entitäten einbeziehen",
+          "ignored_integrations": "Ignorierte Integrationen",
+          "ignored_entities": "Ignorierte Entitäten"
+        },
+        "data_description": {
+          "scan_interval": "Minuten zwischen zwei Scans. Das Entitätsregister wird außerdem einige Sekunden nach jeder Änderung gescannt.",
+          "grace_period": "Minuten nach dem Start von Home Assistant bis zum ersten Scan, während die Integrationen ihre Entitäten einrichten.",
+          "stale_hours": "Stunden, die eine noch von ihrer Integration bereitgestellte Entität nicht verfügbar (oder unbekannt) gewesen sein muss, um aufgelistet zu werden. 0 listet nur die nicht mehr bereitgestellten Entitäten auf.",
+          "include_unknown": "Auch die Entitäten auflisten, die so lange unbekannt sind. Tasten, Szenen und Ereignisse, die von Natur aus unbekannt sind, werden nie aufgelistet.",
+          "ignored_integrations": "Integrationen, deren Entitäten nie aufgelistet werden. Gib eine Domain ein, um eine nicht aufgeführte hinzuzufügen.",
+          "ignored_entities": "Nie aufgelistete Entitäten (Entitäts-IDs). Die Karte fügt sie hier mit ihrer Schaltfläche „Ignorieren“ hinzu."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities ist bereits eingerichtet.",
+      "single_instance_allowed": "Orphan Entities ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen von Orphan Entities",
+        "data": {
+          "scan_interval": "Scanintervall",
+          "grace_period": "Karenzzeit nach dem Start",
+          "stale_hours": "Veraltet nach",
+          "include_unknown": "Unbekannte Entitäten einbeziehen",
+          "ignored_integrations": "Ignorierte Integrationen",
+          "ignored_entities": "Ignorierte Entitäten"
+        },
+        "data_description": {
+          "scan_interval": "Minuten zwischen zwei Scans. Das Entitätsregister wird außerdem einige Sekunden nach jeder Änderung gescannt.",
+          "grace_period": "Minuten nach dem Start von Home Assistant bis zum ersten Scan, während die Integrationen ihre Entitäten einrichten.",
+          "stale_hours": "Stunden, die eine noch von ihrer Integration bereitgestellte Entität nicht verfügbar (oder unbekannt) gewesen sein muss, um aufgelistet zu werden. 0 listet nur die nicht mehr bereitgestellten Entitäten auf.",
+          "include_unknown": "Auch die Entitäten auflisten, die so lange unbekannt sind. Tasten, Szenen und Ereignisse, die von Natur aus unbekannt sind, werden nie aufgelistet.",
+          "ignored_integrations": "Integrationen, deren Entitäten nie aufgelistet werden. Gib eine Domain ein, um eine nicht aufgeführte hinzuzufügen.",
+          "ignored_entities": "Nie aufgelistete Entitäten (Entitäts-IDs). Die Karte fügt sie hier mit ihrer Schaltfläche „Ignorieren“ hinzu."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Jetzt scannen"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Verwaiste Entitäten",
+        "state_attributes": {
+          "entities": {
+            "name": "Entitäten"
+          },
+          "counts": {
+            "name": "Anzahlen"
+          },
+          "removed": {
+            "name": "Entfernt"
+          },
+          "stale_hours": {
+            "name": "Veraltet nach"
+          },
+          "include_unknown": {
+            "name": "Unbekannte einbeziehen"
+          },
+          "ignored_integrations": {
+            "name": "Ignorierte Integrationen"
+          },
+          "ignored_entities": {
+            "name": "Ignorierte Entitäten"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Letzter Scan"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Nach verwaisten Entitäten scannen",
+      "description": "Durchsucht das Entitätsregister nach den Entitäten, die ihre Integration nicht mehr bereitstellt."
+    },
+    "remove": {
+      "name": "Verwaiste Entitäten entfernen",
+      "description": "Entfernt vom letzten Scan aufgelistete Entitäten aus dem Entitätsregister.",
+      "fields": {
+        "entities": {
+          "name": "Entitäten",
+          "description": "Zu entfernende Entitäts-IDs. Jede muss in der Liste der verwaisten Entitäten stehen."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Entitäten ignorieren",
+      "description": "Fügt Entitäten zu den ignorierten Entitäten hinzu: Sie werden nicht mehr aufgelistet.",
+      "fields": {
+        "entities": {
+          "name": "Entitäten",
+          "description": "Zu ignorierende Entitäts-IDs."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities ist nicht geladen." },
+    "starting": { "message": "Home Assistant startet noch: Der erste Scan läuft, sobald die Karenzzeit abgelaufen ist." },
+    "no_entities": { "message": "Keine Entität zum Entfernen." },
+    "too_many": { "message": "Höchstens {max} Entitäten auf einmal." },
+    "not_orphan": { "message": "Nicht in der Liste der verwaisten Entitäten: {entities}. Erneut scannen und noch einmal versuchen." },
+    "not_registered": { "message": "Nicht im Entitätsregister: {entities}." }
+  }
+}

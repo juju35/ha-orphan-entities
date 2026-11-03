@@ -1,0 +1,16 @@
+{
+  "entity": {
+    "button": {
+      "scan": { "default": "mdi:magnify-scan" }
+    },
+    "sensor": {
+      "orphans": { "default": "mdi:ghost-outline" },
+      "last_scan": { "default": "mdi:clock-check-outline" }
+    }
+  },
+  "services": {
+    "scan": { "service": "mdi:magnify-scan" },
+    "remove": { "service": "mdi:broom" },
+    "ignore": { "service": "mdi:eye-off-outline" }
+  }
+}
