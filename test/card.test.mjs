@@ -185,11 +185,9 @@ test('language follows Home Assistant, then the config, with English as fallback
     ['ru-RU', 'ru'],
     ['uk-UA', 'uk'],
     ['hu', 'hu'],
-    ['ga-IE', 'ga'],
     ['sk', 'sk'],
     ['cs-CZ', 'cs'],
     ['sl', 'sl'],
-    ['mt', 'mt'],
     ['lv-LV', 'lv'],
     ['el-GR', 'el'],
   ])
@@ -402,7 +400,7 @@ test('plurals: 1, 2, 19 and 20 in Romanian; one and other elsewhere', () => {
     [1, 2, 19, 20].map((n) => ro._count('orphans', n)),
     ['1 orfană', '2 orfane', '19 orfane', '20 de orfane'],
   );
-  for (const lang of ['da', 'sv', 'bg', 'hu', 'ga', 'sl', 'mt', 'lv', 'el']) {
+  for (const lang of ['da', 'sv', 'bg', 'hu', 'sl', 'lv', 'el']) {
     const card = render({}, makeHass({ language: lang }));
     assert.equal(card._count('orphans', 1), OE_I18N[lang].orphans_one.replace('{n}', 1), lang);
     assert.equal(card._count('orphans', 7), OE_I18N[lang].orphans_many.replace('{n}', 7), lang);
