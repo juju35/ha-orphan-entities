@@ -5,16 +5,16 @@
 [![Validate](https://github.com/juju35/ha-orphan-entities/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-orphan-entities/actions/workflows/validate.yml)
 [![Lint](https://github.com/juju35/ha-orphan-entities/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-orphan-entities/actions/workflows/lint.yml)
 [![Release](https://img.shields.io/github/v/release/juju35/ha-orphan-entities)](https://github.com/juju35/ha-orphan-entities/releases/latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-orphan-entities/blob/main/LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
-<p align="center"><img src="custom_components/orphan_entities/brand/icon.png" alt="Orphan Entities" width="120"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/custom_components/orphan_entities/brand/icon.png" alt="Orphan Entities" width="120"></p>
 
 Home Assistant integration that tracks the orphaned entities of your entity registry: those their integration no longer provides, and optionally those unavailable or unknown for too long. It comes with a Lovelace card to filter, review and remove them in bulk.
 
 <p align="center">
-  <img src="screenshots/card.png" alt="Orphan Entities card with orphaned entities" width="420">
-  <img src="screenshots/card-dark.png" alt="Orphan Entities card, dark theme" width="420">
+  <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card.png" alt="Orphan Entities card with orphaned entities" width="420">
+  <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-dark.png" alt="Orphan Entities card, dark theme" width="420">
 </p>
 
 Removed integrations, renamed devices and old YAML platforms leave entities behind in the registry. Home Assistant shows them one by one as "not provided"; Orphan Entities lists them all, tells you why each one is listed, and removes the ones you select in one go.
@@ -158,13 +158,13 @@ type: custom:orphan-entities-card
 
 | Orphaned entities | Selection | Confirmation |
 |---|---|---|
-| ![Card](screenshots/card.png) | ![Card, two entities selected](screenshots/card-selected.png) | ![Card, confirmation](screenshots/card-confirm.png) |
-| ![Card, dark theme](screenshots/card-dark.png) | ![Card, two entities selected, dark theme](screenshots/card-selected-dark.png) | ![Card, confirmation, dark theme](screenshots/card-confirm-dark.png) |
+| ![Card](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card.png) | ![Card, two entities selected](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected.png) | ![Card, confirmation](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm.png) |
+| ![Card, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-dark.png) | ![Card, two entities selected, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected-dark.png) | ![Card, confirmation, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm-dark.png) |
 
 | Filtered on a reason | No orphan |
 |---|---|
-| ![Card filtered](screenshots/card-filtered.png) | ![Card, no orphan](screenshots/card-ok.png) |
-| ![Card filtered, dark theme](screenshots/card-filtered-dark.png) | ![Card, no orphan, dark theme](screenshots/card-ok-dark.png) |
+| ![Card filtered](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-filtered.png) | ![Card, no orphan](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-ok.png) |
+| ![Card filtered, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-filtered-dark.png) | ![Card, no orphan, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-ok-dark.png) |
 
 - **Header**: status (*n orphans*, no orphan, waiting for the first scan), time of the last scan and the **Scan now** button. On a narrow card the status takes a second line, shortens, then keeps only its coloured dot
 - **Summary**: orphans, removed since Home Assistant started, ignored (listed on hover)
@@ -195,8 +195,8 @@ type: custom:orphan-entities-mini-card
 
 | Orphaned entities | No orphan | Zoomed in |
 |---|---|---|
-| ![Mini card](screenshots/mini.png) | ![Mini card, no orphan](screenshots/mini-ok.png) | ![Mini card zoomed in](screenshots/mini-zoom.png) |
-| ![Mini card, dark theme](screenshots/mini-dark.png) | ![Mini card, no orphan, dark theme](screenshots/mini-ok-dark.png) | ![Mini card zoomed in, dark theme](screenshots/mini-zoom-dark.png) |
+| ![Mini card](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini.png) | ![Mini card, no orphan](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-ok.png) | ![Mini card zoomed in](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-zoom.png) |
+| ![Mini card, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-dark.png) | ![Mini card, no orphan, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-ok-dark.png) | ![Mini card zoomed in, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-zoom-dark.png) |
 
 - The **detail** button (top right) switches the card to the full [card](#card), with the same options, and back, as does a click anywhere else on the page
 - A reason's chip opens the full card filtered on that reason
@@ -231,7 +231,7 @@ python scripts/screenshots.py      # README screenshots (Playwright)
 ### Releasing
 
 1. Bump the version in `custom_components/orphan_entities/manifest.json`, `const.py` (`VERSION`) and the card (`ORPHAN_ENTITIES_CARD_VERSION`)
-2. Add a `## <version>` section at the top of [CHANGELOG.md](CHANGELOG.md)
+2. Add a `## <version>` section at the top of [CHANGELOG.md](https://github.com/juju35/ha-orphan-entities/blob/main/CHANGELOG.md)
 3. Push to `main`: the **Release** workflow creates the tag and the GitHub release with the changelog section as notes
 
 ## Translations
@@ -268,7 +268,7 @@ Contributions for additional languages are welcome!
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/juju35/ha-orphan-entities/blob/main/LICENSE)
 
 ## Support
 
