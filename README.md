@@ -158,13 +158,13 @@ type: custom:orphan-entities-card
 
 | Orphaned entities | Selection | Confirmation |
 |---|---|---|
-| ![Card](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card.png) | ![Card, two entities selected](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected.png) | ![Card, confirmation](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm.png) |
-| ![Card, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-dark.png) | ![Card, two entities selected, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected-dark.png) | ![Card, confirmation, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card.png" alt="Card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected.png" alt="Card, two entities selected" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm.png" alt="Card, confirmation" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-dark.png" alt="Card, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected-dark.png" alt="Card, two entities selected, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm-dark.png" alt="Card, confirmation, dark theme" width="400"> |
 
 | Filtered on a reason | No orphan |
 |---|---|
-| ![Card filtered](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-filtered.png) | ![Card, no orphan](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-ok.png) |
-| ![Card filtered, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-filtered-dark.png) | ![Card, no orphan, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-ok-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-filtered.png" alt="Card filtered" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-ok.png" alt="Card, no orphan" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-filtered-dark.png" alt="Card filtered, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-ok-dark.png" alt="Card, no orphan, dark theme" width="400"> |
 
 - **Header**: status (*n orphans*, no orphan, waiting for the first scan), time of the last scan and the **Scan now** button. On a narrow card the status takes a second line, shortens, then keeps only its coloured dot
 - **Summary**: orphans, removed since Home Assistant started, ignored (listed on hover)
@@ -195,8 +195,8 @@ type: custom:orphan-entities-mini-card
 
 | Orphaned entities | No orphan | Zoomed in |
 |---|---|---|
-| ![Mini card](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini.png) | ![Mini card, no orphan](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-ok.png) | ![Mini card zoomed in](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-zoom.png) |
-| ![Mini card, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-dark.png) | ![Mini card, no orphan, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-ok-dark.png) | ![Mini card zoomed in, dark theme](https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-zoom-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini.png" alt="Mini card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-ok.png" alt="Mini card, no orphan" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-zoom.png" alt="Mini card zoomed in" width="386"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-dark.png" alt="Mini card, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-ok-dark.png" alt="Mini card, no orphan, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/mini-zoom-dark.png" alt="Mini card zoomed in, dark theme" width="386"> |
 
 - The **detail** button (top right) switches the card to the full [card](#card), with the same options, and back, as does a click anywhere else on the page
 - A reason's chip opens the full card filtered on that reason
