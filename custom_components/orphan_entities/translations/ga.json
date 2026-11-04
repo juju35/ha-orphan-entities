@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Liostaíonn sé na haonáin nach soláthraíonn a gcomhtháthú a thuilleadh, ionas gur féidir iad a bhaint ar an mórchóir.",
+        "data": {
+          "scan_interval": "Eatramh scanta",
+          "grace_period": "Tréimhse chairde tar éis tosú",
+          "stale_hours": "As dáta tar éis",
+          "include_unknown": "Cuir aonáin anaithnide san áireamh",
+          "ignored_integrations": "Comhtháthuithe ar neamhaird",
+          "ignored_entities": "Aonáin ar neamhaird"
+        },
+        "data_description": {
+          "scan_interval": "Nóiméid idir dhá scanadh. Scanáltar clárlann na n-aonán freisin cúpla soicind tar éis gach athraithe.",
+          "grace_period": "Nóiméid tar éis do Home Assistant tosú roimh an gcéad scanadh, fad a chruthaíonn na comhtháthuithe a n-aonáin.",
+          "stale_hours": "Uaireanta a chaithfidh aonán atá fós á sholáthar ag a chomhtháthú a bheith gan a bheith ar fáil (nó anaithnid) le go liostófar é. Ní liostaíonn 0 ach na haonáin nach soláthraítear a thuilleadh.",
+          "include_unknown": "Liostaigh freisin na haonáin atá anaithnid chomh fada sin. Ní liostaítear riamh cnaipí, radhairc ná imeachtaí, atá anaithnid de réir nádúir.",
+          "ignored_integrations": "Comhtháthuithe nach liostaítear a n-aonáin riamh. Clóscríobh fearann chun ceann nach bhfuil sa liosta a chur leis.",
+          "ignored_entities": "Aonáin nach liostaítear riamh (aitheantais aonán). Cuireann an cárta anseo iad lena chnaipe Déan neamhaird."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Tá Orphan Entities cumraithe cheana féin.",
+      "single_instance_allowed": "Tá Orphan Entities cumraithe cheana féin."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Roghanna Orphan Entities",
+        "data": {
+          "scan_interval": "Eatramh scanta",
+          "grace_period": "Tréimhse chairde tar éis tosú",
+          "stale_hours": "As dáta tar éis",
+          "include_unknown": "Cuir aonáin anaithnide san áireamh",
+          "ignored_integrations": "Comhtháthuithe ar neamhaird",
+          "ignored_entities": "Aonáin ar neamhaird"
+        },
+        "data_description": {
+          "scan_interval": "Nóiméid idir dhá scanadh. Scanáltar clárlann na n-aonán freisin cúpla soicind tar éis gach athraithe.",
+          "grace_period": "Nóiméid tar éis do Home Assistant tosú roimh an gcéad scanadh, fad a chruthaíonn na comhtháthuithe a n-aonáin.",
+          "stale_hours": "Uaireanta a chaithfidh aonán atá fós á sholáthar ag a chomhtháthú a bheith gan a bheith ar fáil (nó anaithnid) le go liostófar é. Ní liostaíonn 0 ach na haonáin nach soláthraítear a thuilleadh.",
+          "include_unknown": "Liostaigh freisin na haonáin atá anaithnid chomh fada sin. Ní liostaítear riamh cnaipí, radhairc ná imeachtaí, atá anaithnid de réir nádúir.",
+          "ignored_integrations": "Comhtháthuithe nach liostaítear a n-aonáin riamh. Clóscríobh fearann chun ceann nach bhfuil sa liosta a chur leis.",
+          "ignored_entities": "Aonáin nach liostaítear riamh (aitheantais aonán). Cuireann an cárta anseo iad lena chnaipe Déan neamhaird."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Scanáil anois"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Aonáin dhílleachta",
+        "state_attributes": {
+          "entities": {
+            "name": "Aonáin"
+          },
+          "counts": {
+            "name": "Comhaireamh"
+          },
+          "removed": {
+            "name": "Bainte"
+          },
+          "stale_hours": {
+            "name": "As dáta tar éis"
+          },
+          "include_unknown": {
+            "name": "Cuir anaithnide san áireamh"
+          },
+          "ignored_integrations": {
+            "name": "Comhtháthuithe ar neamhaird"
+          },
+          "ignored_entities": {
+            "name": "Aonáin ar neamhaird"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "An scanadh deireanach"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Scanáil le haghaidh aonán dílleachta",
+      "description": "Cuardaíonn sé clárlann na n-aonán le haghaidh na n-aonán nach soláthraíonn a gcomhtháthú a thuilleadh."
+    },
+    "remove": {
+      "name": "Bain aonáin dhílleachta",
+      "description": "Baineann sé de chlárlann na n-aonán aonáin a liostaigh an scanadh deireanach.",
+      "fields": {
+        "entities": {
+          "name": "Aonáin",
+          "description": "Aitheantais na n-aonán le baint. Caithfidh gach ceann acu a bheith i liosta na n-aonán dílleachta."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Déan neamhaird d'aonáin",
+      "description": "Cuireann sé aonáin leis na haonáin ar neamhaird: ní liostaítear a thuilleadh iad.",
+      "fields": {
+        "entities": {
+          "name": "Aonáin",
+          "description": "Aitheantais na n-aonán le neamhaird a dhéanamh díobh."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Níl Orphan Entities luchtaithe." },
+    "starting": { "message": "Tá Home Assistant fós ag tosú: rithfidh an chéad scanadh nuair a bheidh an tréimhse chairde thart." },
+    "no_entities": { "message": "Níl aon aonán le baint." },
+    "too_many": { "message": "{max} aonán ar a mhéad ag an am céanna." },
+    "not_orphan": { "message": "Níl siad i liosta na n-aonán dílleachta: {entities}. Scanáil arís agus bain triail eile as." },
+    "not_registered": { "message": "Níl siad i gclárlann na n-aonán: {entities}." }
+  }
+}

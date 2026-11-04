@@ -14,7 +14,7 @@ custom_components/orphan_entities/
 ├── sensor.py        # orphans (count + entities/counts/removed/stale_hours/include_unknown/ignored_*), last_scan
 ├── entity.py        # Shared service device, listener on OrphanScanner
 ├── frontend/orphan-entities-card.js   # custom:orphan-entities-card + custom:orphan-entities-mini-card (subclass: compact view, detail button toggling the full view)
-├── const.py / icons.json / services.yaml / translations/{en,fr,de,es,it,nl,pt,pt-BR,pl,sr,sr-Latn}.json / brand/
+├── const.py / icons.json / services.yaml / translations/{en,fr,de,es,it,nl,pt,pt-BR,pl,sr,sr-Latn,ro,da,sv,bg,ru,uk,hu,ga,sk,cs,sl,mt,lv,el}.json / brand/
 ```
 
 ## Rules
