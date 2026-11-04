@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Parāda vienības, ko to integrācija vairs nenodrošina, lai tās varētu noņemt vienlaikus.",
+        "data": {
+          "scan_interval": "Skenēšanas intervāls",
+          "grace_period": "Nogaidīšanas laiks pēc palaišanas",
+          "stale_hours": "Novecojusi pēc",
+          "include_unknown": "Iekļaut nezināmas vienības",
+          "ignored_integrations": "Ignorētās integrācijas",
+          "ignored_entities": "Ignorētās vienības"
+        },
+        "data_description": {
+          "scan_interval": "Minūtes starp divām skenēšanām. Vienību reģistrs tiek skenēts arī dažas sekundes pēc katras izmaiņas.",
+          "grace_period": "Minūtes pēc Home Assistant palaišanas līdz pirmajai skenēšanai, kamēr integrācijas izveido savas vienības.",
+          "stale_hours": "Stundas, cik ilgi vienībai, ko tās integrācija joprojām nodrošina, jābūt nepieejamai (vai nezināmai), lai tā tiktu parādīta. 0 parāda tikai vienības, kas vairs netiek nodrošinātas.",
+          "include_unknown": "Rādīt arī vienības, kas tikpat ilgi ir nezināmas. Pogas, ainas un notikumi, kas pēc būtības ir nezināmi, nekad netiek rādīti.",
+          "ignored_integrations": "Integrācijas, kuru vienības nekad netiek rādītas. Ievadiet domēnu, lai pievienotu integrāciju, kuras nav sarakstā.",
+          "ignored_entities": "Vienības, kas nekad netiek rādītas (vienību ID). Karte tās šeit pievieno ar savu pogu Ignorēt."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities jau ir konfigurēts.",
+      "single_instance_allowed": "Orphan Entities jau ir konfigurēts."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Orphan Entities opcijas",
+        "data": {
+          "scan_interval": "Skenēšanas intervāls",
+          "grace_period": "Nogaidīšanas laiks pēc palaišanas",
+          "stale_hours": "Novecojusi pēc",
+          "include_unknown": "Iekļaut nezināmas vienības",
+          "ignored_integrations": "Ignorētās integrācijas",
+          "ignored_entities": "Ignorētās vienības"
+        },
+        "data_description": {
+          "scan_interval": "Minūtes starp divām skenēšanām. Vienību reģistrs tiek skenēts arī dažas sekundes pēc katras izmaiņas.",
+          "grace_period": "Minūtes pēc Home Assistant palaišanas līdz pirmajai skenēšanai, kamēr integrācijas izveido savas vienības.",
+          "stale_hours": "Stundas, cik ilgi vienībai, ko tās integrācija joprojām nodrošina, jābūt nepieejamai (vai nezināmai), lai tā tiktu parādīta. 0 parāda tikai vienības, kas vairs netiek nodrošinātas.",
+          "include_unknown": "Rādīt arī vienības, kas tikpat ilgi ir nezināmas. Pogas, ainas un notikumi, kas pēc būtības ir nezināmi, nekad netiek rādīti.",
+          "ignored_integrations": "Integrācijas, kuru vienības nekad netiek rādītas. Ievadiet domēnu, lai pievienotu integrāciju, kuras nav sarakstā.",
+          "ignored_entities": "Vienības, kas nekad netiek rādītas (vienību ID). Karte tās šeit pievieno ar savu pogu Ignorēt."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Skenēt tagad"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Pamestas vienības",
+        "state_attributes": {
+          "entities": {
+            "name": "Vienības"
+          },
+          "counts": {
+            "name": "Skaits"
+          },
+          "removed": {
+            "name": "Noņemtas"
+          },
+          "stale_hours": {
+            "name": "Novecojusi pēc"
+          },
+          "include_unknown": {
+            "name": "Iekļaut nezināmās"
+          },
+          "ignored_integrations": {
+            "name": "Ignorētās integrācijas"
+          },
+          "ignored_entities": {
+            "name": "Ignorētās vienības"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Pēdējā skenēšana"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Meklēt pamestas vienības",
+      "description": "Meklē vienību reģistrā vienības, ko to integrācija vairs nenodrošina."
+    },
+    "remove": {
+      "name": "Noņemt pamestas vienības",
+      "description": "Noņem no vienību reģistra vienības, ko parādīja pēdējā skenēšana.",
+      "fields": {
+        "entities": {
+          "name": "Vienības",
+          "description": "Noņemamo vienību ID. Katrai jābūt pamesto vienību sarakstā."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignorēt vienības",
+      "description": "Pievieno vienības ignorētajām vienībām: tās vairs netiek rādītas.",
+      "fields": {
+        "entities": {
+          "name": "Vienības",
+          "description": "Ignorējamo vienību ID."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities nav ielādēts." },
+    "starting": { "message": "Home Assistant joprojām tiek palaists: pirmā skenēšana notiks pēc nogaidīšanas laika beigām." },
+    "no_entities": { "message": "Nav noņemamu vienību." },
+    "too_many": { "message": "Vienlaikus ne vairāk kā {max} vienības." },
+    "not_orphan": { "message": "Nav pamesto vienību sarakstā: {entities}. Skenējiet vēlreiz un mēģiniet vēlreiz." },
+    "not_registered": { "message": "Nav vienību reģistrā: {entities}." }
+  }
+}

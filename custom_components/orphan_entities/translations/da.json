@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Viser de entiteter, som deres integration ikke længere leverer, så du kan fjerne dem samlet.",
+        "data": {
+          "scan_interval": "Scanningsinterval",
+          "grace_period": "Ventetid efter opstart",
+          "stale_hours": "Forældet efter",
+          "include_unknown": "Medtag ukendte entiteter",
+          "ignored_integrations": "Ignorerede integrationer",
+          "ignored_entities": "Ignorerede entiteter"
+        },
+        "data_description": {
+          "scan_interval": "Minutter mellem to scanninger. Entitetsregistret scannes også et par sekunder efter hver ændring.",
+          "grace_period": "Minutter efter Home Assistants opstart før den første scanning, mens integrationerne opretter deres entiteter.",
+          "stale_hours": "Timer, en entitet, der stadig leveres af sin integration, skal have været utilgængelig (eller ukendt) for at blive vist. 0 viser kun de entiteter, der ikke længere leveres.",
+          "include_unknown": "Vis også de entiteter, der har været ukendte lige så længe. Knapper, scener og hændelser, der er ukendte af natur, vises aldrig.",
+          "ignored_integrations": "Integrationer, hvis entiteter aldrig vises. Skriv et domæne for at tilføje en, der ikke er på listen.",
+          "ignored_entities": "Entiteter, der aldrig vises (entitets-ID'er). Kortet tilføjer dem her med sin Ignorer-knap."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities er allerede konfigureret.",
+      "single_instance_allowed": "Orphan Entities er allerede konfigureret."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Indstillinger for Orphan Entities",
+        "data": {
+          "scan_interval": "Scanningsinterval",
+          "grace_period": "Ventetid efter opstart",
+          "stale_hours": "Forældet efter",
+          "include_unknown": "Medtag ukendte entiteter",
+          "ignored_integrations": "Ignorerede integrationer",
+          "ignored_entities": "Ignorerede entiteter"
+        },
+        "data_description": {
+          "scan_interval": "Minutter mellem to scanninger. Entitetsregistret scannes også et par sekunder efter hver ændring.",
+          "grace_period": "Minutter efter Home Assistants opstart før den første scanning, mens integrationerne opretter deres entiteter.",
+          "stale_hours": "Timer, en entitet, der stadig leveres af sin integration, skal have været utilgængelig (eller ukendt) for at blive vist. 0 viser kun de entiteter, der ikke længere leveres.",
+          "include_unknown": "Vis også de entiteter, der har været ukendte lige så længe. Knapper, scener og hændelser, der er ukendte af natur, vises aldrig.",
+          "ignored_integrations": "Integrationer, hvis entiteter aldrig vises. Skriv et domæne for at tilføje en, der ikke er på listen.",
+          "ignored_entities": "Entiteter, der aldrig vises (entitets-ID'er). Kortet tilføjer dem her med sin Ignorer-knap."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Scan nu"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Forældreløse entiteter",
+        "state_attributes": {
+          "entities": {
+            "name": "Entiteter"
+          },
+          "counts": {
+            "name": "Antal"
+          },
+          "removed": {
+            "name": "Fjernet"
+          },
+          "stale_hours": {
+            "name": "Forældet efter"
+          },
+          "include_unknown": {
+            "name": "Medtag ukendte"
+          },
+          "ignored_integrations": {
+            "name": "Ignorerede integrationer"
+          },
+          "ignored_entities": {
+            "name": "Ignorerede entiteter"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Seneste scanning"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Scan efter forældreløse entiteter",
+      "description": "Gennemsøger entitetsregistret efter de entiteter, som deres integration ikke længere leverer."
+    },
+    "remove": {
+      "name": "Fjern forældreløse entiteter",
+      "description": "Fjerner entiteter, der er fundet ved den seneste scanning, fra entitetsregistret.",
+      "fields": {
+        "entities": {
+          "name": "Entiteter",
+          "description": "Entitets-ID'er, der skal fjernes. Hver af dem skal være på listen over forældreløse entiteter."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignorer entiteter",
+      "description": "Føjer entiteter til de ignorerede entiteter: de vises ikke længere.",
+      "fields": {
+        "entities": {
+          "name": "Entiteter",
+          "description": "Entitets-ID'er, der skal ignoreres."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities er ikke indlæst." },
+    "starting": { "message": "Home Assistant starter stadig: den første scanning kører, når ventetiden er overstået." },
+    "no_entities": { "message": "Ingen entiteter at fjerne." },
+    "too_many": { "message": "Højst {max} entiteter ad gangen." },
+    "not_orphan": { "message": "Ikke på listen over forældreløse entiteter: {entities}. Scan igen, og prøv igen." },
+    "not_registered": { "message": "Ikke i entitetsregistret: {entities}." }
+  }
+}

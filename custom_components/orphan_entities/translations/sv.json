@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Listar de entiteter som deras integration inte längre tillhandahåller, så att du kan ta bort dem samtidigt.",
+        "data": {
+          "scan_interval": "Skanningsintervall",
+          "grace_period": "Väntetid efter start",
+          "stale_hours": "Inaktuell efter",
+          "include_unknown": "Inkludera okända entiteter",
+          "ignored_integrations": "Ignorerade integrationer",
+          "ignored_entities": "Ignorerade entiteter"
+        },
+        "data_description": {
+          "scan_interval": "Minuter mellan två skanningar. Entitetsregistret skannas också några sekunder efter varje ändring.",
+          "grace_period": "Minuter efter att Home Assistant har startat innan den första skanningen, medan integrationerna skapar sina entiteter.",
+          "stale_hours": "Timmar som en entitet som fortfarande tillhandahålls av sin integration måste ha varit otillgänglig (eller okänd) för att listas. 0 listar bara de entiteter som inte längre tillhandahålls.",
+          "include_unknown": "Lista även de entiteter som har varit okända lika länge. Knappar, scener och händelser, som är okända till sin natur, listas aldrig.",
+          "ignored_integrations": "Integrationer vars entiteter aldrig listas. Skriv en domän för att lägga till en som inte finns i listan.",
+          "ignored_entities": "Entiteter som aldrig listas (entitets-ID:n). Kortet lägger till dem här med sin Ignorera-knapp."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities är redan konfigurerad.",
+      "single_instance_allowed": "Orphan Entities är redan konfigurerad."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Alternativ för Orphan Entities",
+        "data": {
+          "scan_interval": "Skanningsintervall",
+          "grace_period": "Väntetid efter start",
+          "stale_hours": "Inaktuell efter",
+          "include_unknown": "Inkludera okända entiteter",
+          "ignored_integrations": "Ignorerade integrationer",
+          "ignored_entities": "Ignorerade entiteter"
+        },
+        "data_description": {
+          "scan_interval": "Minuter mellan två skanningar. Entitetsregistret skannas också några sekunder efter varje ändring.",
+          "grace_period": "Minuter efter att Home Assistant har startat innan den första skanningen, medan integrationerna skapar sina entiteter.",
+          "stale_hours": "Timmar som en entitet som fortfarande tillhandahålls av sin integration måste ha varit otillgänglig (eller okänd) för att listas. 0 listar bara de entiteter som inte längre tillhandahålls.",
+          "include_unknown": "Lista även de entiteter som har varit okända lika länge. Knappar, scener och händelser, som är okända till sin natur, listas aldrig.",
+          "ignored_integrations": "Integrationer vars entiteter aldrig listas. Skriv en domän för att lägga till en som inte finns i listan.",
+          "ignored_entities": "Entiteter som aldrig listas (entitets-ID:n). Kortet lägger till dem här med sin Ignorera-knapp."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Skanna nu"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Föräldralösa entiteter",
+        "state_attributes": {
+          "entities": {
+            "name": "Entiteter"
+          },
+          "counts": {
+            "name": "Antal"
+          },
+          "removed": {
+            "name": "Borttagna"
+          },
+          "stale_hours": {
+            "name": "Inaktuell efter"
+          },
+          "include_unknown": {
+            "name": "Inkludera okända"
+          },
+          "ignored_integrations": {
+            "name": "Ignorerade integrationer"
+          },
+          "ignored_entities": {
+            "name": "Ignorerade entiteter"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Senaste skanning"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Sök efter föräldralösa entiteter",
+      "description": "Söker i entitetsregistret efter de entiteter som deras integration inte längre tillhandahåller."
+    },
+    "remove": {
+      "name": "Ta bort föräldralösa entiteter",
+      "description": "Tar bort entiteter som listats av den senaste skanningen från entitetsregistret.",
+      "fields": {
+        "entities": {
+          "name": "Entiteter",
+          "description": "Entitets-ID:n som ska tas bort. Var och en måste finnas i listan över föräldralösa entiteter."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignorera entiteter",
+      "description": "Lägger till entiteter bland de ignorerade entiteterna: de listas inte längre.",
+      "fields": {
+        "entities": {
+          "name": "Entiteter",
+          "description": "Entitets-ID:n som ska ignoreras."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities är inte inläst." },
+    "starting": { "message": "Home Assistant startar fortfarande: den första skanningen körs när väntetiden är över." },
+    "no_entities": { "message": "Ingen entitet att ta bort." },
+    "too_many": { "message": "Högst {max} entiteter åt gången." },
+    "not_orphan": { "message": "Finns inte i listan över föräldralösa entiteter: {entities}. Skanna igen och försök på nytt." },
+    "not_registered": { "message": "Finns inte i entitetsregistret: {entities}." }
+  }
+}

@@ -31,7 +31,7 @@ Removed integrations, renamed devices and old YAML platforms leave entities behi
 - `orphan_entities.scan`, `orphan_entities.remove` and `orphan_entities.ignore` **actions** for administrators, `orphan_entities_removed` **event**
 - **Lovelace card** bundled with the integration: search, integration and reason filters, selection one by one or of every match, **Remove** and **Ignore** in bulk
 - **Mini card**: the orphans by reason on two lines, with a detail button showing the full card
-- English, French, German, Spanish, Italian, Dutch, European Portuguese, Polish and Serbian (Cyrillic and Latin); pt-BR uses the European Portuguese texts
+- English, French, German, Spanish, Italian, Dutch, European Portuguese, Polish, Serbian (Cyrillic and Latin), Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek; pt-BR uses the European Portuguese texts
 
 ## Prerequisites
 
@@ -182,7 +182,7 @@ Every option is in the visual editor:
 | `max_rows` | `25` | Rows shown before **Show all**, from 1 to 500 |
 | `scan_button` | `true` | **Scan now** button in the header. It presses the button entity, so any user who sees the card can scan |
 | `hide_when_empty` | `false` | Hide the card while there is no orphan |
-| `language` | Home Assistant's | `en`, `fr`, `de`, `es`, `it`, `nl`, `pt`, `pl`, `sr` or `sr-Latn` |
+| `language` | Home Assistant's | `en`, `fr`, `de`, `es`, `it`, `nl`, `pt`, `pl`, `sr`, `sr-Latn`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` |
 
 ### Mini card
 
@@ -248,6 +248,18 @@ The integration and its card follow the language of Home Assistant. Currently su
 | Português (Portugal) | `pt` |
 | Português (Brasil) | `pt-BR` (pt-BR uses the European Portuguese texts) |
 | Polski | `pl` |
+| Română | `ro` |
+| Dansk | `da` |
+| Svenska | `sv` |
+| Български | `bg` |
+| Русский | `ru` |
+| Українська | `uk` |
+| Magyar | `hu` |
+| Slovenčina | `sk` |
+| Čeština | `cs` |
+| Slovenščina | `sl` |
+| Latviešu | `lv` |
+| Ελληνικά | `el` |
 | Српски | `sr` |
 | Srpski (latinica) | `sr-Latn` |
 

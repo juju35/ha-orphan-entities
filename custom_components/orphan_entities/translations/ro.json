@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Listează entitățile pe care integrarea lor nu le mai furnizează, pentru a le putea elimina în masă.",
+        "data": {
+          "scan_interval": "Interval de scanare",
+          "grace_period": "Perioadă de grație după pornire",
+          "stale_hours": "Învechită după",
+          "include_unknown": "Include entitățile necunoscute",
+          "ignored_integrations": "Integrări ignorate",
+          "ignored_entities": "Entități ignorate"
+        },
+        "data_description": {
+          "scan_interval": "Minute între două scanări. Registrul entităților este scanat și la câteva secunde după fiecare modificare.",
+          "grace_period": "Minute după pornirea Home Assistant înainte de prima scanare, cât timp integrările își creează entitățile.",
+          "stale_hours": "Ore în care o entitate încă furnizată de integrarea sa trebuie să fi fost indisponibilă (sau necunoscută) pentru a fi listată. 0 listează doar entitățile care nu mai sunt furnizate.",
+          "include_unknown": "Listează și entitățile necunoscute de tot atâta timp. Butoanele, scenele și evenimentele, necunoscute prin natura lor, nu sunt listate niciodată.",
+          "ignored_integrations": "Integrări ale căror entități nu sunt listate niciodată. Tastați un domeniu pentru a adăuga una care nu apare în listă.",
+          "ignored_entities": "Entități care nu sunt listate niciodată (ID-uri de entitate). Cardul le adaugă aici cu butonul său Ignoră."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities este deja configurat.",
+      "single_instance_allowed": "Orphan Entities este deja configurat."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opțiuni Orphan Entities",
+        "data": {
+          "scan_interval": "Interval de scanare",
+          "grace_period": "Perioadă de grație după pornire",
+          "stale_hours": "Învechită după",
+          "include_unknown": "Include entitățile necunoscute",
+          "ignored_integrations": "Integrări ignorate",
+          "ignored_entities": "Entități ignorate"
+        },
+        "data_description": {
+          "scan_interval": "Minute între două scanări. Registrul entităților este scanat și la câteva secunde după fiecare modificare.",
+          "grace_period": "Minute după pornirea Home Assistant înainte de prima scanare, cât timp integrările își creează entitățile.",
+          "stale_hours": "Ore în care o entitate încă furnizată de integrarea sa trebuie să fi fost indisponibilă (sau necunoscută) pentru a fi listată. 0 listează doar entitățile care nu mai sunt furnizate.",
+          "include_unknown": "Listează și entitățile necunoscute de tot atâta timp. Butoanele, scenele și evenimentele, necunoscute prin natura lor, nu sunt listate niciodată.",
+          "ignored_integrations": "Integrări ale căror entități nu sunt listate niciodată. Tastați un domeniu pentru a adăuga una care nu apare în listă.",
+          "ignored_entities": "Entități care nu sunt listate niciodată (ID-uri de entitate). Cardul le adaugă aici cu butonul său Ignoră."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Scanează acum"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Entități orfane",
+        "state_attributes": {
+          "entities": {
+            "name": "Entități"
+          },
+          "counts": {
+            "name": "Numărători"
+          },
+          "removed": {
+            "name": "Eliminate"
+          },
+          "stale_hours": {
+            "name": "Învechită după"
+          },
+          "include_unknown": {
+            "name": "Include necunoscutele"
+          },
+          "ignored_integrations": {
+            "name": "Integrări ignorate"
+          },
+          "ignored_entities": {
+            "name": "Entități ignorate"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Ultima scanare"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Scanează entitățile orfane",
+      "description": "Caută în registrul entităților entitățile pe care integrarea lor nu le mai furnizează."
+    },
+    "remove": {
+      "name": "Elimină entitățile orfane",
+      "description": "Elimină din registrul entităților entitățile listate de ultima scanare.",
+      "fields": {
+        "entities": {
+          "name": "Entități",
+          "description": "ID-urile entităților de eliminat. Fiecare trebuie să fie în lista entităților orfane."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignoră entități",
+      "description": "Adaugă entități la entitățile ignorate: nu mai sunt listate.",
+      "fields": {
+        "entities": {
+          "name": "Entități",
+          "description": "ID-urile entităților de ignorat."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities nu este încărcat." },
+    "starting": { "message": "Home Assistant încă pornește: prima scanare va rula la sfârșitul perioadei de grație." },
+    "no_entities": { "message": "Nicio entitate de eliminat." },
+    "too_many": { "message": "Cel mult {max} entități odată." },
+    "not_orphan": { "message": "Nu sunt în lista entităților orfane: {entities}. Scanați din nou și reîncercați." },
+    "not_registered": { "message": "Nu sunt în registrul entităților: {entities}." }
+  }
+}

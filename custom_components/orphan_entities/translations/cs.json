@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Zobrazuje entity, které jejich integrace již neposkytuje, abyste je mohli hromadně odebrat.",
+        "data": {
+          "scan_interval": "Interval skenování",
+          "grace_period": "Čekací doba po spuštění",
+          "stale_hours": "Zastaralá po",
+          "include_unknown": "Zahrnout neznámé entity",
+          "ignored_integrations": "Ignorované integrace",
+          "ignored_entities": "Ignorované entity"
+        },
+        "data_description": {
+          "scan_interval": "Minuty mezi dvěma skenováními. Registr entit se skenuje také několik sekund po každé změně.",
+          "grace_period": "Minuty po spuštění Home Assistant před prvním skenováním, než integrace vytvoří své entity.",
+          "stale_hours": "Počet hodin, po které musí být entita stále poskytovaná svou integrací nedostupná (nebo neznámá), aby byla zobrazena. 0 zobrazí pouze entity, které se již neposkytují.",
+          "include_unknown": "Zobrazit také entity, které jsou stejně dlouho neznámé. Tlačítka, scény a události, které jsou ze své podstaty neznámé, se nikdy nezobrazují.",
+          "ignored_integrations": "Integrace, jejichž entity se nikdy nezobrazují. Zadejte doménu a přidejte integraci, která není v seznamu.",
+          "ignored_entities": "Entity, které se nikdy nezobrazují (ID entit). Karta je sem přidává tlačítkem Ignorovat."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Orphan Entities je již nastaveno.",
+      "single_instance_allowed": "Orphan Entities je již nastaveno."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Orphan Entities",
+        "data": {
+          "scan_interval": "Interval skenování",
+          "grace_period": "Čekací doba po spuštění",
+          "stale_hours": "Zastaralá po",
+          "include_unknown": "Zahrnout neznámé entity",
+          "ignored_integrations": "Ignorované integrace",
+          "ignored_entities": "Ignorované entity"
+        },
+        "data_description": {
+          "scan_interval": "Minuty mezi dvěma skenováními. Registr entit se skenuje také několik sekund po každé změně.",
+          "grace_period": "Minuty po spuštění Home Assistant před prvním skenováním, než integrace vytvoří své entity.",
+          "stale_hours": "Počet hodin, po které musí být entita stále poskytovaná svou integrací nedostupná (nebo neznámá), aby byla zobrazena. 0 zobrazí pouze entity, které se již neposkytují.",
+          "include_unknown": "Zobrazit také entity, které jsou stejně dlouho neznámé. Tlačítka, scény a události, které jsou ze své podstaty neznámé, se nikdy nezobrazují.",
+          "ignored_integrations": "Integrace, jejichž entity se nikdy nezobrazují. Zadejte doménu a přidejte integraci, která není v seznamu.",
+          "ignored_entities": "Entity, které se nikdy nezobrazují (ID entit). Karta je sem přidává tlačítkem Ignorovat."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Skenovat nyní"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Osiřelé entity",
+        "state_attributes": {
+          "entities": {
+            "name": "Entity"
+          },
+          "counts": {
+            "name": "Počty"
+          },
+          "removed": {
+            "name": "Odebrané"
+          },
+          "stale_hours": {
+            "name": "Zastaralá po"
+          },
+          "include_unknown": {
+            "name": "Zahrnout neznámé"
+          },
+          "ignored_integrations": {
+            "name": "Ignorované integrace"
+          },
+          "ignored_entities": {
+            "name": "Ignorované entity"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Poslední skenování"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Vyhledat osiřelé entity",
+      "description": "Vyhledá v registru entit entity, které jejich integrace již neposkytuje."
+    },
+    "remove": {
+      "name": "Odebrat osiřelé entity",
+      "description": "Odebere z registru entit entity zobrazené posledním skenováním.",
+      "fields": {
+        "entities": {
+          "name": "Entity",
+          "description": "ID entit k odebrání. Každá musí být v seznamu osiřelých entit."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Ignorovat entity",
+      "description": "Přidá entity mezi ignorované entity: již se nebudou zobrazovat.",
+      "fields": {
+        "entities": {
+          "name": "Entity",
+          "description": "ID entit k ignorování."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Orphan Entities není načteno." },
+    "starting": { "message": "Home Assistant se stále spouští: první skenování proběhne po uplynutí čekací doby." },
+    "no_entities": { "message": "Žádná entita k odebrání." },
+    "too_many": { "message": "Najednou nejvýše {max} entit." },
+    "not_orphan": { "message": "Nejsou v seznamu osiřelých entit: {entities}. Skenujte znovu a zkuste to znovu." },
+    "not_registered": { "message": "Nejsou v registru entit: {entities}." }
+  }
+}

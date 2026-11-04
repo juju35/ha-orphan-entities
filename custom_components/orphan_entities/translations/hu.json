@@ -1,0 +1,125 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Orphan Entities",
+        "description": "Listázza azokat az entitásokat, amelyeket az integrációjuk már nem biztosít, hogy egyszerre eltávolíthassa őket.",
+        "data": {
+          "scan_interval": "Vizsgálati időköz",
+          "grace_period": "Türelmi idő indulás után",
+          "stale_hours": "Elavult ennyi idő után",
+          "include_unknown": "Ismeretlen entitások is",
+          "ignored_integrations": "Figyelmen kívül hagyott integrációk",
+          "ignored_entities": "Figyelmen kívül hagyott entitások"
+        },
+        "data_description": {
+          "scan_interval": "Két vizsgálat között eltelt percek. Az entitásnyilvántartás minden változás után néhány másodperccel is vizsgálatra kerül.",
+          "grace_period": "A Home Assistant indulása utáni percek az első vizsgálat előtt, amíg az integrációk létrehozzák az entitásaikat.",
+          "stale_hours": "Ennyi órán át kell nem elérhetőnek (vagy ismeretlennek) lennie egy integrációja által még biztosított entitásnak ahhoz, hogy listázva legyen. 0 esetén csak a már nem biztosított entitások jelennek meg.",
+          "include_unknown": "Az ugyanennyi ideje ismeretlen entitások listázása is. A gombok, jelenetek és események, amelyek természetüknél fogva ismeretlenek, soha nem jelennek meg.",
+          "ignored_integrations": "Integrációk, amelyek entitásai soha nem jelennek meg. Írjon be egy domaint, hogy hozzáadjon egy olyat, amely nincs a listában.",
+          "ignored_entities": "Soha nem listázott entitások (entitásazonosítók). A kártya Mellőzés gombjával ide veszi fel őket."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Az Orphan Entities már be van állítva.",
+      "single_instance_allowed": "Az Orphan Entities már be van állítva."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Orphan Entities beállításai",
+        "data": {
+          "scan_interval": "Vizsgálati időköz",
+          "grace_period": "Türelmi idő indulás után",
+          "stale_hours": "Elavult ennyi idő után",
+          "include_unknown": "Ismeretlen entitások is",
+          "ignored_integrations": "Figyelmen kívül hagyott integrációk",
+          "ignored_entities": "Figyelmen kívül hagyott entitások"
+        },
+        "data_description": {
+          "scan_interval": "Két vizsgálat között eltelt percek. Az entitásnyilvántartás minden változás után néhány másodperccel is vizsgálatra kerül.",
+          "grace_period": "A Home Assistant indulása utáni percek az első vizsgálat előtt, amíg az integrációk létrehozzák az entitásaikat.",
+          "stale_hours": "Ennyi órán át kell nem elérhetőnek (vagy ismeretlennek) lennie egy integrációja által még biztosított entitásnak ahhoz, hogy listázva legyen. 0 esetén csak a már nem biztosított entitások jelennek meg.",
+          "include_unknown": "Az ugyanennyi ideje ismeretlen entitások listázása is. A gombok, jelenetek és események, amelyek természetüknél fogva ismeretlenek, soha nem jelennek meg.",
+          "ignored_integrations": "Integrációk, amelyek entitásai soha nem jelennek meg. Írjon be egy domaint, hogy hozzáadjon egy olyat, amely nincs a listában.",
+          "ignored_entities": "Soha nem listázott entitások (entitásazonosítók). A kártya Mellőzés gombjával ide veszi fel őket."
+        }
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "scan": {
+        "name": "Vizsgálat most"
+      }
+    },
+    "sensor": {
+      "orphans": {
+        "name": "Árva entitások",
+        "state_attributes": {
+          "entities": {
+            "name": "Entitások"
+          },
+          "counts": {
+            "name": "Darabszámok"
+          },
+          "removed": {
+            "name": "Eltávolítva"
+          },
+          "stale_hours": {
+            "name": "Elavult ennyi idő után"
+          },
+          "include_unknown": {
+            "name": "Ismeretlenek is"
+          },
+          "ignored_integrations": {
+            "name": "Figyelmen kívül hagyott integrációk"
+          },
+          "ignored_entities": {
+            "name": "Figyelmen kívül hagyott entitások"
+          }
+        }
+      },
+      "last_scan": {
+        "name": "Utolsó vizsgálat"
+      }
+    }
+  },
+  "services": {
+    "scan": {
+      "name": "Árva entitások keresése",
+      "description": "Megkeresi az entitásnyilvántartásban azokat az entitásokat, amelyeket az integrációjuk már nem biztosít."
+    },
+    "remove": {
+      "name": "Árva entitások eltávolítása",
+      "description": "Eltávolítja az entitásnyilvántartásból az utolsó vizsgálat által listázott entitásokat.",
+      "fields": {
+        "entities": {
+          "name": "Entitások",
+          "description": "Az eltávolítandó entitások azonosítói. Mindegyiknek szerepelnie kell az árva entitások listájában."
+        }
+      }
+    },
+    "ignore": {
+      "name": "Entitások figyelmen kívül hagyása",
+      "description": "Hozzáadja az entitásokat a figyelmen kívül hagyottakhoz: többé nem jelennek meg.",
+      "fields": {
+        "entities": {
+          "name": "Entitások",
+          "description": "A figyelmen kívül hagyandó entitások azonosítói."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": { "message": "Az Orphan Entities nincs betöltve." },
+    "starting": { "message": "A Home Assistant még indul: az első vizsgálat a türelmi idő végén fut le." },
+    "no_entities": { "message": "Nincs eltávolítandó entitás." },
+    "too_many": { "message": "Egyszerre legfeljebb {max} entitás." },
+    "not_orphan": { "message": "Nem szerepelnek az árva entitások listájában: {entities}. Vizsgáljon újra, és próbálja meg ismét." },
+    "not_registered": { "message": "Nem szerepelnek az entitásnyilvántartásban: {entities}." }
+  }
+}

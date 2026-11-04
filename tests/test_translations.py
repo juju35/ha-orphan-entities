@@ -11,6 +11,7 @@ import pytest
 
 TRANSLATIONS = Path(__file__).parent.parent / "custom_components" / "orphan_entities" / "translations"
 LANGUAGES = ["de", "es", "fr", "it", "nl", "pl", "pt", "pt-BR", "sr", "sr-Latn"]
+LANGUAGES += ["ro", "da", "sv", "bg", "ru", "uk", "hu", "sk", "cs", "sl", "lv", "el"]
 
 
 def _flatten(data: dict, prefix: str = "") -> dict[str, str]:

@@ -159,8 +159,8 @@ test('every language has the English keys and placeholders', () => {
       assert.deepEqual(placeholders(strings[key]), placeholders(OE_I18N.en[key]), `${lang}.${key}`);
     }
   }
-  // Polish and Serbian have their 2-4 forms.
-  for (const lang of ['pl', 'sr', 'sr-Latn']) {
+  // Polish, Serbian, Russian, Ukrainian, Slovak, Czech (2-4) and Romanian (2-19) have their "few" forms.
+  for (const lang of ['pl', 'sr', 'sr-Latn', 'ru', 'uk', 'sk', 'cs', 'ro']) {
     for (const k of Object.keys(OE_I18N.en).filter((k) => k.endsWith('_many'))) assert.ok(OE_I18N[lang][k.replace(/_many$/, '_few')], `${lang}.${k}`);
   }
 });
@@ -177,6 +177,21 @@ test('language follows Home Assistant, then the config, with English as fallback
   assert.equal(oeLang({ language: 'ja' }, {}), 'en');
   assert.equal(oeLang({ language: 'pt-BR' }, {}), 'pt');
   assert.equal(oeLang({ locale: { language: 'sr-Latn' }, language: 'sr' }, {}), 'sr-Latn');
+  for (const [tag, lang] of [
+    ['ro-RO', 'ro'],
+    ['da-DK', 'da'],
+    ['sv-SE', 'sv'],
+    ['bg', 'bg'],
+    ['ru-RU', 'ru'],
+    ['uk-UA', 'uk'],
+    ['hu', 'hu'],
+    ['sk', 'sk'],
+    ['cs-CZ', 'cs'],
+    ['sl', 'sl'],
+    ['lv-LV', 'lv'],
+    ['el-GR', 'el'],
+  ])
+    assert.equal(oeLang({ language: tag }, {}), lang, tag);
 });
 
 test('entities found by translation key, or by entity ID when it is missing', () => {
@@ -367,13 +382,28 @@ test('French, with plurals', () => {
   assert.match(html(render({}, makeHass({ language: 'fr', items: ITEMS.slice(0, 1) }))), /1 orpheline/);
 });
 
-test('plurals: 1, 2, 5 and 22 in Polish and Serbian', () => {
-  for (const lang of ['pl', 'sr', 'sr-Latn']) {
+test('plurals: 1, 2, 5 and 22 in Polish, Serbian, Russian and Ukrainian; 22 is "many" in Slovak and Czech', () => {
+  for (const lang of ['pl', 'sr', 'sr-Latn', 'ru', 'uk', 'sk', 'cs']) {
     const card = render({}, makeHass({ language: lang }));
     const forms = [1, 2, 5, 22].map((n) => card._count('orphans', n));
+    assert.equal(forms[0], OE_I18N[lang].orphans_one.replace('{n}', 1), lang);
     assert.equal(forms[1], OE_I18N[lang].orphans_few.replace('{n}', 2), lang);
     assert.equal(forms[2], OE_I18N[lang].orphans_many.replace('{n}', 5), lang);
-    assert.equal(forms[3], OE_I18N[lang].orphans_few.replace('{n}', 22), lang);
+    const twentyTwo = ['sk', 'cs'].includes(lang) ? 'orphans_many' : 'orphans_few';
+    assert.equal(forms[3], OE_I18N[lang][twentyTwo].replace('{n}', 22), lang);
+  }
+});
+
+test('plurals: 1, 2, 19 and 20 in Romanian; one and other elsewhere', () => {
+  const ro = render({}, makeHass({ language: 'ro' }));
+  assert.deepEqual(
+    [1, 2, 19, 20].map((n) => ro._count('orphans', n)),
+    ['1 orfană', '2 orfane', '19 orfane', '20 de orfane'],
+  );
+  for (const lang of ['da', 'sv', 'bg', 'hu', 'sl', 'lv', 'el']) {
+    const card = render({}, makeHass({ language: lang }));
+    assert.equal(card._count('orphans', 1), OE_I18N[lang].orphans_one.replace('{n}', 1), lang);
+    assert.equal(card._count('orphans', 7), OE_I18N[lang].orphans_many.replace('{n}', 7), lang);
   }
 });
 
