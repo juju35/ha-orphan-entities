@@ -247,6 +247,10 @@ test('before the first scan: waiting, no list; not set up without the sensor', (
   const due = makeHass({ scanned: false, items: [] });
   due.states[ORPHANS].attributes.next_scan = new Date(Date.now() + 7 * 60000).toISOString();
   assert.match(html(render({}, due)), /Waiting for the first scan \(in 7 minutes\)/);
+  const mini = html(render({}, due, OrphanEntitiesMiniCard));
+  assert.match(mini, /title="Waiting for the first scan \(in 7 minutes\)"/);
+  assert.doesNotMatch(mini, /Waiting for the first scan \(in 7 minutes\)<\//);
+  assert.match(mini, />in 7 minutes</);
   const none = render({}, { ...makeHass(), entities: {}, states: {} });
   assert.match(html(none), /Not set up/);
 });

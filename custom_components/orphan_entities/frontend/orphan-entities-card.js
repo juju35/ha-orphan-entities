@@ -2037,7 +2037,8 @@ class OrphanEntitiesCard extends HTMLElement {
 
   _status(items, scanned) {
     if (!this._ids.orphans || !this._hass.states[this._ids.orphans]?.attributes?.entities) return this._t('not_loaded');
-    if (!scanned) return this._waiting();
+    // The mini card's header is narrow, and its chip says when the first scan is due.
+    if (!scanned) return this instanceof OrphanEntitiesMiniCard ? this._t('waiting') : this._waiting();
     return items.length ? this._count('orphans', items.length) : this._t('none');
   }
 
@@ -2529,8 +2530,11 @@ class OrphanEntitiesMiniCard extends OrphanEntitiesCard {
       return this._chip(`${oeKind(r)} pill`, OE_REASON_ICONS[r], label, label, `m:${r}`, `data-zoom="${r}" ${sensor}`);
     });
     if (scanned && !items.length) chips.push(this._chip('ok', 'mdi:check-circle', this._t('none'), this._t('empty'), 'm:ok', sensor));
-    const text = scannedAt ? this._t('scanned', { d: this._ago(scannedAt) }) : scanned ? this._t('never_scanned') : this._waiting();
-    chips.push(this._chip('idle', 'mdi:clock-check-outline', text, scannedAt ? this._absolute(scannedAt) : text, 'm:s', ids.last_scan ? `data-entity="${oeEsc(ids.last_scan)}"` : ''));
+    // The mini card is narrow: while waiting the chip only says when ("in 10 minutes"), the full status is its tooltip.
+    const due = scanned ? '' : this._in(this._hass.states[ids.orphans]?.attributes?.next_scan);
+    const text = scannedAt ? this._t('scanned', { d: this._ago(scannedAt) }) : scanned ? this._t('never_scanned') : due || this._t('waiting');
+    const tip = scannedAt ? this._absolute(scannedAt) : due ? this._waiting() : text;
+    chips.push(this._chip('idle', 'mdi:clock-check-outline', text, tip, 'm:s', ids.last_scan ? `data-entity="${oeEsc(ids.last_scan)}"` : ''));
     return chips.join('');
   }
 
