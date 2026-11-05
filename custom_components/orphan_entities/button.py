@@ -19,7 +19,7 @@ async def async_setup_entry(
 
 
 class ScanButton(OrphanEntitiesEntity, ButtonEntity):
-    """Scan now (does nothing while Home Assistant is starting or within the grace period)."""
+    """Scan now, even within the grace period (does nothing while Home Assistant is starting)."""
 
     async def async_press(self) -> None:
-        self.scanner.async_scan()
+        self.scanner.async_scan(force=True)

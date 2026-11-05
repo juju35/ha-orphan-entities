@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities не загружено." },
-    "starting": { "message": "Home Assistant ещё запускается: первое сканирование выполнится по окончании задержки после запуска." },
+    "starting": { "message": "Home Assistant ещё запускается: повторите сканирование после запуска." },
     "no_entities": { "message": "Нет объектов для удаления." },
     "too_many": { "message": "Не более {max} объектов за раз." },
     "not_orphan": { "message": "Нет в списке осиротевших объектов: {entities}. Выполните сканирование и повторите попытку." },

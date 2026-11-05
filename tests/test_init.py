@@ -18,6 +18,7 @@ from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.service import async_register_admin_service
 from homeassistant.setup import async_setup_component
+from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import MockConfigEntry, async_capture_events, async_fire_time_changed
 
 from custom_components.orphan_entities.const import (
@@ -233,20 +234,50 @@ async def test_no_scan_while_starting(hass: HomeAssistant, freezer: FrozenDateTi
     hass.set_state(CoreState.starting)
     await _setup(hass)
     assert hass.states.get(ORPHANS).state == STATE_UNKNOWN
+    assert hass.states.get(ORPHANS).attributes["next_scan"] is None
     with pytest.raises(ServiceValidationError):
         await hass.services.async_call(DOMAIN, "scan", {}, blocking=True)
-
-    hass.set_state(CoreState.running)
-    hass.bus.async_fire(EVENT_HOMEASSISTANT_STARTED)
-    await hass.async_block_till_done()
     await hass.services.async_call("button", "press", {"entity_id": BUTTON}, blocking=True)
     await hass.async_block_till_done()
     assert hass.states.get(ORPHANS).state == STATE_UNKNOWN
 
-    freezer.tick(timedelta(minutes=10))
+    hass.set_state(CoreState.running)
+    hass.bus.async_fire(EVENT_HOMEASSISTANT_STARTED)
+    await hass.async_block_till_done()
+    # The sensor says when the first scan is due (end of the grace period), and the registry changes wait for it.
+    assert hass.states.get(ORPHANS).attributes["next_scan"] == (dt_util.utcnow() + timedelta(minutes=10)).isoformat()
+    freezer.tick(timedelta(minutes=5))
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done()
+    assert hass.states.get(ORPHANS).state == STATE_UNKNOWN
+
+    freezer.tick(timedelta(minutes=5))
     async_fire_time_changed(hass)
     await hass.async_block_till_done()
     assert _listed(hass) == {orphan: "not_provided"}
+    assert hass.states.get(ORPHANS).attributes["next_scan"] is None
+
+
+async def test_manual_scan_within_grace_period(hass: HomeAssistant):
+    """A scan the user asks for (button, action) runs within the grace period: only the start refuses it."""
+    acme = _integration(hass, "acme")
+    orphan = _entity(hass, "acme", "old", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    hass.set_state(CoreState.starting)
+    await _setup(hass)
+    hass.set_state(CoreState.running)
+    hass.bus.async_fire(EVENT_HOMEASSISTANT_STARTED)
+    await hass.async_block_till_done()
+    assert hass.states.get(ORPHANS).state == STATE_UNKNOWN
+
+    await hass.services.async_call("button", "press", {"entity_id": BUTTON}, blocking=True)
+    await hass.async_block_till_done()
+    assert _listed(hass) == {orphan: "not_provided"}
+    assert hass.states.get(ORPHANS).attributes["next_scan"] is not None
+
+    hass.states.async_set(orphan, "on")
+    await hass.services.async_call(DOMAIN, "scan", {}, blocking=True)
+    await hass.async_block_till_done()
+    assert _listed(hass) == {}
 
 
 async def test_scheduled_scan_and_registry_changes(hass: HomeAssistant, freezer: FrozenDateTimeFactory):

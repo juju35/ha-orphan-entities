@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Az Orphan Entities nincs betöltve." },
-    "starting": { "message": "A Home Assistant még indul: az első vizsgálat a türelmi idő végén fut le." },
+    "starting": { "message": "A Home Assistant még indul: indítsa újra a vizsgálatot, ha elindult." },
     "no_entities": { "message": "Nincs eltávolítandó entitás." },
     "too_many": { "message": "Egyszerre legfeljebb {max} entitás." },
     "not_orphan": { "message": "Nem szerepelnek az árva entitások listájában: {entities}. Vizsgáljon újra, és próbálja meg ismét." },

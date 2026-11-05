@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities не е заредено." },
-    "starting": { "message": "Home Assistant все още стартира: първото сканиране ще се изпълни след края на гратисния период." },
+    "starting": { "message": "Home Assistant все още стартира: сканирайте отново, щом стартира." },
     "no_entities": { "message": "Няма обект за премахване." },
     "too_many": { "message": "Най-много {max} обекта наведнъж." },
     "not_orphan": { "message": "Не са в списъка с осиротели обекти: {entities}. Сканирайте отново и опитайте пак." },

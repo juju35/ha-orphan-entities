@@ -88,7 +88,8 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _register)
 
     async def scan(_call: ServiceCall) -> None:
-        if not _entry(hass).runtime_data.async_scan():
+        # Asked for by the user: scans even within the grace period, only Home Assistant starting refuses.
+        if not _entry(hass).runtime_data.async_scan(force=True):
             raise ServiceValidationError(translation_domain=DOMAIN, translation_key="starting")
 
     async def remove(call: ServiceCall) -> ServiceResponse:
@@ -227,8 +228,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: OrphanEntitiesConfigEntr
 
     @callback
     def first_scan(_hass: HomeAssistant) -> None:
-        if scanner.started_at is None:
-            scanner.started_at = dt_util.utcnow()
+        scanner.async_started()
         if scanner.ready:
             scanner.async_scan()
         else:

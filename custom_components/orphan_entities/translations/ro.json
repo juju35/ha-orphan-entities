@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities nu este încărcat." },
-    "starting": { "message": "Home Assistant încă pornește: prima scanare va rula la sfârșitul perioadei de grație." },
+    "starting": { "message": "Home Assistant încă pornește: scanați din nou după ce a pornit." },
     "no_entities": { "message": "Nicio entitate de eliminat." },
     "too_many": { "message": "Cel mult {max} entități odată." },
     "not_orphan": { "message": "Nu sunt în lista entităților orfane: {entities}. Scanați din nou și reîncercați." },

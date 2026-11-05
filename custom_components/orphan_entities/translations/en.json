@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities is not loaded." },
-    "starting": { "message": "Home Assistant is still starting: the first scan runs once the grace period is over." },
+    "starting": { "message": "Home Assistant is still starting: scan again once it is up." },
     "no_entities": { "message": "No entity to remove." },
     "too_many": { "message": "At most {max} entities at a time." },
     "not_orphan": { "message": "Not in the list of orphaned entities: {entities}. Scan again and retry." },

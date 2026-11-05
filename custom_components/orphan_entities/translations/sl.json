@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities ni naložen." },
-    "starting": { "message": "Home Assistant se še zaganja: prvi pregled se izvede po koncu čakalnega časa." },
+    "starting": { "message": "Home Assistant se še zaganja: po zagonu znova zaženite pregled." },
     "no_entities": { "message": "Ni entitet za odstranitev." },
     "too_many": { "message": "Največ {max} entitet naenkrat." },
     "not_orphan": { "message": "Niso na seznamu osirotelih entitet: {entities}. Ponovno preglejte in poskusite znova." },

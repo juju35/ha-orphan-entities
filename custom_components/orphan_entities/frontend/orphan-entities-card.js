@@ -4,7 +4,7 @@
  * Served and added to the dashboard resources by the integration.
  * https://github.com/juju35/ha-orphan-entities
  */
-var ORPHAN_ENTITIES_CARD_VERSION = '1.0.2';
+var ORPHAN_ENTITIES_CARD_VERSION = '1.0.3';
 
 const OE_I18N = {
   en: {
@@ -1832,6 +1832,24 @@ class OrphanEntitiesCard extends HTMLElement {
     return rtf.format(-Math.floor(m / 1440), 'day');
   }
 
+  // "in 7 minutes": when the first scan after a start is due (end of the grace period), or "" once it is.
+  _in(iso) {
+    const m = iso ? (new Date(iso).getTime() - Date.now()) / 60000 : NaN;
+    if (!(m > 0)) return '';
+    try {
+      const rtf = new Intl.RelativeTimeFormat(oeLocale(this._hass, this._config), { numeric: 'auto' });
+      return m < 60 ? rtf.format(Math.ceil(m), 'minute') : rtf.format(Math.ceil(m / 60), 'hour');
+    } catch {
+      return this._duration(m);
+    }
+  }
+
+  // The status while the sensor is unknown (Home Assistant starting, grace period): with the time of the first scan.
+  _waiting() {
+    const due = this._in(this._hass.states[this._ids.orphans]?.attributes?.next_scan);
+    return due ? `${this._t('waiting')} (${due})` : this._t('waiting');
+  }
+
   _absolute(iso) {
     const d = new Date(iso);
     if (!Number.isFinite(d.getTime())) return '';
@@ -2019,7 +2037,7 @@ class OrphanEntitiesCard extends HTMLElement {
 
   _status(items, scanned) {
     if (!this._ids.orphans || !this._hass.states[this._ids.orphans]?.attributes?.entities) return this._t('not_loaded');
-    if (!scanned) return this._t('waiting');
+    if (!scanned) return this._waiting();
     return items.length ? this._count('orphans', items.length) : this._t('none');
   }
 
@@ -2511,7 +2529,7 @@ class OrphanEntitiesMiniCard extends OrphanEntitiesCard {
       return this._chip(`${oeKind(r)} pill`, OE_REASON_ICONS[r], label, label, `m:${r}`, `data-zoom="${r}" ${sensor}`);
     });
     if (scanned && !items.length) chips.push(this._chip('ok', 'mdi:check-circle', this._t('none'), this._t('empty'), 'm:ok', sensor));
-    const text = scannedAt ? this._t('scanned', { d: this._ago(scannedAt) }) : this._t(scanned ? 'never_scanned' : 'waiting');
+    const text = scannedAt ? this._t('scanned', { d: this._ago(scannedAt) }) : scanned ? this._t('never_scanned') : this._waiting();
     chips.push(this._chip('idle', 'mdi:clock-check-outline', text, scannedAt ? this._absolute(scannedAt) : text, 'm:s', ids.last_scan ? `data-entity="${oeEsc(ids.last_scan)}"` : ''));
     return chips.join('');
   }

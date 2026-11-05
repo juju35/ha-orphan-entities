@@ -28,7 +28,7 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
 
     _attr_state_class = SensorStateClass.MEASUREMENT
     # Rewritten at every scan and possibly long: kept out of the recorder database.
-    _unrecorded_attributes = frozenset({"entities", "ignored_integrations", "ignored_entities"})
+    _unrecorded_attributes = frozenset({"entities", "next_scan", "ignored_integrations", "ignored_entities"})
 
     @property
     def native_value(self) -> int | None:
@@ -38,6 +38,8 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
     def extra_state_attributes(self) -> dict[str, Any]:
         return {
             "entities": [o.as_dict() for o in self.scanner.orphans],
+            # End of the grace period after a start (None once it is over): the card says when the first scan is due.
+            "next_scan": self.scanner.next_scan.isoformat() if self.scanner.next_scan else None,
             "counts": self.scanner.counts(),
             "removed": self.scanner.removed,
             "stale_hours": self.scanner.stale_hours,

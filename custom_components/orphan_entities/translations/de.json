@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities ist nicht geladen." },
-    "starting": { "message": "Home Assistant startet noch: Der erste Scan läuft, sobald die Karenzzeit abgelaufen ist." },
+    "starting": { "message": "Home Assistant startet noch: Scan erneut starten, sobald es läuft." },
     "no_entities": { "message": "Keine Entität zum Entfernen." },
     "too_many": { "message": "Höchstens {max} Entitäten auf einmal." },
     "not_orphan": { "message": "Nicht in der Liste der verwaisten Entitäten: {entities}. Erneut scannen und noch einmal versuchen." },

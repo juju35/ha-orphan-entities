@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities no está cargado." },
-    "starting": { "message": "Home Assistant aún se está iniciando: el primer escaneo se ejecutará cuando termine el periodo de gracia." },
+    "starting": { "message": "Home Assistant todavía está arrancando: vuelve a escanear cuando esté listo." },
     "no_entities": { "message": "No hay ninguna entidad que eliminar." },
     "too_many": { "message": "Como máximo {max} entidades a la vez." },
     "not_orphan": { "message": "No están en la lista de entidades huérfanas: {entities}. Vuelve a escanear e inténtalo de nuevo." },

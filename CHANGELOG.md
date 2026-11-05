@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 - 2026-11-05
+
+### What's new
+- **Scan now** (button, `orphan_entities.scan` action, the card) no longer waits for the grace period after a start: it scans as soon as Home Assistant is up. Only the automatic scans wait for it.
+- While the sensor is unknown after a start, the card says when the first scan is due (*Waiting for the first scan (in 7 minutes)*), from the new `next_scan` attribute of the **Orphaned entities** sensor.
+
 ## 1.0.2 - 2026-11-04
 
 ### Documentation

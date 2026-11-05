@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Το Orphan Entities δεν έχει φορτωθεί." },
-    "starting": { "message": "Το Home Assistant εκκινεί ακόμα: η πρώτη σάρωση θα εκτελεστεί μόλις λήξει η περίοδος χάριτος." },
+    "starting": { "message": "Το Home Assistant ξεκινά ακόμη: σαρώστε ξανά μόλις ξεκινήσει." },
     "no_entities": { "message": "Καμία οντότητα προς αφαίρεση." },
     "too_many": { "message": "Έως {max} οντότητες κάθε φορά." },
     "not_orphan": { "message": "Δεν βρίσκονται στη λίστα των ορφανών οντοτήτων: {entities}. Σαρώστε ξανά και δοκιμάστε πάλι." },

@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities не завантажено." },
-    "starting": { "message": "Home Assistant ще запускається: перше сканування виконається після завершення затримки після запуску." },
+    "starting": { "message": "Home Assistant ще запускається: повторіть сканування після запуску." },
     "no_entities": { "message": "Немає сутностей для видалення." },
     "too_many": { "message": "Не більше {max} сутностей за раз." },
     "not_orphan": { "message": "Немає в списку осиротілих сутностей: {entities}. Виконайте сканування та спробуйте ще раз." },

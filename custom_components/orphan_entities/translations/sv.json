@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities är inte inläst." },
-    "starting": { "message": "Home Assistant startar fortfarande: den första skanningen körs när väntetiden är över." },
+    "starting": { "message": "Home Assistant startar fortfarande: skanna igen när det är igång." },
     "no_entities": { "message": "Ingen entitet att ta bort." },
     "too_many": { "message": "Högst {max} entiteter åt gången." },
     "not_orphan": { "message": "Finns inte i listan över föräldralösa entiteter: {entities}. Skanna igen och försök på nytt." },

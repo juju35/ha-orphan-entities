@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities není načteno." },
-    "starting": { "message": "Home Assistant se stále spouští: první skenování proběhne po uplynutí čekací doby." },
+    "starting": { "message": "Home Assistant se stále spouští: po spuštění skenování spusťte znovu." },
     "no_entities": { "message": "Žádná entita k odebrání." },
     "too_many": { "message": "Najednou nejvýše {max} entit." },
     "not_orphan": { "message": "Nejsou v seznamu osiřelých entit: {entities}. Skenujte znovu a zkuste to znovu." },

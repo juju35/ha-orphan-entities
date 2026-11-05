@@ -105,10 +105,27 @@ class OrphanScanner:
             and dt_util.utcnow() >= self.started_at + self.grace_period
         )
 
+    @property
+    def next_scan(self) -> datetime | None:
+        """End of the grace period, while the first automatic scan is still waiting for it."""
+        if self.ready or self.started_at is None:
+            return None
+        return self.started_at + self.grace_period
+
     @callback
-    def async_scan(self) -> bool:
-        """Scan the entity registry; False (nothing done) while Home Assistant is starting or in the grace period."""
-        if not self.ready:
+    def async_started(self) -> None:
+        """Home Assistant has started: the grace period starts now; the sensor shows when the first scan is due."""
+        if self.started_at is None:
+            self.started_at = dt_util.utcnow()
+        self._notify()
+
+    @callback
+    def async_scan(self, *, force: bool = False) -> bool:
+        """Scan the entity registry; False (nothing done) while Home Assistant is starting.
+
+        Automatic scans also wait for the grace period; `force` (a scan the user asked for) does not.
+        """
+        if self.hass.state is not CoreState.running or (not force and not self.ready):
             return False
         now = dt_util.utcnow()
         registry = er.async_get(self.hass)

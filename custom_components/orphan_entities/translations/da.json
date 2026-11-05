@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities er ikke indlæst." },
-    "starting": { "message": "Home Assistant starter stadig: den første scanning kører, når ventetiden er overstået." },
+    "starting": { "message": "Home Assistant starter stadig: scan igen, når det kører." },
     "no_entities": { "message": "Ingen entiteter at fjerne." },
     "too_many": { "message": "Højst {max} entiteter ad gangen." },
     "not_orphan": { "message": "Ikke på listen over forældreløse entiteter: {entities}. Scan igen, og prøv igen." },

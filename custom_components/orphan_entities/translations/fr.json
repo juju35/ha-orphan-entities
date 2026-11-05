@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities n'est pas chargé." },
-    "starting": { "message": "Home Assistant est encore en cours de démarrage : la première analyse aura lieu à la fin du délai de grâce." },
+    "starting": { "message": "Home Assistant est encore en cours de démarrage : relancez l’analyse une fois démarré." },
     "no_entities": { "message": "Aucune entité à supprimer." },
     "too_many": { "message": "{max} entités au maximum à la fois." },
     "not_orphan": { "message": "Absentes de la liste des entités orphelines : {entities}. Relancez une analyse et réessayez." },

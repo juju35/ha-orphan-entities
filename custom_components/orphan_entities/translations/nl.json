@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities is niet geladen." },
-    "starting": { "message": "Home Assistant is nog aan het opstarten: de eerste scan wordt uitgevoerd zodra de wachttijd voorbij is." },
+    "starting": { "message": "Home Assistant is nog aan het opstarten: scan opnieuw zodra het draait." },
     "no_entities": { "message": "Geen entiteit om te verwijderen." },
     "too_many": { "message": "Maximaal {max} entiteiten tegelijk." },
     "not_orphan": { "message": "Niet in de lijst met verweesde entiteiten: {entities}. Scan opnieuw en probeer het nog eens." },

@@ -243,6 +243,10 @@ test('before the first scan: waiting, no list; not set up without the sensor', (
   assert.match(html(waiting), /Waiting for the first scan/);
   assert.equal(waiting.style.display, '');
   assert.doesNotMatch(html(waiting), /class="list"/);
+  // Within the grace period after a start the sensor says when the first scan is due.
+  const due = makeHass({ scanned: false, items: [] });
+  due.states[ORPHANS].attributes.next_scan = new Date(Date.now() + 7 * 60000).toISOString();
+  assert.match(html(render({}, due)), /Waiting for the first scan \(in 7 minutes\)/);
   const none = render({}, { ...makeHass(), entities: {}, states: {} });
   assert.match(html(none), /Not set up/);
 });

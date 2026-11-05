@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities nie jest wczytany." },
-    "starting": { "message": "Home Assistant wciąż się uruchamia: pierwsze skanowanie nastąpi po zakończeniu okresu karencji." },
+    "starting": { "message": "Home Assistant wciąż się uruchamia: skanuj ponownie, gdy będzie gotowy." },
     "no_entities": { "message": "Brak encji do usunięcia." },
     "too_many": { "message": "Maksymalnie {max} encji naraz." },
     "not_orphan": { "message": "Nie ma na liście osieroconych encji: {entities}. Przeskanuj ponownie i spróbuj jeszcze raz." },

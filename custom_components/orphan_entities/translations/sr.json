@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities није учитан." },
-    "starting": { "message": "Home Assistant се још покреће: прво скенирање почиње када истекне период чекања." },
+    "starting": { "message": "Home Assistant се још покреће: скенирајте поново када буде спреман." },
     "no_entities": { "message": "Нема ентитета за уклањање." },
     "too_many": { "message": "Највише {max} ентитета одједном." },
     "not_orphan": { "message": "Нису на листи осироћених ентитета: {entities}. Скенирајте поново и покушајте опет." },

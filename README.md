@@ -25,7 +25,7 @@ Removed integrations, renamed devices and old YAML platforms leave entities behi
 
 - **Scan** of the entity registry at a set interval (15 minutes by default), and a few seconds after the registry changes
 - **Five reasons**, from the most to the least certain orphan: *Integration removed*, *Integration not loaded*, *Not provided*, then, for entities still provided, *Unavailable* and *Unknown* for longer than a set delay (24 hours by default)
-- **Never during startup**: nothing is listed while Home Assistant starts, nor during the grace period after it has started (10 minutes by default), while the integrations set up their entities
+- **Never during startup**: nothing is listed while Home Assistant starts, nor during the grace period after it has started (10 minutes by default), while the integrations set up their entities. The card then says when the first scan is due; **Scan now** does not wait for it
 - **Bulk removal** from the entity registry, limited to the listed entities, with a confirmation
 - **Ignored integrations and entities**, in the options or with the card's **Ignore** button
 - **Orphaned entities** sensor with the list, **Last scan** sensor, **Scan now** button
@@ -69,7 +69,7 @@ Copy `custom_components/orphan_entities/` to `/config/custom_components/orphan_e
 | Option | Default | Description |
 |---|---|---|
 | Scan interval | 15 min | Minutes between two scans, from 1 to 1440. The registry is also scanned 10 seconds after it changes |
-| Grace period after startup | 10 min | Minutes after Home Assistant has started before the first scan, from 0 to 1440 |
+| Grace period after startup | 10 min | Minutes after Home Assistant has started before the first automatic scan, from 0 to 1440. A scan asked for (button, action) runs at once |
 | Stale after | 24 h | Hours an entity still provided by its integration must have been unavailable (or unknown) to be listed, up to 8760. `0` lists only the entities no longer provided |
 | Include unknown entities | on | Also list the entities unknown for that long. Buttons, scenes, events and other entities unknown by design are never listed |
 | Ignored integrations | none | Integrations whose entities are never listed. The list offers the integrations that own entities; type a domain to add another one |
@@ -93,13 +93,13 @@ Removing an entity deletes its entry from the entity registry, as its **Delete**
 
 | Entity | Description |
 |---|---|
-| `button.orphan_entities_scan_now` | Scans now |
-| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`. The list is not recorded in the database |
+| `button.orphan_entities_scan_now` | Scans now, even within the grace period (nothing while Home Assistant is starting) |
+| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`. The list is not recorded in the database |
 | `sensor.orphan_entities_last_scan` | End of the last scan |
 
 ### Action `orphan_entities.scan`
 
-Scans the entity registry now. For administrators. Refused while Home Assistant is starting or within the grace period.
+Scans the entity registry now, even within the grace period. For administrators. Refused while Home Assistant is starting.
 
 ```yaml
 action: orphan_entities.scan
@@ -210,7 +210,7 @@ It takes every option of the full card (they set its detail view), plus:
 
 ## How it works
 
-At each interval, and 10 seconds after the last change of the entity registry or of a config entry, the integration goes through the entity registry, reads each entity's config entry and state, and classifies it. Entities only restored by Home Assistant carry `restored: true` in their state: their integration didn't create them. No scan runs before Home Assistant has fully started and the grace period has passed.
+At each interval, and 10 seconds after the last change of the entity registry or of a config entry, the integration goes through the entity registry, reads each entity's config entry and state, and classifies it. Entities only restored by Home Assistant carry `restored: true` in their state: their integration didn't create them. No automatic scan runs before Home Assistant has fully started and the grace period has passed; a scan asked for with the button or the action only waits for the start.
 
 To debug:
 

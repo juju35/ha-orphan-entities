@@ -116,7 +116,7 @@
   },
   "exceptions": {
     "not_loaded": { "message": "Orphan Entities non è caricato." },
-    "starting": { "message": "Home Assistant è ancora in fase di avvio: la prima scansione verrà eseguita al termine del periodo di tolleranza." },
+    "starting": { "message": "Home Assistant si sta ancora avviando: scansiona di nuovo una volta avviato." },
     "no_entities": { "message": "Nessuna entità da rimuovere." },
     "too_many": { "message": "Al massimo {max} entità alla volta." },
     "not_orphan": { "message": "Non presenti nell'elenco delle entità orfane: {entities}. Esegui di nuovo la scansione e riprova." },
