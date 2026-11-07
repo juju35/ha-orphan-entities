@@ -66,6 +66,11 @@ ICONS = {
     "clock-check-outline": "M23.5 17L18.5 22L15 18.5L16.5 17L18.5 19L22 15.5L23.5 17M13.1 19.9C12.7 20 12.4 20 12 20C7.6 20 4 16.4 4 12S7.6 4 12 4 20 7.6 20 12C20 12.4 20 12.7 19.9 13.1C20.6 13.2 21.2 13.4 21.8 13.7C21.9 13.1 22 12.6 22 12C22 6.5 17.5 2 12 2S2 6.5 2 12C2 17.5 6.5 22 12 22C12.6 22 13.2 21.9 13.7 21.8C13.4 21.3 13.2 20.6 13.1 19.9M15.6 14.1L12.5 12.3V7H11V13L14.5 15.1C14.8 14.7 15.2 14.4 15.6 14.1Z",
     "arrow-expand": "M10,21V19H6.41L10.91,14.5L9.5,13.09L5,17.59V14H3V21H10M14.5,10.91L19,6.41V10H21V3H14V5H17.59L13.09,9.5L14.5,10.91Z",
     "arrow-collapse": "M19.5,3.09L15,7.59V4H13V11H20V9H16.41L20.91,4.5L19.5,3.09M4,13V15H7.59L3.09,19.5L4.5,20.91L9,16.41V20H11V13H4Z",
+    "robot-outline": "M17.5 15.5C17.5 16.61 16.61 17.5 15.5 17.5S13.5 16.61 13.5 15.5 14.4 13.5 15.5 13.5 17.5 14.4 17.5 15.5M8.5 13.5C7.4 13.5 6.5 14.4 6.5 15.5S7.4 17.5 8.5 17.5 10.5 16.61 10.5 15.5 9.61 13.5 8.5 13.5M23 15V18C23 18.55 22.55 19 22 19H21V20C21 21.11 20.11 22 19 22H5C3.9 22 3 21.11 3 20V19H2C1.45 19 1 18.55 1 18V15C1 14.45 1.45 14 2 14H3C3 10.13 6.13 7 10 7H11V5.73C10.4 5.39 10 4.74 10 4C10 2.9 10.9 2 12 2S14 2.9 14 4C14 4.74 13.6 5.39 13 5.73V7H14C17.87 7 21 10.13 21 14H22C22.55 14 23 14.45 23 15M21 16H19V14C19 11.24 16.76 9 14 9H10C7.24 9 5 11.24 5 14V16H3V17H5V20H19V17H21V16Z",
+    "script-text-outline": "M15,20A1,1 0 0,0 16,19V4H8A1,1 0 0,0 7,5V16H5V5A3,3 0 0,1 8,2H19A3,3 0 0,1 22,5V6H20V5A1,1 0 0,0 19,4A1,1 0 0,0 18,5V9L18,19A3,3 0 0,1 15,22H5A3,3 0 0,1 2,19V18H13A2,2 0 0,0 15,20M9,6H14V8H9V6M9,10H14V12H9V10M9,14H14V16H9V14Z",
+    "view-dashboard-outline": "M19,5V7H15V5H19M9,5V11H5V5H9M19,13V19H15V13H19M9,17V19H5V17H9M21,3H13V9H21V3M11,3H3V13H11V3M21,11H13V21H21V11M11,15H3V21H11V15Z",
+    "link-variant": "M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z",
+    "alert-outline": "M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16",
 }
 
 # Minimal stand-ins for Home Assistant's <ha-card> and <ha-icon>.
@@ -103,7 +108,7 @@ def ago(**delta) -> str:
     return (NOW - timedelta(**delta)).isoformat()
 
 
-def orphan(entity_id, name, platform, reason, device=None, disabled=False, **delta):
+def orphan(entity_id, name, platform, reason, device=None, disabled=False, used_by=(), **delta):
     return {
         "entity_id": entity_id,
         "name": name,
@@ -115,16 +120,38 @@ def orphan(entity_id, name, platform, reason, device=None, disabled=False, **del
         "entry_title": None if reason == "integration_missing" else platform.replace("_", " ").title(),
         "device": device,
         "disabled": disabled,
+        "used_by": list(used_by),
     }
+
+
+def ref(kind, name, path=None):
+    return {"type": kind, "id": f"{kind}.{name.lower().replace(' ', '_')}", "name": name, "path": path}
+
+
+# What still uses the hallway spot and the garage door, mock data.
+HALLWAY_USES = [
+    ref("automation", "Hallway motion light", "/config/automation/edit/1700000000001"),
+    ref("script", "Good night", "/config/script/edit/good_night"),
+    ref("dashboard", "Overview", "/lovelace"),
+]
+GARAGE_USES = [ref("automation", "Garage left open", "/config/automation/edit/1700000000002")]
 
 
 # Mock orphans: neutral names, one of each reason.
 ORPHANS_LIST = [
     orphan("sensor.old_node_battery", "Old node battery", "zwave_js", "entry_removed", "Old node", True, days=40),
     orphan("switch.pool_pump", "Pool pump", "command_line", "integration_missing", days=12),
-    orphan("light.hallway_spot", "Hallway spot", "hue", "not_provided", "Hallway spot", days=9),
+    orphan("light.hallway_spot", "Hallway spot", "hue", "not_provided", "Hallway spot", used_by=HALLWAY_USES, days=9),
     orphan("sensor.hallway_spot_power", "Hallway spot power", "hue", "not_provided", "Hallway spot", days=9),
-    orphan("binary_sensor.garage_door", "Garage door", "zha", "unavailable", "Garage door sensor", days=3),
+    orphan(
+        "binary_sensor.garage_door",
+        "Garage door",
+        "zha",
+        "unavailable",
+        "Garage door sensor",
+        used_by=GARAGE_USES,
+        days=3,
+    ),
     orphan("sensor.weather_station_uv", "Weather station UV", "netatmo", "unknown", "Weather station", hours=30),
 ]
 
@@ -187,6 +214,8 @@ SHOTS = [
     *both("card-selected", hass=ORPHANS_LIST, select=SELECTED),
     # The confirmation at the top of the card.
     *both("card-confirm", hass=ORPHANS_LIST, select=SELECTED, confirm="remove"),
+    # The "Used by" list of an entity still in use, open under its row.
+    *both("card-used", hass=ORPHANS_LIST, open=["light.hallway_spot"]),
     # Filtered on a reason.
     *both("card-filtered", hass=ORPHANS_LIST, reason="not_provided"),
     *both("card-ok", hass=[]),
@@ -216,6 +245,7 @@ MOUNT = """([hass, dark, card, opts]) => {
     if (opts.zoom) el.shadowRoot.querySelector(".zoom").dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail: 1 }));
     if (opts.reason) el._reason = opts.reason;
     for (const id of opts.select || []) el._sel.add(id);
+    for (const id of opts.open || []) el._open.add(id);
     if (opts.confirm) el._confirm = opts.confirm;
     el._sig = null;
     el._render();
@@ -266,7 +296,7 @@ def main():
             page.add_script_tag(content=HA_ELEMENTS)
             page.add_script_tag(content=CARD_JS)
             card = shot.get("card", "orphan-entities-card")
-            opts = {k: shot[k] for k in ("zoom", "select", "confirm", "reason") if k in shot}
+            opts = {k: shot[k] for k in ("zoom", "select", "confirm", "reason", "open") if k in shot}
             page.evaluate(
                 MOUNT, [mock_hass(shot["hass"], devices=shot.get("devices", ())), shot["theme"] == "dark", card, opts]
             )

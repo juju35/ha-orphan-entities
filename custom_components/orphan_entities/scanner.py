@@ -29,6 +29,7 @@ from .const import (
     REASONS,
     STATELESS_DOMAINS,
 )
+from .references import async_dashboards, find_references
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -116,6 +117,11 @@ class OrphanScanner:
         self.devices: list[OrphanDevice] = []
         self.last_scan: datetime | None = None
         self.removed = 0
+        # What still uses each orphan ({entity_id: [automation, script, scene, group or dashboard]}), found at each
+        # scan; the dashboards (read asynchronously) are those of the previous scan until they have been read again.
+        self.references: dict[str, list[dict[str, Any]]] = {}
+        self._dashboards: list[dict[str, Any]] = []
+        self._generation = 0
         self._listeners: list[Callable[[], None]] = []
 
     @callback
@@ -194,8 +200,22 @@ class OrphanScanner:
         self.orphans = found
         self.devices = self._orphan_devices(registry, devices)
         self.last_scan = now
+        self.references = find_references(self.hass, (o.entity_id for o in found), self._dashboards)
         self._notify()
+        self._generation += 1
+        self.hass.async_create_task(self._async_dashboard_references(self._generation))
         return True
+
+    async def _async_dashboard_references(self, generation: int) -> None:
+        """Read the dashboards again, then update the references if they changed (a newer scan wins)."""
+        dashboards = await async_dashboards(self.hass)
+        if generation != self._generation:
+            return
+        self._dashboards = dashboards
+        references = find_references(self.hass, (o.entity_id for o in self.orphans), dashboards)
+        if references != self.references:
+            self.references = references
+            self._notify()
 
     def _classify(self, e: er.RegistryEntry, loaded: set[str], now: datetime) -> tuple[str | None, datetime | None]:
         """Why `e` is listed (and since when), or (None, None)."""

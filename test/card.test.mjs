@@ -537,6 +537,11 @@ test('text is readable on its tile in light and dark themes (WCAG AA, 4.5:1)', (
   cases.push(['stat warn value', { '--t': 'var(--oe-warn)' }, ['.stat .val', '.stat.warn .val'], [['.stat.warn']]]);
   cases.push(['stat warn label', { '--t': 'var(--oe-warn)' }, ['.stat .lbl'], [['.stat.warn']]]);
   cases.push(['empty list', {}, ['.empty'], [['.empty'], ['.empty.ok']]]);
+  cases.push(['used by badge', {}, ['.used'], [['.used'], ['.used:hover']]]);
+  cases.push(['used by kind', {}, ['.refs .rk'], [['.refs']]]);
+  cases.push(['used by link', {}, ['.refs a'], [['.refs']]]);
+  cases.push(['used by name', {}, ['.refs .rn'], [['.refs']]]);
+  cases.push(['still used warning', {}, ['.dlg .dw'], [['.dlg .dw']]]);
   for (const k of ['danger', 'neutral']) {
     const t = k === 'danger' ? 'var(--oe-alert)' : 'var(--primary-color)';
     cases.push([`button ${k}`, { '--t': t }, ['.act'], [['.act'], ['.act:hover']]]);
@@ -612,4 +617,78 @@ test('orphan devices: listed under the entities, removed together after a confir
   await card._run();
   const call = hass.calls.find((c) => c[1] === 'remove_devices');
   assert.deepEqual(plain(call.slice(0, 3)), ['orphan_entities', 'remove_devices', { devices: ['d1', 'd2'] }]);
+});
+
+const USES = [
+  { type: 'automation', id: 'automation.hall_lights', name: 'Hall lights', path: '/config/automation/edit/1700000000' },
+  { type: 'script', id: 'script.night', name: 'Night', path: '/config/script/edit/night' },
+  { type: 'group', id: 'group.downstairs', name: 'Downstairs', path: null },
+  { type: 'dashboard', id: 'lovelace', name: 'Overview', path: '/lovelace' },
+];
+// The card's markup without its styles.
+const markup = (card) => html(card).replace(/<style>[\s\S]*?<\/style>/, '');
+const usedItems = () => ITEMS.map((i) => ({ ...i, used_by: i.entity_id === 'light.hallway' ? USES : [] }));
+
+test('used by: a badge on the rows still in use, its list in the tooltip and under the row with links', () => {
+  const card = render({}, makeHass({ items: usedItems() }));
+  let h = html(card);
+  assert.equal((h.match(/class="used"/g) || []).length, 1);
+  assert.match(h, /data-used="light.hallway"[^>]*aria-expanded="false" title="Automation: Hall lights\nScript: Night\nGroup: Downstairs\nDashboard: Overview">.*<span>Used by 4<\/span>/);
+  assert.doesNotMatch(h, /class="refs"/);
+  // Selecting the row still works, the badge is its own button next to it.
+  assert.deepEqual(rows(card), ITEMS.map((i) => i.entity_id));
+  card._open.add('light.hallway');
+  card._render();
+  h = html(card);
+  assert.match(h, /aria-expanded="true"/);
+  assert.match(h, /<a href="\/config\/automation\/edit\/1700000000" data-nav="\/config\/automation\/edit\/1700000000">Hall lights<\/a>/);
+  assert.match(h, /<a href="\/config\/script\/edit\/night" data-nav="\/config\/script\/edit\/night">Night<\/a>/);
+  assert.match(h, /<span class="rk">Group<\/span><span class="rn">Downstairs<\/span>/);
+  // Other users see the badge too.
+  assert.match(html(render({}, makeHass({ items: usedItems(), admin: false }))), /Used by 4/);
+  // Unused rows: no badge, as before.
+  assert.doesNotMatch(html(render({}, makeHass())), /class="used"/);
+  // The list of an entity no longer listed closes.
+  card.hass = makeHass({ items: usedItems().filter((i) => i.entity_id !== 'light.hallway') });
+  assert.equal(card._open.size, 0);
+});
+
+test('used by: names and paths are escaped, a path that is not a page is not a link', () => {
+  const items = [orphan('sensor.x', 'demo', 'not_provided', { used_by: [{ type: 'automation', name: '<b>A</b>', path: 'javascript:alert(1)' }] })];
+  const card = render({}, makeHass({ items }));
+  card._open.add('sensor.x');
+  card._render();
+  assert.doesNotMatch(html(card), /<b>A|javascript:/);
+  assert.match(html(card), /<span class="rn">&lt;b&gt;A&lt;\/b&gt;<\/span>/);
+});
+
+test('remove: the confirmation counts the selected entities still in use and asks to remove them anyway', () => {
+  const card = render({}, makeHass({ items: usedItems() }));
+  card._toggle('sensor.garage_door');
+  card._toggle('light.hallway');
+  card._confirm = 'remove';
+  card._render();
+  let h = html(card);
+  assert.match(h, /1 selected entity is still in use: what uses it may stop working\./);
+  assert.match(h, /<span>Remove anyway<\/span>/);
+  // The entity in use is listed first, with its badge.
+  assert.match(h, /<ul><li><span class="name">hallway<\/span> <span class="sub">light.hallway<\/span> <span class="ub">Used by 4<\/span>/);
+  // Nothing in use: the usual confirmation.
+  card._sel.delete('light.hallway');
+  card._render();
+  h = markup(card);
+  assert.doesNotMatch(h, /still in use|Remove anyway|class="ub"/);
+  assert.match(h, /<span>Remove<\/span>/);
+  // Ignoring keeps the entities: no warning.
+  card._sel.add('light.hallway');
+  card._confirm = 'ignore';
+  card._render();
+  assert.doesNotMatch(markup(card), /still in use/);
+  // Plurals, in French too.
+  const fr = render({}, makeHass({ items: ITEMS.map((i) => ({ ...i, used_by: USES })), language: 'fr' }));
+  fr._toggleAll();
+  fr._confirm = 'remove';
+  fr._render();
+  assert.match(html(fr), /6 entités sélectionnées sont encore utilisées/);
+  assert.match(html(fr), /Supprimer quand même/);
 });

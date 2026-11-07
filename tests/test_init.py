@@ -457,3 +457,95 @@ async def test_orphan_devices(hass: HomeAssistant):
     assert er.async_get(hass).async_get(node) is None
     assert hass.states.get(ORPHANS).attributes["devices"] == []
     assert node not in _listed(hass)
+
+
+async def test_used_by(hass: HomeAssistant, hass_storage):
+    """Each orphan lists the automations, scripts, scenes, groups and dashboards (storage mode) still using it."""
+    acme = _integration(hass, "acme")
+    used = _entity(hass, "acme", "old_lamp", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    unused = _entity(hass, "acme", "spare", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    hass_storage["lovelace"] = {
+        "version": 1,
+        "key": "lovelace",
+        # sensor.spare_part is another entity: sensor.spare is not used by this dashboard.
+        "data": {"config": {"views": [{"cards": [{"type": "entities", "entities": [used, "sensor.spare_part"]}]}]}},
+    }
+    hass_storage["lovelace_dashboards"] = {
+        "version": 1,
+        "key": "lovelace_dashboards",
+        "data": {
+            "items": [
+                {
+                    "id": "dashboard_lamps",
+                    "url_path": "dashboard-lamps",
+                    "title": "Lamps",
+                    "mode": "storage",
+                    "require_admin": False,
+                    "show_in_sidebar": True,
+                    "icon": None,
+                }
+            ]
+        },
+    }
+    hass_storage["lovelace.dashboard_lamps"] = {
+        "version": 1,
+        "key": "lovelace.dashboard_lamps",
+        "data": {"config": {"views": [{"cards": [{"type": "tile", "entity": used}]}]}},
+    }
+    assert await async_setup_component(hass, "lovelace", {})
+    assert await async_setup_component(
+        hass,
+        "automation",
+        {
+            "automation": {
+                "id": "lamp_alert",
+                "alias": "Lamp alert",
+                "triggers": [{"trigger": "state", "entity_id": used}],
+                "actions": [{"delay": 1}],
+            }
+        },
+    )
+    assert await async_setup_component(
+        hass,
+        "script",
+        {
+            "script": {
+                "lamp_off": {
+                    "alias": "Lamp off",
+                    "sequence": [{"action": "homeassistant.turn_off", "target": {"entity_id": used}}],
+                }
+            }
+        },
+    )
+    assert await async_setup_component(
+        hass, "scene", {"scene": [{"id": "evening", "name": "Evening", "entities": {used: "on"}}]}
+    )
+    assert await async_setup_component(hass, "group", {"group": {"lamps": {"name": "Lamp group", "entities": [used]}}})
+    await hass.async_block_till_done()
+    await _setup(hass)
+    await _scan(hass)
+
+    entities = {e["entity_id"]: e for e in hass.states.get(ORPHANS).attributes["entities"]}
+    assert entities[unused]["used_by"] == []
+    assert [(r["type"], r["name"], r["path"]) for r in entities[used]["used_by"]] == [
+        ("automation", "Lamp alert", "/config/automation/edit/lamp_alert"),
+        ("script", "Lamp off", "/config/script/edit/lamp_off"),
+        ("scene", "Evening", "/config/scene/edit/evening"),
+        ("group", "Lamp group", None),
+        ("dashboard", "Overview", "/lovelace"),
+        ("dashboard", "Lamps", "/dashboard-lamps"),
+    ]
+    # Kept out of the recorder with the list itself.
+    from custom_components.orphan_entities.sensor import OrphansSensor  # noqa: PLC0415
+
+    assert "entities" in OrphansSensor._unrecorded_attributes
+
+
+async def test_used_by_without_integrations(hass: HomeAssistant):
+    """No automation, script, scene or group loaded, no dashboard: nothing uses the orphans, the scan still works."""
+    acme = _integration(hass, "acme")
+    orphan = _entity(hass, "acme", "old", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    await _setup(hass)
+    await _scan(hass)
+    assert hass.states.get(ORPHANS).attributes["entities"][0]["used_by"] == []
+    assert _listed(hass) == {orphan: "not_provided"}
