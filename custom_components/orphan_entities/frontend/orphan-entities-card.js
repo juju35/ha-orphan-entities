@@ -4,7 +4,7 @@
  * Served and added to the dashboard resources by the integration.
  * https://github.com/juju35/ha-orphan-entities
  */
-var ORPHAN_ENTITIES_CARD_VERSION = '1.0.4';
+var ORPHAN_ENTITIES_CARD_VERSION = '1.0.6';
 
 const OE_I18N = {
   en: {
@@ -1751,10 +1751,31 @@ class OrphanEntitiesCard extends HTMLElement {
 
   connectedCallback() {
     document.addEventListener('keydown', this._onKey);
+    // The header is fitted again when the card is resized (a phone turned, a column added to the view).
+    if (typeof ResizeObserver === 'function' && !this._resize) {
+      this._resize = new ResizeObserver(() => this._fitPill());
+      this._resize.observe(this);
+    }
   }
 
   disconnectedCallback() {
     document.removeEventListener('keydown', this._onKey);
+    this._resize?.disconnect();
+    this._resize = null;
+  }
+
+  // The status pill keeps its text only while the text and the title both fit: a long status such as "Waiting for
+  // the first scan" on a narrow card would otherwise leave "Orp…" of the title, or get cut itself. When one of them
+  // is cut, the pill shows its dot alone (the text stays in its tooltip) and the title gets the room.
+  _fitPill() {
+    const root = this.shadowRoot;
+    const pill = root?.querySelector('.head .pill');
+    const text = pill?.querySelector('.ptxt');
+    if (!pill || !text || typeof text.clientWidth !== 'number') return;
+    pill.classList.remove('compact');
+    const title = root.querySelector('.head .title');
+    const cut = (el) => !!el && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1);
+    if (cut(text) || cut(title)) pill.classList.add('compact');
   }
 
   setConfig(config) {
@@ -1885,6 +1906,7 @@ class OrphanEntitiesCard extends HTMLElement {
     const caret = active && typeof active.selectionStart === 'number' ? [active.selectionStart, active.selectionEnd] : null;
     this._draw(m);
     this._bind();
+    this._fitPill();
     if (!focusKey) return;
     const el = [...this.shadowRoot.querySelectorAll('[data-focus]')].find((n) => n.dataset.focus === focusKey);
     el?.focus({ preventScroll: true });
@@ -2254,12 +2276,14 @@ class OrphanEntitiesCard extends HTMLElement {
       .badge { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
                background: color-mix(in srgb, var(--oe-accent) 16%, transparent); color: var(--oe-accent); }
       .badge ha-icon { --mdc-icon-size: 24px; }
-      .heading { flex: 1 1 0; min-width: 5ch; display: flex; flex-direction: column; }
+      /* The title keeps at least 45 % of the header (a few words), the pill takes at most 60 % and wraps on two
+         lines before the title is cut: "En attente de la première analyse" must not leave "Orp…" on a mini card. */
+      .heading { flex: 1 1 0; min-width: min(45%, 14ch); display: flex; flex-direction: column; }
       .title { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .subtitle { font-size: 12px; line-height: 1.3; color: var(--secondary-text-color);
                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .pill { flex: 0 1 auto; min-width: 0; display: flex; align-items: center; box-sizing: border-box;
+      .pill { flex: 0 1 auto; min-width: 0; max-width: 60%; display: flex; align-items: center; box-sizing: border-box;
               white-space: nowrap; overflow: hidden;
               font-size: 11px; font-weight: 500; padding: 1px 6px; border-radius: 9px;
               color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color));
@@ -2267,6 +2291,10 @@ class OrphanEntitiesCard extends HTMLElement {
       .pill .ptxt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: normal; line-height: 1.25;
                     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
       .pill .dot { display: none; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+      /* Dot only: under 200 px, and whenever the text or the title would be cut (class compact, set by _fitPill) */
+      .head .pill.compact { padding: 5px; }
+      .head .pill.compact .dot { display: block; }
+      .head .pill.compact .ptxt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
       @container (max-width: 200px) {
         .head .pill { padding: 5px; }
         .head .pill .dot { display: block; }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6 - 2026-11-07
+
+### Fixes
+- Header: the status pill keeps its text only while the text and the title both fit. On a narrow mini card, *Waiting for the first scan* left "Orp…" of the title; the pill now shows its dot alone (the text stays in its tooltip) whenever its text or the title would be cut, and fits again when the card is resized. The title keeps at least 45 % of the header, the pill at most 60 %.
+
 ## 1.0.4 - 2026-11-05
 
 ### Fixed
