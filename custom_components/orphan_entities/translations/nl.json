@@ -18,7 +18,7 @@
           "stale_hours": "Uren dat een entiteit die nog door haar integratie wordt geleverd niet beschikbaar (of onbekend) moet zijn geweest om te worden getoond. 0 toont alleen de entiteiten die niet meer worden geleverd.",
           "include_unknown": "Toon ook de entiteiten die even lang onbekend zijn. Knoppen, scènes en gebeurtenissen, die van nature onbekend zijn, worden nooit getoond.",
           "ignored_integrations": "Integraties waarvan de entiteiten nooit worden getoond. Typ een domein om er een toe te voegen die niet in de lijst staat.",
-          "ignored_entities": "Entiteiten die nooit worden getoond (entiteit-ID's). De kaart voegt ze hier toe met haar knop Negeren."
+          "ignored_entities": "Entiteiten (entiteit-ID's) en apparaten (apparaat-ID's) die nooit worden getoond. De kaart voegt ze hier toe met de knop Negeren."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Uren dat een entiteit die nog door haar integratie wordt geleverd niet beschikbaar (of onbekend) moet zijn geweest om te worden getoond. 0 toont alleen de entiteiten die niet meer worden geleverd.",
           "include_unknown": "Toon ook de entiteiten die even lang onbekend zijn. Knoppen, scènes en gebeurtenissen, die van nature onbekend zijn, worden nooit getoond.",
           "ignored_integrations": "Integraties waarvan de entiteiten nooit worden getoond. Typ een domein om er een toe te voegen die niet in de lijst staat.",
-          "ignored_entities": "Entiteiten die nooit worden getoond (entiteit-ID's). De kaart voegt ze hier toe met haar knop Negeren."
+          "ignored_entities": "Entiteiten (entiteit-ID's) en apparaten (apparaat-ID's) die nooit worden getoond. De kaart voegt ze hier toe met de knop Negeren."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Apparaten"
+          },
+          "truncated": {
+            "name": "Buiten de lijst"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Entiteiten negeren",
-      "description": "Voegt entiteiten toe aan de genegeerde entiteiten: ze worden niet meer getoond.",
+      "description": "Voegt entiteiten of apparaten toe aan de genegeerde: ze worden niet meer getoond.",
       "fields": {
         "entities": {
           "name": "Entiteiten",
           "description": "Entiteit-ID's om te negeren."
+        },
+        "devices": {
+          "name": "Apparaten",
+          "description": "Te negeren apparaat-ID's (verweesde apparaten)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Geen verweesde apparaten (eerst scannen): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Niet in het apparaatregister: {devices}."
     }
   }
 }

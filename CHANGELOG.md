@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0 - 2026-11-07
+
+### What's new
+- **Orphan devices, one by one**: administrators select devices in the card, then **Ignore** or **Remove devices** act on the selection only (**Remove devices** without a selection still removes them all). The `orphan_entities.ignore` action takes device IDs (`devices`), shown by name in the **Ignored entities** option.
+- **Checked again before removal**: `remove` and `remove_devices` classify each entity or device again first, keep the ones no longer orphaned since the scan and return them in `skipped`.
+- **Device removal counts its entities**: the entities removed with orphan devices count in `removed` and are in an `orphan_entities_removed` event, and `remove_devices` takes at most 1000 devices at a time.
+- **Lighter sensor**: the `entities` and `devices` attributes hold at most 250 items each (the new `truncated` attribute and the card say how many orphans are left out), and the dashboards are read again only when one is saved, not at every scan.
 ## 1.3.0 - 2026-11-07
 
 ### What's new

@@ -18,7 +18,7 @@
           "stale_hours": "Ure, ko mora biti entiteta, ki jo njena integracija še zagotavlja, nedosegljiva (ali neznana), da je prikazana. 0 prikaže samo entitete, ki niso več zagotovljene.",
           "include_unknown": "Prikaži tudi entitete, ki so enako dolgo neznane. Gumbi, scene in dogodki, ki so po naravi neznani, niso nikoli prikazani.",
           "ignored_integrations": "Integracije, katerih entitete niso nikoli prikazane. Vnesite domeno, da dodate integracijo, ki je ni na seznamu.",
-          "ignored_entities": "Entitete, ki niso nikoli prikazane (ID-ji entitet). Kartica jih sem doda z gumbom Prezri."
+          "ignored_entities": "Entitete (ID-ji entitet) in naprave (ID-ji naprav), ki niso nikoli prikazane. Kartica jih sem doda z gumbom Prezri."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Ure, ko mora biti entiteta, ki jo njena integracija še zagotavlja, nedosegljiva (ali neznana), da je prikazana. 0 prikaže samo entitete, ki niso več zagotovljene.",
           "include_unknown": "Prikaži tudi entitete, ki so enako dolgo neznane. Gumbi, scene in dogodki, ki so po naravi neznani, niso nikoli prikazani.",
           "ignored_integrations": "Integracije, katerih entitete niso nikoli prikazane. Vnesite domeno, da dodate integracijo, ki je ni na seznamu.",
-          "ignored_entities": "Entitete, ki niso nikoli prikazane (ID-ji entitet). Kartica jih sem doda z gumbom Prezri."
+          "ignored_entities": "Entitete (ID-ji entitet) in naprave (ID-ji naprav), ki niso nikoli prikazane. Kartica jih sem doda z gumbom Prezri."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Naprave"
+          },
+          "truncated": {
+            "name": "Zunaj seznama"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Prezri entitete",
-      "description": "Doda entitete med prezrte entitete: ne bodo več prikazane.",
+      "description": "Doda entitete ali naprave med prezrte: niso več prikazane.",
       "fields": {
         "entities": {
           "name": "Entitete",
           "description": "ID-ji entitet, ki jih želite prezreti."
+        },
+        "devices": {
+          "name": "Naprave",
+          "description": "ID-ji naprav, ki naj se prezrejo (osirotele naprave)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "To niso osirotele naprave (najprej preglejte): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Ni v registru naprav: {devices}."
     }
   }
 }

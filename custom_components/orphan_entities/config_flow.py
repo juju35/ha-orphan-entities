@@ -7,6 +7,7 @@ from typing import Any
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.selector import (
     BooleanSelector,
@@ -66,6 +67,14 @@ async def _schema(hass: HomeAssistant, current: dict[str, Any]) -> vol.Schema:
         key=lambda o: o["label"].casefold(),
     )
     entities: list[str] = list(current.get(CONF_IGNORED_ENTITIES, []))
+    # Device IDs (ignored orphan devices) share the option: shown with the device's name.
+    devices = dr.async_get(hass)
+    ignored_items = [
+        SelectOptionDict(value=item, label=f"{device.name_by_user or device.name or item} ({item})")
+        if (device := devices.async_get(item))
+        else SelectOptionDict(value=item, label=item)
+        for item in sorted(entities)
+    ]
     return vol.Schema(
         {
             vol.Required(CONF_SCAN_INTERVAL, default=current.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)): _number(
@@ -81,7 +90,7 @@ async def _schema(hass: HomeAssistant, current: dict[str, Any]) -> vol.Schema:
                 CONF_INCLUDE_UNKNOWN, default=current.get(CONF_INCLUDE_UNKNOWN, DEFAULT_INCLUDE_UNKNOWN)
             ): BooleanSelector(),
             vol.Optional(CONF_IGNORED_INTEGRATIONS, default=ignored): _multi(options),
-            vol.Optional(CONF_IGNORED_ENTITIES, default=entities): _multi(sorted(entities)),
+            vol.Optional(CONF_IGNORED_ENTITIES, default=entities): _multi(ignored_items),
         }
     )
 

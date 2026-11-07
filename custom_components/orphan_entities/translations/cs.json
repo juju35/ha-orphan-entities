@@ -18,7 +18,7 @@
           "stale_hours": "Počet hodin, po které musí být entita stále poskytovaná svou integrací nedostupná (nebo neznámá), aby byla zobrazena. 0 zobrazí pouze entity, které se již neposkytují.",
           "include_unknown": "Zobrazit také entity, které jsou stejně dlouho neznámé. Tlačítka, scény a události, které jsou ze své podstaty neznámé, se nikdy nezobrazují.",
           "ignored_integrations": "Integrace, jejichž entity se nikdy nezobrazují. Zadejte doménu a přidejte integraci, která není v seznamu.",
-          "ignored_entities": "Entity, které se nikdy nezobrazují (ID entit). Karta je sem přidává tlačítkem Ignorovat."
+          "ignored_entities": "Entity (ID entit) a zařízení (ID zařízení), která se nikdy nezobrazují. Karta je sem přidává tlačítkem Ignorovat."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Počet hodin, po které musí být entita stále poskytovaná svou integrací nedostupná (nebo neznámá), aby byla zobrazena. 0 zobrazí pouze entity, které se již neposkytují.",
           "include_unknown": "Zobrazit také entity, které jsou stejně dlouho neznámé. Tlačítka, scény a události, které jsou ze své podstaty neznámé, se nikdy nezobrazují.",
           "ignored_integrations": "Integrace, jejichž entity se nikdy nezobrazují. Zadejte doménu a přidejte integraci, která není v seznamu.",
-          "ignored_entities": "Entity, které se nikdy nezobrazují (ID entit). Karta je sem přidává tlačítkem Ignorovat."
+          "ignored_entities": "Entity (ID entit) a zařízení (ID zařízení), která se nikdy nezobrazují. Karta je sem přidává tlačítkem Ignorovat."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Zařízení"
+          },
+          "truncated": {
+            "name": "Mimo seznam"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignorovat entity",
-      "description": "Přidá entity mezi ignorované entity: již se nebudou zobrazovat.",
+      "description": "Přidá entity nebo zařízení mezi ignorované: už se nezobrazují.",
       "fields": {
         "entities": {
           "name": "Entity",
           "description": "ID entit k ignorování."
+        },
+        "devices": {
+          "name": "Zařízení",
+          "description": "ID zařízení k ignorování (osiřelá zařízení)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Nejsou to osiřelá zařízení (nejprve skenujte): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Není v registru zařízení: {devices}."
     }
   }
 }

@@ -18,7 +18,7 @@
           "stale_hours": "Liczba godzin, przez które encja nadal dostarczana przez swoją integrację musi być niedostępna (lub nieznana), aby została wyświetlona. 0 wyświetla tylko encje, które nie są już dostarczane.",
           "include_unknown": "Wyświetlaj też encje nieznane przez ten sam czas. Przyciski, sceny i zdarzenia, z natury nieznane, nigdy nie są wyświetlane.",
           "ignored_integrations": "Integracje, których encje nigdy nie są wyświetlane. Wpisz domenę, aby dodać integrację, której nie ma na liście.",
-          "ignored_entities": "Encje, które nigdy nie są wyświetlane (identyfikatory encji). Karta dodaje je tutaj przyciskiem Ignoruj."
+          "ignored_entities": "Encje (ID encji) i urządzenia (ID urządzeń), które nigdy nie są wyświetlane. Karta dodaje je tutaj przyciskiem Ignoruj."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Liczba godzin, przez które encja nadal dostarczana przez swoją integrację musi być niedostępna (lub nieznana), aby została wyświetlona. 0 wyświetla tylko encje, które nie są już dostarczane.",
           "include_unknown": "Wyświetlaj też encje nieznane przez ten sam czas. Przyciski, sceny i zdarzenia, z natury nieznane, nigdy nie są wyświetlane.",
           "ignored_integrations": "Integracje, których encje nigdy nie są wyświetlane. Wpisz domenę, aby dodać integrację, której nie ma na liście.",
-          "ignored_entities": "Encje, które nigdy nie są wyświetlane (identyfikatory encji). Karta dodaje je tutaj przyciskiem Ignoruj."
+          "ignored_entities": "Encje (ID encji) i urządzenia (ID urządzeń), które nigdy nie są wyświetlane. Karta dodaje je tutaj przyciskiem Ignoruj."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Urządzenia"
+          },
+          "truncated": {
+            "name": "Poza listą"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignoruj encje",
-      "description": "Dodaje encje do ignorowanych encji: nie są już wyświetlane.",
+      "description": "Dodaje encje lub urządzenia do ignorowanych: nie są już wyświetlane.",
       "fields": {
         "entities": {
           "name": "Encje",
           "description": "Identyfikatory encji do zignorowania."
+        },
+        "devices": {
+          "name": "Urządzenia",
+          "description": "ID urządzeń do zignorowania (osierocone urządzenia)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "To nie są osierocone urządzenia (najpierw przeskanuj): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Brak w rejestrze urządzeń: {devices}."
     }
   }
 }

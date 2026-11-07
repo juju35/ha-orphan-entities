@@ -317,7 +317,7 @@ async def test_remove(hass: HomeAssistant):
         response = await hass.services.async_call(
             DOMAIN, "remove", {"entities": [a, b, a]}, blocking=True, return_response=True
         )
-        assert response == {"removed": [a, b]}
+        assert response == {"removed": [a, b], "skipped": []}
     else:
         await hass.services.async_call(DOMAIN, "remove", {"entities": [a, b, a]}, blocking=True)
     await hass.async_block_till_done()
@@ -549,3 +549,160 @@ async def test_used_by_without_integrations(hass: HomeAssistant):
     await _scan(hass)
     assert hass.states.get(ORPHANS).attributes["entities"][0]["used_by"] == []
     assert _listed(hass) == {orphan: "not_provided"}
+
+
+async def test_remove_skips_entities_no_longer_orphaned(hass: HomeAssistant):
+    """An entity listed by the last scan but provided again since is kept, and dropped from the list."""
+    acme = _integration(hass, "acme")
+    back = _entity(hass, "acme", "back", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    gone = _entity(hass, "acme", "gone", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    await _setup(hass)
+    assert set(await _scan(hass)) == {back, gone}
+    # Its integration provides it again (a real state, not the restored placeholder).
+    hass.states.async_set(back, "on")
+    scanner = hass.config_entries.async_entries(DOMAIN)[0].runtime_data
+    assert scanner.async_remove([back, gone]) == ([gone], [back])
+    await hass.async_block_till_done()
+    registry = er.async_get(hass)
+    assert registry.async_get(back) is not None
+    assert registry.async_get(gone) is None
+    assert _listed(hass) == {}
+    assert hass.states.get(ORPHANS).attributes["removed"] == 1
+
+
+def _orphan_device(hass: HomeAssistant, domain: str, entities: int = 0):
+    """A device of a config entry then removed, with `entities` entities; (device, entry, entity IDs)."""
+    from homeassistant.helpers import device_registry as dr  # noqa: PLC0415
+
+    entry = _integration(hass, domain)
+    device = dr.async_get(hass).async_get_or_create(
+        config_entry_id=entry.entry_id, identifiers={(domain, "1")}, name=domain.title()
+    )
+    ids = [_entity(hass, domain, f"{domain}_{n}", None, entry, device_id=device.id) for n in range(entities)]
+    hass.config_entries._entries.pop(entry.entry_id)
+    return device, entry, ids
+
+
+async def test_remove_devices_checks_again_and_counts_entities(hass: HomeAssistant):
+    """A device whose integration came back is kept; the entities removed with the others count and fire an event."""
+    from homeassistant.helpers import device_registry as dr  # noqa: PLC0415
+
+    from custom_components.orphan_entities.const import EVENT_DEVICES_REMOVED  # noqa: PLC0415
+
+    old, _, nodes = _orphan_device(hass, "delta", entities=2)
+    back, back_entry, _ = _orphan_device(hass, "omega")
+    await _setup(hass)
+    await _scan(hass)
+    assert {d["device_id"] for d in hass.states.get(ORPHANS).attributes["devices"]} == {old.id, back.id}
+    removed_events = async_capture_events(hass, EVENT_REMOVED)
+    device_events = async_capture_events(hass, EVENT_DEVICES_REMOVED)
+    # The integration of `back` is set up again before the removal.
+    back_entry.add_to_hass(hass)
+
+    scanner = hass.config_entries.async_entries(DOMAIN)[0].runtime_data
+    removed, skipped, entities = scanner.async_remove_devices([old.id, back.id])
+    await hass.async_block_till_done()
+    assert (removed, skipped, sorted(entities)) == ([old.id], [back.id], sorted(nodes))
+    devices = dr.async_get(hass)
+    assert devices.async_get(old.id) is None
+    assert devices.async_get(back.id) is not None
+    assert device_events[0].data == {"devices": [old.id]}
+    assert sorted(removed_events[0].data["entities"]) == sorted(nodes)
+    attributes = hass.states.get(ORPHANS).attributes
+    assert attributes["removed"] == 2
+    assert attributes["devices"] == []
+
+
+async def test_remove_devices_batch_limit(hass: HomeAssistant):
+    first, _, _ = _orphan_device(hass, "delta")
+    second, _, _ = _orphan_device(hass, "omega")
+    await _setup(hass)
+    await _scan(hass)
+    with (
+        patch("custom_components.orphan_entities.scanner.MAX_BATCH", 1),
+        pytest.raises(ServiceValidationError) as err,
+    ):
+        await hass.services.async_call(DOMAIN, "remove_devices", {"devices": [first.id, second.id]}, blocking=True)
+    assert err.value.translation_key == "too_many"
+
+
+async def test_ignore_devices(hass: HomeAssistant):
+    """`ignore` takes device IDs too: the device is no longer listed."""
+    old, _, _ = _orphan_device(hass, "delta")
+    entry = await _setup(hass)
+    await _scan(hass)
+    with pytest.raises(vol.Invalid):
+        await hass.services.async_call(DOMAIN, "ignore", {}, blocking=True)
+    with pytest.raises(ServiceValidationError) as err:
+        await hass.services.async_call(DOMAIN, "ignore", {"devices": ["nowhere"]}, blocking=True)
+    assert err.value.translation_key == "device_not_registered"
+
+    await hass.services.async_call(DOMAIN, "ignore", {"devices": [old.id]}, blocking=True)
+    await hass.async_block_till_done()
+    assert entry.options[CONF_IGNORED_ENTITIES] == [old.id]
+    await _scan(hass)
+    assert hass.states.get(ORPHANS).attributes["devices"] == []
+
+
+async def test_entities_attribute_capped(hass: HomeAssistant):
+    """The attribute lists at most MAX_LISTED entities; the state keeps the full count."""
+    acme = _integration(hass, "acme")
+    for key in ("a", "b", "c"):
+        _entity(hass, "acme", key, STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    await _setup(hass)
+    with patch("custom_components.orphan_entities.sensor.MAX_LISTED", 2):
+        await _scan(hass)
+        state = hass.states.get(ORPHANS)
+    assert state.state == "3"
+    assert len(state.attributes["entities"]) == 2
+    assert state.attributes["truncated"] == 1
+
+
+async def test_dashboards_read_again_only_when_saved(hass: HomeAssistant, hass_storage):
+    """The dashboards are read at the first scan, then only after `lovelace_updated`, not at every scan."""
+    from custom_components.orphan_entities import scanner as scanner_module  # noqa: PLC0415
+
+    acme = _integration(hass, "acme")
+    used = _entity(hass, "acme", "old_lamp", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    hass_storage["lovelace"] = {
+        "version": 1,
+        "key": "lovelace",
+        "data": {"config": {"views": [{"cards": [{"type": "tile", "entity": used}]}]}},
+    }
+    assert await async_setup_component(hass, "lovelace", {})
+    reads = []
+    original = scanner_module.async_dashboards
+
+    async def counted(hass_: HomeAssistant):
+        reads.append(1)
+        return await original(hass_)
+
+    def used_by() -> list[str]:
+        return [r["type"] for r in hass.states.get(ORPHANS).attributes["entities"][0]["used_by"]]
+
+    with patch.object(scanner_module, "async_dashboards", counted):
+        await _setup(hass)
+        await _scan(hass)
+        assert used_by() == ["dashboard"]
+        await _scan(hass)
+        assert len(reads) == 1
+
+        lovelace = hass.data["lovelace"]
+        dashboards = lovelace["dashboards"] if isinstance(lovelace, dict) else lovelace.dashboards
+        # Newer releases also keep the default dashboard under "lovelace": every storage dashboard drops the lamp.
+        for dashboard in list(dashboards.values()):
+            if getattr(dashboard, "mode", None) == "storage":
+                await dashboard.async_save({"views": []})
+        await hass.async_block_till_done()
+        assert len(reads) >= 2
+        assert used_by() == []
+
+
+async def test_options_show_ignored_devices_by_name(hass: HomeAssistant):
+    """An ignored device ID is shown with its device's name in the options; an entity ID as it is."""
+    old, _, _ = _orphan_device(hass, "delta")
+    entry = await _setup(hass, **{CONF_IGNORED_ENTITIES: [old.id, "sensor.kept"]})
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    selector = result["data_schema"].schema[next(k for k in result["data_schema"].schema if k == CONF_IGNORED_ENTITIES)]
+    labels = {o["value"]: o["label"] for o in selector.config["options"]}
+    assert labels == {old.id: f"Delta ({old.id})", "sensor.kept": "sensor.kept"}

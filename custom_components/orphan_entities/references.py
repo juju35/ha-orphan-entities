@@ -78,11 +78,30 @@ async def async_dashboards(hass: HomeAssistant) -> list[dict[str, Any]]:
     return sorted(found, key=lambda d: (d["id"] != "lovelace", d["name"].casefold()))
 
 
+def find_dashboard_references(
+    entity_ids: Iterable[str], dashboards: list[dict[str, Any]]
+) -> dict[str, list[dict[str, Any]]]:
+    """{entity_id: dashboards using it}: one pass per dashboard, whole IDs (sensor.a does not match sensor.a_b)."""
+    wanted = list(dict.fromkeys(entity_ids))
+    found: dict[str, list[dict[str, Any]]] = {}
+    if not wanted or not dashboards:
+        return found
+    pattern = re.compile(
+        r"(?<![\w.])(" + "|".join(re.escape(e) for e in sorted(wanted, key=len, reverse=True)) + r")(?!\w)"
+    )
+    for dashboard in dashboards:
+        ref = {k: v for k, v in dashboard.items() if k != "text"}
+        for entity_id in dict.fromkeys(pattern.findall(dashboard["text"])):
+            found.setdefault(entity_id, []).append(ref)
+    return found
+
+
 @callback
 def find_references(
-    hass: HomeAssistant, entity_ids: Iterable[str], dashboards: list[dict[str, Any]]
+    hass: HomeAssistant, entity_ids: Iterable[str], in_dashboards: dict[str, list[dict[str, Any]]]
 ) -> dict[str, list[dict[str, Any]]]:
-    """{entity_id: what uses it}, for the entities that something uses. Only the loaded integrations are asked."""
+    """{entity_id: what uses it}, for the entities that something uses. Only the loaded integrations are asked;
+    `in_dashboards` comes from find_dashboard_references."""
     wanted = list(dict.fromkeys(entity_ids))
     if not wanted:
         return {}
@@ -108,16 +127,6 @@ def find_references(
             if isinstance(members, (list, tuple)):
                 for member in members:
                     helpers.setdefault(member, []).append(entry.entity_id)
-    # One pass per dashboard: the entity IDs found in its config, whole (sensor.a does not match sensor.a_b).
-    in_dashboards: dict[str, list[dict[str, Any]]] = {}
-    if dashboards:
-        pattern = re.compile(
-            r"(?<![\w.])(" + "|".join(re.escape(e) for e in sorted(wanted, key=len, reverse=True)) + r")(?!\w)"
-        )
-        for dashboard in dashboards:
-            ref = {k: v for k, v in dashboard.items() if k != "text"}
-            for entity_id in dict.fromkeys(pattern.findall(dashboard["text"])):
-                in_dashboards.setdefault(entity_id, []).append(ref)
 
     found: dict[str, list[dict[str, Any]]] = {}
     for entity_id in wanted:

@@ -26,10 +26,10 @@ Removed integrations, renamed devices and old YAML platforms leave entities behi
 - **Scan** of the entity registry at a set interval (15 minutes by default), and a few seconds after the registry changes
 - **Five reasons**, from the most to the least certain orphan: *Integration removed*, *Integration not loaded*, *Not provided*, then, for entities still provided, *Unavailable* and *Unknown* for longer than a set delay (24 hours by default)
 - **Never during startup**: nothing is listed while Home Assistant starts, nor during the grace period after it has started (10 minutes by default), while the integrations set up their entities. The card then says when the first scan is due; **Scan now** does not wait for it
-- **Bulk removal** from the entity registry, limited to the listed entities, with a confirmation
+- **Bulk removal** from the entity registry, limited to the listed entities, with a confirmation. Each entity is checked again just before: one no longer orphaned is kept
 - **Used by**: each orphan shows what still uses it (automations, scripts, scenes, groups, dashboards), with links to their editors, and the confirmation warns before removing entities still in use
-- **Orphan devices**: devices whose integration entries were all removed, listed under the entities and removed together (with their entities) from the device registry
-- **Ignored integrations and entities**, in the options or with the card's **Ignore** button
+- **Orphan devices**: devices whose integration entries were all removed, listed under the entities; select some to remove (with their entities) or ignore, or remove them all
+- **Ignored integrations, entities and devices**, in the options or with the card's **Ignore** button
 - **Orphaned entities** sensor with the list, **Last scan** sensor, **Scan now** button
 - `orphan_entities.scan`, `orphan_entities.remove`, `orphan_entities.remove_devices` and `orphan_entities.ignore` **actions** for administrators, `orphan_entities_removed` and `orphan_entities_devices_removed` **events**
 - **Lovelace card** bundled with the integration: search, integration and reason filters, selection one by one or of every match, **Remove** and **Ignore** in bulk
@@ -75,7 +75,7 @@ Copy `custom_components/orphan_entities/` to `/config/custom_components/orphan_e
 | Stale after | 24 h | Hours an entity still provided by its integration must have been unavailable (or unknown) to be listed, up to 8760. `0` lists only the entities no longer provided |
 | Include unknown entities | on | Also list the entities unknown for that long. Buttons, scenes, events and other entities unknown by design are never listed |
 | Ignored integrations | none | Integrations whose entities are never listed. The list offers the integrations that own entities; type a domain to add another one |
-| Ignored entities | none | Entity IDs never listed. The card's **Ignore** button adds them here |
+| Ignored entities | none | Entity IDs, and device IDs of orphan devices, never listed (devices shown with their name). The card's **Ignore** button adds them here |
 
 ### What counts as orphaned
 
@@ -89,7 +89,7 @@ Copy `custom_components/orphan_entities/` to `/config/custom_components/orphan_e
 
 Left out: disabled entities (but those of a removed integration), entities of a disabled integration or of one that failed to set up (they come back with it: that's the job of [Integration Watchdog](https://github.com/juju35/ha-integration-watchdog)), the ignored integrations and entities.
 
-**Orphan devices** are the devices of the device registry whose config entries no longer exist, all of them (a device shared with a live entry is still provided). Removing one deletes it from the device registry with its entities, as Home Assistant does when an integration is removed cleanly.
+**Orphan devices** are the devices of the device registry whose config entries no longer exist, all of them (a device shared with a live entry is still provided). Removing one deletes it from the device registry with its entities, as Home Assistant does when an integration is removed cleanly; those entities count in `removed` and are in an `orphan_entities_removed` event.
 
 ### Used by
 
@@ -109,7 +109,7 @@ Limits:
 
 - **YAML dashboards** (and the dashboards of a YAML-mode Lovelace) are not scanned, nor are the YAML files themselves: a card defined there is not found
 - **Templates are not resolved**: an entity named only inside a template (`{{ states('sensor.x') }}`), built from a variable, or targeted through an area, device or label is not found
-- References are refreshed at each scan (every **Scan interval**, after registry changes, or with **Scan now**): an automation edited since then shows up at the next scan
+- References are refreshed at each scan (every **Scan interval**, after registry changes, or with **Scan now**): an automation edited since then shows up at the next scan. Dashboards are read at the first scan, then again only when one is saved
 
 Removing an entity deletes its entry from the entity registry, as its **Delete** button does in Home Assistant. Its history stays in the database. An *Unavailable* or *Unknown* entity is still provided by its integration: it comes back if the integration creates it again (after a reload or a restart).
 
@@ -118,7 +118,7 @@ Removing an entity deletes its entry from the entity registry, as its **Delete**
 | Entity | Description |
 |---|---|
 | `button.orphan_entities_scan_now` | Scans now, even within the grace period (nothing while Home Assistant is starting) |
-| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`, `used_by`: what still uses it, see [Used by](#used-by)), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`, `devices` (orphan devices: `device_id`, `name`, `manufacturer`, `model`, `entities`, `since`). The lists are not recorded in the database |
+| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`, `used_by`: what still uses it, see [Used by](#used-by)), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`, `devices` (orphan devices: `device_id`, `name`, `manufacturer`, `model`, `entities`, `since`), `truncated` (orphans left out of `entities`). `entities` and `devices` hold at most 250 items each, the most certain orphans first; the state keeps the full count. The lists are not recorded in the database |
 | `sensor.orphan_entities_last_scan` | End of the last scan |
 
 ### Action `orphan_entities.scan`
@@ -131,7 +131,7 @@ action: orphan_entities.scan
 
 ### Action `orphan_entities.remove`
 
-Removes entities from the entity registry. For administrators. Each one must be in the list of the last scan: otherwise nothing is removed. Returns the entities removed (Home Assistant 2025.1 or newer).
+Removes entities from the entity registry. For administrators. Each one must be in the list of the last scan: otherwise nothing is removed. Each one is also classified again just before: an entity no longer orphaned since the scan (its integration is back, it is available again) is kept and returned in `skipped`. At most 1000 at a time. Returns the entities removed and skipped (Home Assistant 2025.1 or newer).
 
 ```yaml
 action: orphan_entities.remove
@@ -139,32 +139,34 @@ data:
   entities:
     - sensor.old_temperature
     - light.old_lamp
+response_variable: result  # {"removed": ["sensor.old_temperature"], "skipped": ["light.old_lamp"]}
 ```
 
 ### Action `orphan_entities.remove_devices`
 
-Removes orphan devices, with their entities. Only the devices of the last scan's `devices` list: any other refuses the request. For administrators.
+Removes orphan devices, with their entities. Only the devices of the last scan's `devices` list: any other refuses the request. Each device is checked again just before: one whose integration is back is kept and returned in `skipped`. At most 1000 at a time. For administrators. Fires `orphan_entities_devices_removed`, and `orphan_entities_removed` with the entities removed with the devices.
 
 ```yaml
 action: orphan_entities.remove_devices
 data:
   devices: 3b1f0c2e9d8a4f6b
-response_variable: result  # {"removed": ["3b1f0c2e9d8a4f6b"]}
+response_variable: result  # {"removed": ["3b1f0c2e9d8a4f6b"], "skipped": [], "entities": ["sensor.old_hub_temperature"]}
 ```
 
 ### Action `orphan_entities.ignore`
 
-Adds entities to the **Ignored entities** option: they are no longer listed. For administrators.
+Adds entities, or orphan devices (`devices`, device IDs), to the **Ignored entities** option: they are no longer listed. For administrators. Give `entities`, `devices` or both.
 
 ```yaml
 action: orphan_entities.ignore
 data:
   entities: sensor.kept_on_purpose
+  devices: 3b1f0c2e9d8a4f6b
 ```
 
 ### Event `orphan_entities_removed`
 
-Fired after each removal, with `entities`, the entity IDs removed.
+Fired after each removal, with `entities`, the entity IDs removed (also those removed with orphan devices).
 
 Notify when new orphans appear:
 
@@ -202,7 +204,7 @@ type: custom:orphan-entities-card
 
 | Orphan devices | |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-devices.png" alt="Card, orphan devices" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-devices-dark.png" alt="Card, orphan devices, dark theme" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-devices.png" alt="Card, orphan devices, one selected" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-devices-dark.png" alt="Card, orphan devices, one selected, dark theme" width="400"> |
 
 | Filtered on a reason | No orphan |
 |---|---|
@@ -212,9 +214,10 @@ type: custom:orphan-entities-card
 - **Header**: status (*n orphans*, no orphan, waiting for the first scan), time of the last scan and the **Scan now** button. On a narrow card the status takes a second line, shortens, then keeps only its coloured dot
 - **Summary**: orphans, removed since Home Assistant started, ignored (listed on hover)
 - **Filters**: search on the name, entity ID, integration, device and config entry; integration list; a chip per reason with its count
-- **List**: for each entity, its integration's logo, name, entity ID, device, reason and for how long. No longer provided in red, stale in orange. A long list stops at **Rows shown**, then **Show all**
+- **List**: for each entity, its integration's logo, name, entity ID, device, reason and for how long. No longer provided in red, stale in orange. A long list stops at **Rows shown**, then **Show all**. Past 250 orphans, a note says how many more there are: remove or ignore the first ones to see them
 - **Used by**: an entity that an automation, a script, a scene, a group or a dashboard still uses gets an orange **Used by n** badge; its tooltip lists them, a click opens the list under the row, with links to their editors. When some selected entities are still in use, the removal confirmation says how many and asks to **Remove anyway**
 - **Selection** (administrators only): click a row to select it; **Select the n shown** selects every entity matching the filters, including those past **Rows shown**. **Ignore** and **Remove** then act on the selection, after a confirmation at the top of the card (Escape cancels). Other users see the list without checkboxes
+- **Orphan devices**: **Remove devices** removes them all; administrators can also select some (click a row), then **Ignore** or **Remove devices** act on the selection only
 
 Every option is in the visual editor:
 
@@ -254,7 +257,7 @@ It takes every option of the full card (they set its detail view), plus:
 
 ## How it works
 
-At each interval, and 10 seconds after the last change of the entity registry or of a config entry, the integration goes through the entity registry, reads each entity's config entry and state, and classifies it. It then asks the automations, scripts, scenes and groups which listed entities they use, and searches the dashboards in storage mode for them (read once from storage, then from memory, after the scan). Entities only restored by Home Assistant carry `restored: true` in their state: their integration didn't create them. No automatic scan runs before Home Assistant has fully started and the grace period has passed; a scan asked for with the button or the action only waits for the start.
+At each interval, and 10 seconds after the last change of the entity registry or of a config entry, the integration goes through the entity registry, reads each entity's config entry and state, and classifies it. It then asks the automations, scripts, scenes and groups which listed entities they use, and searches the dashboards in storage mode for them (read at the first scan, then again only when a dashboard is saved). Entities only restored by Home Assistant carry `restored: true` in their state: their integration didn't create them. No automatic scan runs before Home Assistant has fully started and the grace period has passed; a scan asked for with the button or the action only waits for the start.
 
 To report a problem, attach the diagnostics (Settings → Devices & services → Orphan Entities → ⋮ → **Download diagnostics**): the options and the last scan (listed entities and devices, counts, what uses them), with config entry titles (often an account or a host) and any password, token, key, username, email, host, URL, address, GPS position, VIN, plate or tracking number redacted.
 

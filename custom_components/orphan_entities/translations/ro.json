@@ -18,7 +18,7 @@
           "stale_hours": "Ore în care o entitate încă furnizată de integrarea sa trebuie să fi fost indisponibilă (sau necunoscută) pentru a fi listată. 0 listează doar entitățile care nu mai sunt furnizate.",
           "include_unknown": "Listează și entitățile necunoscute de tot atâta timp. Butoanele, scenele și evenimentele, necunoscute prin natura lor, nu sunt listate niciodată.",
           "ignored_integrations": "Integrări ale căror entități nu sunt listate niciodată. Tastați un domeniu pentru a adăuga una care nu apare în listă.",
-          "ignored_entities": "Entități care nu sunt listate niciodată (ID-uri de entitate). Cardul le adaugă aici cu butonul său Ignoră."
+          "ignored_entities": "Entități (ID-uri de entitate) și dispozitive (ID-uri de dispozitiv) niciodată listate. Cardul le adaugă aici cu butonul Ignoră."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Ore în care o entitate încă furnizată de integrarea sa trebuie să fi fost indisponibilă (sau necunoscută) pentru a fi listată. 0 listează doar entitățile care nu mai sunt furnizate.",
           "include_unknown": "Listează și entitățile necunoscute de tot atâta timp. Butoanele, scenele și evenimentele, necunoscute prin natura lor, nu sunt listate niciodată.",
           "ignored_integrations": "Integrări ale căror entități nu sunt listate niciodată. Tastați un domeniu pentru a adăuga una care nu apare în listă.",
-          "ignored_entities": "Entități care nu sunt listate niciodată (ID-uri de entitate). Cardul le adaugă aici cu butonul său Ignoră."
+          "ignored_entities": "Entități (ID-uri de entitate) și dispozitive (ID-uri de dispozitiv) niciodată listate. Cardul le adaugă aici cu butonul Ignoră."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Dispozitive"
+          },
+          "truncated": {
+            "name": "În afara listei"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignoră entități",
-      "description": "Adaugă entități la entitățile ignorate: nu mai sunt listate.",
+      "description": "Adaugă entități sau dispozitive la cele ignorate: nu mai sunt listate.",
       "fields": {
         "entities": {
           "name": "Entități",
           "description": "ID-urile entităților de ignorat."
+        },
+        "devices": {
+          "name": "Dispozitive",
+          "description": "ID-urile dispozitivelor de ignorat (dispozitive orfane)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Nu sunt dispozitive orfane (scanați mai întâi): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Nu se află în registrul de dispozitive: {devices}."
     }
   }
 }

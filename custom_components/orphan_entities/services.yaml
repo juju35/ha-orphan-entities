@@ -10,8 +10,12 @@ remove:
 ignore:
   fields:
     entities:
-      required: true
       example: "sensor.kept_on_purpose"
+      selector:
+        text:
+          multiple: true
+    devices:
+      example: "3b1f0c2e9d8a4f6b"
       selector:
         text:
           multiple: true

@@ -692,3 +692,52 @@ test('remove: the confirmation counts the selected entities still in use and ask
   assert.match(html(fr), /6 entités sélectionnées sont encore utilisées/);
   assert.match(html(fr), /Supprimer quand même/);
 });
+
+test('orphan devices: administrators select some to ignore or remove; a vanished device leaves the selection', async () => {
+  const hass = makeHass();
+  const devices = [
+    { device_id: 'd1', name: 'Old hub', manufacturer: 'Acme', model: 'H1', entities: 2, since: null },
+    { device_id: 'd2', name: 'Old plug', manufacturer: null, model: null, entities: 0, since: null },
+  ];
+  hass.states[ORPHANS].attributes.devices = devices;
+  const card = render({}, hass);
+  assert.deepEqual([...html(card).matchAll(/data-dev="([^"]+)"/g)].map((m) => m[1]), ['d1', 'd2']);
+  card._toggle('d2', card._dsel);
+  let out = html(card);
+  assert.match(out, /Orphan devices · 1\/2/);
+  assert.match(out, /aria-checked="true" data-dev="d2"/);
+  assert.match(out, /data-act="ignore_devices"/);
+  assert.match(out, /data-act="clear_devices"/);
+
+  card._confirm = 'ignore_devices';
+  card._render();
+  out = html(card);
+  assert.match(out, /Ignore the selected devices\?/);
+  assert.match(out, /<li><span class="name">Old plug<\/span>/);
+  assert.doesNotMatch(out, /<li><span class="name">Old hub<\/span>/);
+  await card._run();
+  assert.deepEqual(plain(hass.calls.at(-1).slice(0, 3)), ['orphan_entities', 'ignore', { devices: ['d2'] }]);
+  assert.equal(card._dsel.size, 0);
+
+  card._toggle('d1', card._dsel);
+  card._confirm = 'remove_devices';
+  card._render();
+  await card._run();
+  assert.deepEqual(plain(hass.calls.at(-1).slice(0, 3)), ['orphan_entities', 'remove_devices', { devices: ['d1'] }]);
+
+  // A device no longer listed is dropped from the selection.
+  card._toggle('d2', card._dsel);
+  card.hass = { ...hass, states: { ...hass.states, [ORPHANS]: { ...hass.states[ORPHANS], attributes: { ...hass.states[ORPHANS].attributes, devices: [devices[0]] } } } };
+  assert.equal(card._dsel.size, 0);
+  // Other users: no checkboxes.
+  const viewer = makeHass({ admin: false });
+  viewer.states[ORPHANS].attributes.devices = devices;
+  assert.doesNotMatch(html(render({}, viewer)), /data-dev=/);
+});
+
+test('a list cut by the integration says how many orphans are left out', () => {
+  const hass = makeHass();
+  hass.states[ORPHANS].attributes.truncated = 40;
+  assert.match(html(render({}, hass)), /class="empty trunc">40 more orphans are not listed here/);
+  assert.doesNotMatch(html(render({}, makeHass())), /class="empty trunc"/);
+});

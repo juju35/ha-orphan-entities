@@ -18,7 +18,7 @@
           "stale_hours": "Heures pendant lesquelles une entité encore fournie par son intégration doit avoir été indisponible (ou inconnue) pour être listée. 0 ne liste que les entités qui ne sont plus fournies.",
           "include_unknown": "Lister aussi les entités inconnues depuis aussi longtemps. Les boutons, scènes et événements, inconnus par nature, ne sont jamais listés.",
           "ignored_integrations": "Intégrations dont les entités ne sont jamais listées. Saisissez un domaine pour en ajouter une qui n'est pas dans la liste.",
-          "ignored_entities": "Entités jamais listées (ID d'entité). La carte les ajoute ici avec son bouton Ignorer."
+          "ignored_entities": "Entités (ID d'entité) et appareils (ID d'appareil) jamais listés. La carte les ajoute ici avec son bouton Ignorer."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Heures pendant lesquelles une entité encore fournie par son intégration doit avoir été indisponible (ou inconnue) pour être listée. 0 ne liste que les entités qui ne sont plus fournies.",
           "include_unknown": "Lister aussi les entités inconnues depuis aussi longtemps. Les boutons, scènes et événements, inconnus par nature, ne sont jamais listés.",
           "ignored_integrations": "Intégrations dont les entités ne sont jamais listées. Saisissez un domaine pour en ajouter une qui n'est pas dans la liste.",
-          "ignored_entities": "Entités jamais listées (ID d'entité). La carte les ajoute ici avec son bouton Ignorer."
+          "ignored_entities": "Entités (ID d'entité) et appareils (ID d'appareil) jamais listés. La carte les ajoute ici avec son bouton Ignorer."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Appareils"
+          },
+          "truncated": {
+            "name": "Hors de la liste"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignorer des entités",
-      "description": "Ajoute des entités aux entités ignorées : elles ne sont plus listées.",
+      "description": "Ajoute des entités ou des appareils aux éléments ignorés : ils ne sont plus listés.",
       "fields": {
         "entities": {
           "name": "Entités",
           "description": "ID des entités à ignorer."
+        },
+        "devices": {
+          "name": "Appareils",
+          "description": "ID des appareils à ignorer (appareils orphelins)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Pas des appareils orphelins (lancez une analyse) : {devices}"
+    },
+    "device_not_registered": {
+      "message": "Absent du registre des appareils : {devices}."
     }
   }
 }

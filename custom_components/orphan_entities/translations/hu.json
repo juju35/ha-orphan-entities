@@ -18,7 +18,7 @@
           "stale_hours": "Ennyi órán át kell nem elérhetőnek (vagy ismeretlennek) lennie egy integrációja által még biztosított entitásnak ahhoz, hogy listázva legyen. 0 esetén csak a már nem biztosított entitások jelennek meg.",
           "include_unknown": "Az ugyanennyi ideje ismeretlen entitások listázása is. A gombok, jelenetek és események, amelyek természetüknél fogva ismeretlenek, soha nem jelennek meg.",
           "ignored_integrations": "Integrációk, amelyek entitásai soha nem jelennek meg. Írjon be egy domaint, hogy hozzáadjon egy olyat, amely nincs a listában.",
-          "ignored_entities": "Soha nem listázott entitások (entitásazonosítók). A kártya Mellőzés gombjával ide veszi fel őket."
+          "ignored_entities": "Soha nem listázott entitások (entitásazonosítók) és eszközök (eszközazonosítók). A kártya Mellőzés gombjával ide veszi fel őket."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Ennyi órán át kell nem elérhetőnek (vagy ismeretlennek) lennie egy integrációja által még biztosított entitásnak ahhoz, hogy listázva legyen. 0 esetén csak a már nem biztosított entitások jelennek meg.",
           "include_unknown": "Az ugyanennyi ideje ismeretlen entitások listázása is. A gombok, jelenetek és események, amelyek természetüknél fogva ismeretlenek, soha nem jelennek meg.",
           "ignored_integrations": "Integrációk, amelyek entitásai soha nem jelennek meg. Írjon be egy domaint, hogy hozzáadjon egy olyat, amely nincs a listában.",
-          "ignored_entities": "Soha nem listázott entitások (entitásazonosítók). A kártya Mellőzés gombjával ide veszi fel őket."
+          "ignored_entities": "Soha nem listázott entitások (entitásazonosítók) és eszközök (eszközazonosítók). A kártya Mellőzés gombjával ide veszi fel őket."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Eszközök"
+          },
+          "truncated": {
+            "name": "Listán kívül"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Entitások figyelmen kívül hagyása",
-      "description": "Hozzáadja az entitásokat a figyelmen kívül hagyottakhoz: többé nem jelennek meg.",
+      "description": "Entitásokat vagy eszközöket ad a figyelmen kívül hagyottakhoz: többé nem jelennek meg.",
       "fields": {
         "entities": {
           "name": "Entitások",
           "description": "A figyelmen kívül hagyandó entitások azonosítói."
+        },
+        "devices": {
+          "name": "Eszközök",
+          "description": "Figyelmen kívül hagyandó eszközazonosítók (árva eszközök)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Nem árva eszközök (először futtasson vizsgálatot): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Nincs az eszköznyilvántartásban: {devices}."
     }
   }
 }

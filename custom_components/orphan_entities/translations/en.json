@@ -18,7 +18,7 @@
           "stale_hours": "Hours an entity still provided by its integration must have been unavailable (or unknown) to be listed. 0 lists only the entities no longer provided.",
           "include_unknown": "Also list the entities unknown for that long. Buttons, scenes and events, unknown by design, are never listed.",
           "ignored_integrations": "Integrations whose entities are never listed. Type a domain to add one that isn't listed.",
-          "ignored_entities": "Entities never listed (entity IDs). The card adds them here with its Ignore button."
+          "ignored_entities": "Entities (entity IDs) and devices (device IDs) never listed. The card adds them here with its Ignore button."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Hours an entity still provided by its integration must have been unavailable (or unknown) to be listed. 0 lists only the entities no longer provided.",
           "include_unknown": "Also list the entities unknown for that long. Buttons, scenes and events, unknown by design, are never listed.",
           "ignored_integrations": "Integrations whose entities are never listed. Type a domain to add one that isn't listed.",
-          "ignored_entities": "Entities never listed (entity IDs). The card adds them here with its Ignore button."
+          "ignored_entities": "Entities (entity IDs) and devices (device IDs) never listed. The card adds them here with its Ignore button."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Devices"
+          },
+          "truncated": {
+            "name": "Left out of the list"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignore entities",
-      "description": "Adds entities to the ignored entities: they are no longer listed.",
+      "description": "Adds entities or devices to the ignored ones: they are no longer listed.",
       "fields": {
         "entities": {
           "name": "Entities",
           "description": "Entity IDs to ignore."
+        },
+        "devices": {
+          "name": "Devices",
+          "description": "Device IDs to ignore (orphan devices)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Not orphan devices (scan first): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Not in the device registry: {devices}."
     }
   }
 }

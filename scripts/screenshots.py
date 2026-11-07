@@ -219,8 +219,8 @@ SHOTS = [
     # Filtered on a reason.
     *both("card-filtered", hass=ORPHANS_LIST, reason="not_provided"),
     *both("card-ok", hass=[]),
-    # Orphan devices under the entities.
-    *both("card-devices", hass=ORPHANS_LIST[:2], devices=DEVICES),
+    # Orphan devices under the entities, one selected: Ignore and Remove devices act on it.
+    *both("card-devices", hass=ORPHANS_LIST[:2], devices=DEVICES, dselect=["d2"]),
     *both("mini", hass=ORPHANS_LIST, card=MINI, width=MINI_WIDTH),
     *both("mini-ok", hass=[], card=MINI, width=MINI_WIDTH),
     *both("mini-zoom", hass=ORPHANS_LIST, card=MINI, width=MINI_WIDTH, zoom=True),
@@ -245,6 +245,7 @@ MOUNT = """([hass, dark, card, opts]) => {
     if (opts.zoom) el.shadowRoot.querySelector(".zoom").dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail: 1 }));
     if (opts.reason) el._reason = opts.reason;
     for (const id of opts.select || []) el._sel.add(id);
+    for (const id of opts.dselect || []) el._dsel.add(id);
     for (const id of opts.open || []) el._open.add(id);
     if (opts.confirm) el._confirm = opts.confirm;
     el._sig = null;
@@ -296,7 +297,7 @@ def main():
             page.add_script_tag(content=HA_ELEMENTS)
             page.add_script_tag(content=CARD_JS)
             card = shot.get("card", "orphan-entities-card")
-            opts = {k: shot[k] for k in ("zoom", "select", "confirm", "reason", "open") if k in shot}
+            opts = {k: shot[k] for k in ("zoom", "select", "dselect", "confirm", "reason", "open") if k in shot}
             page.evaluate(
                 MOUNT, [mock_hass(shot["hass"], devices=shot.get("devices", ())), shot["theme"] == "dark", card, opts]
             )
