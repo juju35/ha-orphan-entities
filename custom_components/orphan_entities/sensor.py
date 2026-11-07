@@ -37,7 +37,10 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         return {
-            "entities": [o.as_dict() for o in self.scanner.orphans],
+            # Each with what still uses it (`used_by`): automations, scripts, scenes, groups, dashboards.
+            "entities": [
+                {**o.as_dict(), "used_by": self.scanner.references.get(o.entity_id, [])} for o in self.scanner.orphans
+            ],
             "devices": [d.as_dict() for d in self.scanner.devices],
             # End of the grace period after a start (None once it is over): the card says when the first scan is due.
             "next_scan": self.scanner.next_scan.isoformat() if self.scanner.next_scan else None,

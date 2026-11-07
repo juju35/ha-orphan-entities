@@ -4,7 +4,7 @@
  * Served and added to the dashboard resources by the integration.
  * https://github.com/juju35/ha-orphan-entities
  */
-var ORPHAN_ENTITIES_CARD_VERSION = '1.1.0';
+var ORPHAN_ENTITIES_CARD_VERSION = '1.2.0';
 
 const OE_I18N = {
   en: {
@@ -49,6 +49,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignore {n} entity?',
     confirm_ignore_many: 'Ignore {n} entities?',
     confirm_ignore_text: 'They are no longer listed. Remove them from the ignored entities in the integration options.',
+    used_by: 'Used by {n}',
+    ref_automation: 'Automation',
+    ref_script: 'Script',
+    ref_scene: 'Scene',
+    ref_group: 'Group',
+    ref_dashboard: 'Dashboard',
+    confirm_used_one: '{n} selected entity is still in use: what uses it may stop working.',
+    confirm_used_many: '{n} selected entities are still in use: what uses them may stop working.',
+    remove_anyway: 'Remove anyway',
     and_more: 'and {n} more',
     removed_one: '{n} entity removed',
     removed_many: '{n} entities removed',
@@ -127,6 +136,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignorer {n} entité ?',
     confirm_ignore_many: 'Ignorer {n} entités ?',
     confirm_ignore_text: 'Elles ne sont plus listées. Retirez-les des entités ignorées dans les options de l’intégration.',
+    used_by: 'Utilisée par {n}',
+    ref_automation: 'Automatisation',
+    ref_script: 'Script',
+    ref_scene: 'Scène',
+    ref_group: 'Groupe',
+    ref_dashboard: 'Tableau de bord',
+    confirm_used_one: '{n} entité sélectionnée est encore utilisée : ce qui l’utilise risque de ne plus fonctionner.',
+    confirm_used_many: '{n} entités sélectionnées sont encore utilisées : ce qui les utilise risque de ne plus fonctionner.',
+    remove_anyway: 'Supprimer quand même',
     and_more: 'et {n} de plus',
     removed_one: '{n} entité supprimée',
     removed_many: '{n} entités supprimées',
@@ -205,6 +223,15 @@ const OE_I18N = {
     confirm_ignore_one: '{n} Entität ignorieren?',
     confirm_ignore_many: '{n} Entitäten ignorieren?',
     confirm_ignore_text: 'Sie werden nicht mehr aufgelistet. Entferne sie in den Optionen der Integration aus den ignorierten Entitäten.',
+    used_by: 'Verwendet von {n}',
+    ref_automation: 'Automatisierung',
+    ref_script: 'Skript',
+    ref_scene: 'Szene',
+    ref_group: 'Gruppe',
+    ref_dashboard: 'Dashboard',
+    confirm_used_one: '{n} ausgewählte Entität wird noch verwendet: Was sie nutzt, funktioniert danach womöglich nicht mehr.',
+    confirm_used_many: '{n} ausgewählte Entitäten werden noch verwendet: Was sie nutzt, funktioniert danach womöglich nicht mehr.',
+    remove_anyway: 'Trotzdem entfernen',
     and_more: 'und {n} weitere',
     removed_one: '{n} Entität entfernt',
     removed_many: '{n} Entitäten entfernt',
@@ -283,6 +310,15 @@ const OE_I18N = {
     confirm_ignore_one: '¿Ignorar {n} entidad?',
     confirm_ignore_many: '¿Ignorar {n} entidades?',
     confirm_ignore_text: 'Dejan de mostrarse. Quítalas de las entidades ignoradas en las opciones de la integración.',
+    used_by: 'Usada por {n}',
+    ref_automation: 'Automatización',
+    ref_script: 'Script',
+    ref_scene: 'Escena',
+    ref_group: 'Grupo',
+    ref_dashboard: 'Panel',
+    confirm_used_one: '{n} entidad seleccionada aún está en uso: lo que la usa puede dejar de funcionar.',
+    confirm_used_many: '{n} entidades seleccionadas aún están en uso: lo que las usa puede dejar de funcionar.',
+    remove_anyway: 'Eliminar de todos modos',
     and_more: 'y {n} más',
     removed_one: '{n} entidad eliminada',
     removed_many: '{n} entidades eliminadas',
@@ -361,6 +397,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignorare {n} entità?',
     confirm_ignore_many: 'Ignorare {n} entità?',
     confirm_ignore_text: 'Non vengono più elencate. Rimuovile dalle entità ignorate nelle opzioni dell’integrazione.',
+    used_by: 'Usata da {n}',
+    ref_automation: 'Automazione',
+    ref_script: 'Script',
+    ref_scene: 'Scena',
+    ref_group: 'Gruppo',
+    ref_dashboard: 'Plancia',
+    confirm_used_one: '{n} entità selezionata è ancora in uso: ciò che la usa potrebbe smettere di funzionare.',
+    confirm_used_many: '{n} entità selezionate sono ancora in uso: ciò che le usa potrebbe smettere di funzionare.',
+    remove_anyway: 'Rimuovi comunque',
     and_more: 'e altre {n}',
     removed_one: '{n} entità rimossa',
     removed_many: '{n} entità rimosse',
@@ -439,6 +484,15 @@ const OE_I18N = {
     confirm_ignore_one: '{n} entiteit negeren?',
     confirm_ignore_many: '{n} entiteiten negeren?',
     confirm_ignore_text: 'Ze worden niet meer getoond. Verwijder ze uit de genegeerde entiteiten in de opties van de integratie.',
+    used_by: 'Gebruikt door {n}',
+    ref_automation: 'Automatisering',
+    ref_script: 'Script',
+    ref_scene: 'Scène',
+    ref_group: 'Groep',
+    ref_dashboard: 'Dashboard',
+    confirm_used_one: '{n} geselecteerde entiteit is nog in gebruik: wat haar gebruikt, kan stoppen met werken.',
+    confirm_used_many: '{n} geselecteerde entiteiten zijn nog in gebruik: wat ze gebruikt, kan stoppen met werken.',
+    remove_anyway: 'Toch verwijderen',
     and_more: 'en nog {n}',
     removed_one: '{n} entiteit verwijderd',
     removed_many: '{n} entiteiten verwijderd',
@@ -517,6 +571,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignorar {n} entidade?',
     confirm_ignore_many: 'Ignorar {n} entidades?',
     confirm_ignore_text: 'Deixam de ser listadas. Remova-as das entidades ignoradas nas opções da integração.',
+    used_by: 'Usada por {n}',
+    ref_automation: 'Automatização',
+    ref_script: 'Script',
+    ref_scene: 'Cena',
+    ref_group: 'Grupo',
+    ref_dashboard: 'Painel',
+    confirm_used_one: '{n} entidade selecionada ainda está em uso: o que a usa pode deixar de funcionar.',
+    confirm_used_many: '{n} entidades selecionadas ainda estão em uso: o que as usa pode deixar de funcionar.',
+    remove_anyway: 'Remover mesmo assim',
     and_more: 'e mais {n}',
     removed_one: '{n} entidade removida',
     removed_many: '{n} entidades removidas',
@@ -599,6 +662,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Zignorować {n} encje?',
     confirm_ignore_many: 'Zignorować {n} encji?',
     confirm_ignore_text: 'Nie będą już wyświetlane. Usuń je z ignorowanych encji w opcjach integracji.',
+    used_by: 'Używana przez {n}',
+    ref_automation: 'Automatyzacja',
+    ref_script: 'Skrypt',
+    ref_scene: 'Scena',
+    ref_group: 'Grupa',
+    ref_dashboard: 'Dashboard',
+    confirm_used_one: '{n} zaznaczona encja jest nadal używana: to, co jej używa, może przestać działać.',
+    confirm_used_few: '{n} zaznaczone encje są nadal używane: to, co ich używa, może przestać działać.',
+    confirm_used_many: '{n} zaznaczonych encji jest nadal używanych: to, co ich używa, może przestać działać.',
+    remove_anyway: 'Usuń mimo to',
     and_more: 'i {n} więcej',
     removed_one: 'Usunięto {n} encję',
     removed_few: 'Usunięto {n} encje',
@@ -683,6 +756,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Игнорисати {n} ентитета?',
     confirm_ignore_many: 'Игнорисати {n} ентитета?',
     confirm_ignore_text: 'Више се не приказују. Уклоните их из игнорисаних ентитета у опцијама интеграције.',
+    used_by: 'Користе га: {n}',
+    ref_automation: 'Аутоматизација',
+    ref_script: 'Скрипта',
+    ref_scene: 'Сцена',
+    ref_group: 'Група',
+    ref_dashboard: 'Контролна табла',
+    confirm_used_one: '{n} изабрани ентитет се још користи: оно што га користи може престати да ради.',
+    confirm_used_few: '{n} изабрана ентитета се још користе: оно што их користи може престати да ради.',
+    confirm_used_many: '{n} изабраних ентитета се још користи: оно што их користи може престати да ради.',
+    remove_anyway: 'Ипак уклони',
     and_more: 'и још {n}',
     removed_one: '{n} ентитет уклоњен',
     removed_few: '{n} ентитета уклоњена',
@@ -767,6 +850,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Ignorisati {n} entiteta?',
     confirm_ignore_many: 'Ignorisati {n} entiteta?',
     confirm_ignore_text: 'Više se ne prikazuju. Uklonite ih iz ignorisanih entiteta u opcijama integracije.',
+    used_by: 'Koriste ga: {n}',
+    ref_automation: 'Automatizacija',
+    ref_script: 'Skripta',
+    ref_scene: 'Scena',
+    ref_group: 'Grupa',
+    ref_dashboard: 'Kontrolna tabla',
+    confirm_used_one: '{n} izabrani entitet se još koristi: ono što ga koristi može prestati da radi.',
+    confirm_used_few: '{n} izabrana entiteta se još koriste: ono što ih koristi može prestati da radi.',
+    confirm_used_many: '{n} izabranih entiteta se još koristi: ono što ih koristi može prestati da radi.',
+    remove_anyway: 'Ipak ukloni',
     and_more: 'i još {n}',
     removed_one: '{n} entitet uklonjen',
     removed_few: '{n} entiteta uklonjena',
@@ -851,6 +944,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Ignorați {n} entități?',
     confirm_ignore_many: 'Ignorați {n} de entități?',
     confirm_ignore_text: 'Nu mai sunt listate. Eliminați-le din entitățile ignorate în opțiunile integrării.',
+    used_by: 'Folosită de {n}',
+    ref_automation: 'Automatizare',
+    ref_script: 'Script',
+    ref_scene: 'Scenă',
+    ref_group: 'Grup',
+    ref_dashboard: 'Tablou de bord',
+    confirm_used_one: '{n} entitate selectată este încă folosită: ce o folosește poate să nu mai funcționeze.',
+    confirm_used_few: '{n} entități selectate sunt încă folosite: ce le folosește poate să nu mai funcționeze.',
+    confirm_used_many: '{n} de entități selectate sunt încă folosite: ce le folosește poate să nu mai funcționeze.',
+    remove_anyway: 'Eliminați oricum',
     and_more: 'și încă {n}',
     removed_one: '{n} entitate eliminată',
     removed_few: '{n} entități eliminate',
@@ -931,6 +1034,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignorer {n} entitet?',
     confirm_ignore_many: 'Ignorer {n} entiteter?',
     confirm_ignore_text: 'De vises ikke længere. Fjern dem fra de ignorerede entiteter i integrationens indstillinger.',
+    used_by: 'Bruges af {n}',
+    ref_automation: 'Automatisering',
+    ref_script: 'Script',
+    ref_scene: 'Scene',
+    ref_group: 'Gruppe',
+    ref_dashboard: 'Dashboard',
+    confirm_used_one: '{n} valgt entitet er stadig i brug: det, der bruger den, kan holde op med at virke.',
+    confirm_used_many: '{n} valgte entiteter er stadig i brug: det, der bruger dem, kan holde op med at virke.',
+    remove_anyway: 'Fjern alligevel',
     and_more: 'og {n} til',
     removed_one: '{n} entitet fjernet',
     removed_many: '{n} entiteter fjernet',
@@ -1009,6 +1121,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignorera {n} entitet?',
     confirm_ignore_many: 'Ignorera {n} entiteter?',
     confirm_ignore_text: 'De listas inte längre. Ta bort dem från de ignorerade entiteterna i integrationens alternativ.',
+    used_by: 'Används av {n}',
+    ref_automation: 'Automation',
+    ref_script: 'Skript',
+    ref_scene: 'Scen',
+    ref_group: 'Grupp',
+    ref_dashboard: 'Instrumentpanel',
+    confirm_used_one: '{n} vald entitet används fortfarande: det som använder den kan sluta fungera.',
+    confirm_used_many: '{n} valda entiteter används fortfarande: det som använder dem kan sluta fungera.',
+    remove_anyway: 'Ta bort ändå',
     and_more: 'och {n} till',
     removed_one: '{n} entitet borttagen',
     removed_many: '{n} entiteter borttagna',
@@ -1087,6 +1208,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Да се игнорира ли {n} обект?',
     confirm_ignore_many: 'Да се игнорират ли {n} обекта?',
     confirm_ignore_text: 'Те вече не се показват. Премахнете ги от игнорираните обекти в опциите на интеграцията.',
+    used_by: 'Използван от {n}',
+    ref_automation: 'Автоматизация',
+    ref_script: 'Скрипт',
+    ref_scene: 'Сцена',
+    ref_group: 'Група',
+    ref_dashboard: 'Табло',
+    confirm_used_one: '{n} избран обект все още се използва: това, което го използва, може да спре да работи.',
+    confirm_used_many: '{n} избрани обекта все още се използват: това, което ги използва, може да спре да работи.',
+    remove_anyway: 'Премахни въпреки това',
     and_more: 'и още {n}',
     removed_one: '{n} обект е премахнат',
     removed_many: '{n} обекта са премахнати',
@@ -1169,6 +1299,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Игнорировать {n} объекта?',
     confirm_ignore_many: 'Игнорировать {n} объектов?',
     confirm_ignore_text: 'Они больше не будут отображаться. Удалите их из игнорируемых объектов в параметрах интеграции.',
+    used_by: 'Используется: {n}',
+    ref_automation: 'Автоматизация',
+    ref_script: 'Скрипт',
+    ref_scene: 'Сцена',
+    ref_group: 'Группа',
+    ref_dashboard: 'Панель',
+    confirm_used_one: '{n} выбранный объект всё ещё используется: то, что его использует, может перестать работать.',
+    confirm_used_few: '{n} выбранных объекта всё ещё используются: то, что их использует, может перестать работать.',
+    confirm_used_many: '{n} выбранных объектов всё ещё используются: то, что их использует, может перестать работать.',
+    remove_anyway: 'Всё равно удалить',
     and_more: 'и ещё {n}',
     removed_one: 'Удалён {n} объект',
     removed_few: 'Удалено {n} объекта',
@@ -1253,6 +1393,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Ігнорувати {n} сутності?',
     confirm_ignore_many: 'Ігнорувати {n} сутностей?',
     confirm_ignore_text: 'Вони більше не відображатимуться. Видаліть їх з ігнорованих сутностей у параметрах інтеграції.',
+    used_by: 'Використовується: {n}',
+    ref_automation: 'Автоматизація',
+    ref_script: 'Скрипт',
+    ref_scene: 'Сцена',
+    ref_group: 'Група',
+    ref_dashboard: 'Панель',
+    confirm_used_one: '{n} вибрана сутність досі використовується: те, що її використовує, може перестати працювати.',
+    confirm_used_few: '{n} вибрані сутності досі використовуються: те, що їх використовує, може перестати працювати.',
+    confirm_used_many: '{n} вибраних сутностей досі використовуються: те, що їх використовує, може перестати працювати.',
+    remove_anyway: 'Усе одно видалити',
     and_more: 'і ще {n}',
     removed_one: 'Видалено {n} сутність',
     removed_few: 'Видалено {n} сутності',
@@ -1333,6 +1483,15 @@ const OE_I18N = {
     confirm_ignore_one: '{n} entitás figyelmen kívül hagyása?',
     confirm_ignore_many: '{n} entitás figyelmen kívül hagyása?',
     confirm_ignore_text: 'Többé nem jelennek meg a listában. Az integráció beállításaiban távolíthatja el őket a figyelmen kívül hagyott entitások közül.',
+    used_by: 'Használja: {n}',
+    ref_automation: 'Automatizálás',
+    ref_script: 'Szkript',
+    ref_scene: 'Jelenet',
+    ref_group: 'Csoport',
+    ref_dashboard: 'Irányítópult',
+    confirm_used_one: '{n} kijelölt entitás még használatban van: ami használja, leállhat.',
+    confirm_used_many: '{n} kijelölt entitás még használatban van: ami használja őket, leállhat.',
+    remove_anyway: 'Eltávolítás mégis',
     and_more: 'és még {n}',
     removed_one: '{n} entitás eltávolítva',
     removed_many: '{n} entitás eltávolítva',
@@ -1415,6 +1574,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Ignorovať {n} entity?',
     confirm_ignore_many: 'Ignorovať {n} entít?',
     confirm_ignore_text: 'Už sa nebudú zobrazovať. Odstráňte ich z ignorovaných entít v možnostiach integrácie.',
+    used_by: 'Používa ju: {n}',
+    ref_automation: 'Automatizácia',
+    ref_script: 'Skript',
+    ref_scene: 'Scéna',
+    ref_group: 'Skupina',
+    ref_dashboard: 'Ovládací panel',
+    confirm_used_one: '{n} vybraná entita sa stále používa: to, čo ju používa, môže prestať fungovať.',
+    confirm_used_few: '{n} vybrané entity sa stále používajú: to, čo ich používa, môže prestať fungovať.',
+    confirm_used_many: '{n} vybraných entít sa stále používa: to, čo ich používa, môže prestať fungovať.',
+    remove_anyway: 'Napriek tomu odstrániť',
     and_more: 'a ďalšie ({n})',
     removed_one: 'Odstránená {n} entita',
     removed_few: 'Odstránené {n} entity',
@@ -1499,6 +1668,16 @@ const OE_I18N = {
     confirm_ignore_few: 'Ignorovat {n} entity?',
     confirm_ignore_many: 'Ignorovat {n} entit?',
     confirm_ignore_text: 'Již nebudou zobrazeny. Odeberte je z ignorovaných entit v možnostech integrace.',
+    used_by: 'Používá ji: {n}',
+    ref_automation: 'Automatizace',
+    ref_script: 'Skript',
+    ref_scene: 'Scéna',
+    ref_group: 'Skupina',
+    ref_dashboard: 'Ovládací panel',
+    confirm_used_one: '{n} vybraná entita se stále používá: to, co ji používá, může přestat fungovat.',
+    confirm_used_few: '{n} vybrané entity se stále používají: to, co je používá, může přestat fungovat.',
+    confirm_used_many: '{n} vybraných entit se stále používá: to, co je používá, může přestat fungovat.',
+    remove_anyway: 'Přesto odebrat',
     and_more: 'a další ({n})',
     removed_one: 'Odebrána {n} entita',
     removed_few: 'Odebrány {n} entity',
@@ -1579,6 +1758,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Prezrem {n} entiteto?',
     confirm_ignore_many: 'Prezrem entitete ({n})?',
     confirm_ignore_text: 'Ne bodo več prikazane. Odstranite jih iz prezrtih entitet v možnostih integracije.',
+    used_by: 'Uporablja: {n}',
+    ref_automation: 'Avtomatizacija',
+    ref_script: 'Skripta',
+    ref_scene: 'Scena',
+    ref_group: 'Skupina',
+    ref_dashboard: 'Nadzorna plošča',
+    confirm_used_one: '{n} izbrana entiteta je še v uporabi: kar jo uporablja, lahko preneha delovati.',
+    confirm_used_many: '{n} izbranih entitet je še v uporabi: kar jih uporablja, lahko preneha delovati.',
+    remove_anyway: 'Vseeno odstrani',
     and_more: 'in še {n}',
     removed_one: 'Odstranjena {n} entiteta',
     removed_many: 'Odstranjene entitete: {n}',
@@ -1657,6 +1845,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Ignorēt {n} vienību?',
     confirm_ignore_many: 'Ignorēt {n} vienības?',
     confirm_ignore_text: 'Tās vairs netiek rādītas. Noņemiet tās no ignorētajām vienībām integrācijas opcijās.',
+    used_by: 'Izmanto: {n}',
+    ref_automation: 'Automatizācija',
+    ref_script: 'Skripts',
+    ref_scene: 'Aina',
+    ref_group: 'Grupa',
+    ref_dashboard: 'Informācijas panelis',
+    confirm_used_one: '{n} atlasītā entītija joprojām tiek izmantota: tas, kas to izmanto, var pārstāt darboties.',
+    confirm_used_many: '{n} atlasītās entītijas joprojām tiek izmantotas: tas, kas tās izmanto, var pārstāt darboties.',
+    remove_anyway: 'Tomēr noņemt',
     and_more: 'un vēl {n}',
     removed_one: '{n} vienība noņemta',
     removed_many: '{n} vienības noņemtas',
@@ -1735,6 +1932,15 @@ const OE_I18N = {
     confirm_ignore_one: 'Παράβλεψη {n} οντότητας;',
     confirm_ignore_many: 'Παράβλεψη {n} οντοτήτων;',
     confirm_ignore_text: 'Δεν εμφανίζονται πλέον στη λίστα. Αφαιρέστε τες από τις οντότητες σε παράβλεψη στις επιλογές της ενσωμάτωσης.',
+    used_by: 'Χρησιμοποιείται: {n}',
+    ref_automation: 'Αυτοματισμός',
+    ref_script: 'Σενάριο',
+    ref_scene: 'Σκηνή',
+    ref_group: 'Ομάδα',
+    ref_dashboard: 'Πίνακας ελέγχου',
+    confirm_used_one: '{n} επιλεγμένη οντότητα χρησιμοποιείται ακόμα: ό,τι τη χρησιμοποιεί μπορεί να σταματήσει να λειτουργεί.',
+    confirm_used_many: '{n} επιλεγμένες οντότητες χρησιμοποιούνται ακόμα: ό,τι τις χρησιμοποιεί μπορεί να σταματήσει να λειτουργεί.',
+    remove_anyway: 'Αφαίρεση ούτως ή άλλως',
     and_more: 'και {n} ακόμα',
     removed_one: 'Αφαιρέθηκε {n} οντότητα',
     removed_many: 'Αφαιρέθηκαν {n} οντότητες',
@@ -1837,6 +2043,16 @@ const OE_REASON_ICONS = {
   unavailable: 'mdi:lan-disconnect',
   unknown: 'mdi:help-circle-outline',
 };
+// What still uses an orphan (the integration's `used_by`), in its order: automations, scripts, scenes, groups, dashboards.
+const OE_REF_ICONS = {
+  automation: 'mdi:robot-outline',
+  script: 'mdi:script-text-outline',
+  scene: 'mdi:palette-outline',
+  group: 'mdi:google-circles-communities',
+  dashboard: 'mdi:view-dashboard-outline',
+};
+const oeUses = (i) => (Array.isArray(i?.used_by) ? i.used_by.filter((r) => r && typeof r.name === 'string') : []);
+
 // No longer provided: red; still provided but stale: orange.
 const oeKind = (reason) => (reason === 'unavailable' || reason === 'unknown' ? 'warn' : 'alert');
 
@@ -1892,6 +2108,8 @@ class OrphanEntitiesCard extends HTMLElement {
     this._platform = '';
     this._reason = '';
     this._sel = new Set();
+    // The rows whose "Used by" list is open.
+    this._open = new Set();
     this._showAll = false;
     this._confirm = null;
     this._busy = false;
@@ -2105,7 +2323,7 @@ class OrphanEntitiesCard extends HTMLElement {
     this._sigMinute = minute;
     // Only administrators can remove or ignore entities (admin actions), or open Settings.
     this._admin = this._hass.user?.is_admin === true;
-    const ui = [this._q, this._platform, this._reason, [...this._sel], this._showAll, this._confirm, this._busy, this._zoomed];
+    const ui = [this._q, this._platform, this._reason, [...this._sel], [...this._open], this._showAll, this._confirm, this._busy, this._zoomed];
     const sig = JSON.stringify([c, oeLang(this._hass, c), ids, sensorSt, scanSt, minute, this._admin, ui]);
     if (sig === this._sig) return null;
     this._sig = sig;
@@ -2122,6 +2340,7 @@ class OrphanEntitiesCard extends HTMLElement {
     // The selection only keeps what is still listed; a filter on a vanished integration is dropped.
     const listed = new Set(items.map((i) => i.entity_id));
     for (const id of this._sel) if (!listed.has(id)) this._sel.delete(id);
+    for (const id of this._open) if (!listed.has(id)) this._open.delete(id);
     if (this._platform && !items.some((i) => i.platform === this._platform)) this._platform = '';
     if (this._reason && !items.some((i) => i.reason === this._reason)) this._reason = '';
 
@@ -2190,6 +2409,19 @@ class OrphanEntitiesCard extends HTMLElement {
       this._render();
     });
     on('.row[data-id]', 'click', (el) => this._toggle(el.dataset.id));
+    on('.used[data-used]', 'click', (el) => {
+      const id = el.dataset.used;
+      if (this._open.has(id)) this._open.delete(id);
+      else this._open.add(id);
+      this._render();
+    });
+    // An editor page or a dashboard: opened in Home Assistant's frontend, without reloading the page.
+    on('.refs a[data-nav]', 'click', (el, ev) => {
+      if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.button) return;
+      ev.preventDefault();
+      window.history.pushState(null, '', el.dataset.nav);
+      window.dispatchEvent(new CustomEvent('location-changed', { detail: { replace: false } }));
+    });
     on('.all', 'click', () => this._toggleAll());
     on('.more', 'click', () => {
       this._showAll = true;
@@ -2418,11 +2650,32 @@ class OrphanEntitiesCard extends HTMLElement {
               <span class="lbl">${oeEsc(label)}</span>
               ${since ? `<span class="ago">${oeEsc(since)}</span>` : ''}
             </span>`;
-    if (!this._admin) return `<div class="row ${kind}" title="${oeEsc(title)}">${body}</div>`;
     const on = this._sel.has(i.entity_id);
-    return `<button class="row ${kind}${on ? ' sel' : ''}" role="checkbox" aria-checked="${on}" data-id="${oeEsc(i.entity_id)}" data-focus="e:${oeEsc(i.entity_id)}" title="${oeEsc(title)}">
+    const row = !this._admin
+      ? `<div class="row ${kind}" title="${oeEsc(title)}">${body}</div>`
+      : `<button class="row ${kind}${on ? ' sel' : ''}" role="checkbox" aria-checked="${on}" data-id="${oeEsc(i.entity_id)}" data-focus="e:${oeEsc(i.entity_id)}" title="${oeEsc(title)}">
             <span class="box${on ? ' on' : ''}"><ha-icon icon="${on ? 'mdi:check' : ''}"></ha-icon></span>${body}
           </button>`;
+    const uses = oeUses(i);
+    return uses.length ? this._used(i.entity_id, row, uses) : row;
+  }
+
+  // A row still used by something: its "Used by N" badge (the list in its tooltip) opens the list under the row,
+  // each with a link to its editor page or dashboard when it has one.
+  _used(id, row, uses) {
+    const open = this._open.has(id);
+    const kind = (r) => this._t(`ref_${r.type}`);
+    const tip = uses.map((r) => `${kind(r)}: ${r.name}`).join('\n');
+    const label = this._t('used_by', { n: uses.length });
+    const refs = uses
+      .map((r) => {
+        const name = oeEsc(r.name);
+        const path = typeof r.path === 'string' && r.path.startsWith('/') ? r.path : '';
+        const link = path ? `<a href="${oeEsc(path)}" data-nav="${oeEsc(path)}">${name}</a>` : `<span class="rn">${name}</span>`;
+        return `<li><ha-icon icon="${OE_REF_ICONS[r.type] || 'mdi:link-variant'}"></ha-icon><span class="rk">${oeEsc(kind(r))}</span>${link}</li>`;
+      })
+      .join('');
+    return `<div class="item">${row}<button class="used" data-used="${oeEsc(id)}" data-focus="u:${oeEsc(id)}" aria-expanded="${open}" title="${oeEsc(tip)}"><ha-icon icon="mdi:link-variant"></ha-icon><span>${oeEsc(label)}</span></button>${open ? `<ul class="refs">${refs}</ul>` : ''}</div>`;
   }
 
   // Above the list while entities are selected: their count, then Ignore, Remove and clear.
@@ -2445,18 +2698,28 @@ class OrphanEntitiesCard extends HTMLElement {
     if (act === 'remove_devices') return this._devicesDialog();
     const ids = [...this._sel];
     const items = this._hass.states[this._ids.orphans]?.attributes?.entities || [];
-    const names = new Map(items.map((i) => [i.entity_id, i.name]));
-    const first = ids.slice(0, 5).map((id) => `<li><span class="name">${oeEsc(names.get(id) || id)}</span> <span class="sub">${oeEsc(id)}</span></li>`);
-    if (ids.length > 5) first.push(`<li class="sub">${oeEsc(this._t('and_more', { n: ids.length - 5 }))}</li>`);
+    const byId = new Map(items.map((i) => [i.entity_id, i]));
     const remove = act === 'remove';
+    // The selected entities still in use come first: they are the ones to look at before removing.
+    const uses = (id) => oeUses(byId.get(id)).length;
+    if (remove) ids.sort((a, b) => (uses(b) > 0) - (uses(a) > 0));
+    const used = remove ? ids.filter((id) => uses(id)).length : 0;
+    const first = ids.slice(0, 5).map((id) => {
+      const n = remove ? uses(id) : 0;
+      const badge = n ? ` <span class="ub">${oeEsc(this._t('used_by', { n }))}</span>` : '';
+      return `<li><span class="name">${oeEsc(byId.get(id)?.name || id)}</span> <span class="sub">${oeEsc(id)}</span>${badge}</li>`;
+    });
+    if (ids.length > 5) first.push(`<li class="sub">${oeEsc(this._t('and_more', { n: ids.length - 5 }))}</li>`);
+    const warn = used ? `<div class="dw"><ha-icon icon="mdi:alert-outline"></ha-icon><span>${oeEsc(this._count('confirm_used', used))}</span></div>` : '';
     return `<div class="scrim"></div>
         <div class="dlg ${remove ? 'danger' : 'neutral'}" role="alertdialog" aria-modal="true" aria-labelledby="dlg-t">
           <div class="dt" id="dlg-t">${oeEsc(this._count(remove ? 'confirm_remove' : 'confirm_ignore', ids.length))}</div>
           <div class="dx">${oeEsc(this._t(remove ? 'confirm_remove_text' : 'confirm_ignore_text'))}</div>
+          ${warn}
           <ul>${first.join('')}</ul>
           <div class="db">
             <button class="act icon-text" data-dlg="cancel" data-focus="d:cancel">${oeEsc(this._t('cancel'))}</button>
-            <button class="act ${remove ? 'danger' : 'neutral'}" data-dlg="ok" data-focus="d:ok"><ha-icon icon="${remove ? 'mdi:delete-outline' : 'mdi:eye-off-outline'}"></ha-icon><span>${oeEsc(this._t(act))}</span></button>
+            <button class="act ${remove ? 'danger' : 'neutral'}" data-dlg="ok" data-focus="d:ok"><ha-icon icon="${remove ? 'mdi:delete-outline' : 'mdi:eye-off-outline'}"></ha-icon><span>${oeEsc(this._t(used ? 'remove_anyway' : act))}</span></button>
           </div>
         </div>`;
   }
@@ -2627,6 +2890,27 @@ class OrphanEntitiesCard extends HTMLElement {
       .when > span { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .when .lbl { font-size: 12px; font-weight: 500; line-height: 1.2; color: color-mix(in srgb, var(--t) 40%, var(--primary-text-color)); }
       .when .ago { font-size: 11px; line-height: 1.2; color: var(--oe-muted); }
+      /* A row still in use: its "Used by N" badge (orange, tinted) at its right, its list under it when open */
+      .item { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+      .item > .row { flex: 1 1 0; }
+      .used { --t: var(--oe-warn); all: unset; cursor: pointer; flex: none; box-sizing: border-box; display: inline-flex;
+              align-items: center; gap: 3px; height: 24px; padding: 0 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
+              white-space: nowrap; color: color-mix(in srgb, var(--t) 40%, var(--primary-text-color));
+              background: color-mix(in srgb, var(--t) 16%, transparent); }
+      .used:hover { background: color-mix(in srgb, var(--t) 24%, transparent); }
+      .used:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+      .used ha-icon { --mdc-icon-size: 14px; }
+      .used[aria-expanded="true"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--t) 50%, transparent); }
+      .refs { --t: var(--oe-warn); flex: 1 0 100%; box-sizing: border-box; margin: 0; padding: 6px 10px; list-style: none;
+              display: flex; flex-direction: column; gap: 4px; border-radius: 10px; font-size: 12px;
+              background: color-mix(in srgb, var(--t) 6%, var(--secondary-background-color, transparent)); }
+      .refs li { display: flex; align-items: center; gap: 6px; min-width: 0; }
+      .refs ha-icon { flex: none; --mdc-icon-size: 14px; color: var(--secondary-text-color); }
+      .refs .rk { flex: none; color: var(--oe-muted); }
+      .refs a, .refs .rn { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+      .refs .rn { color: var(--primary-text-color); }
+      .refs a { color: color-mix(in srgb, var(--primary-color) 45%, var(--primary-text-color)); text-decoration: underline; text-underline-offset: 2px; }
+      .refs a:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 1px; border-radius: 2px; }
       .more { all: unset; cursor: pointer; display: block; box-sizing: border-box; width: 100%; margin-top: 6px; padding: 6px;
               border-radius: 10px; text-align: center; font-size: 12px; font-weight: 500; color: var(--primary-color);
               background: color-mix(in srgb, var(--primary-color) 8%, transparent); }
@@ -2666,6 +2950,12 @@ class OrphanEntitiesCard extends HTMLElement {
       .dlg li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
       .dlg li .name { display: inline; font-size: 12px; }
       .db { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+      .dlg .dw { --t: var(--oe-warn); margin-top: 8px; padding: 6px 8px; border-radius: 10px; display: flex; align-items: flex-start; gap: 6px;
+                 font-size: 12px; line-height: 1.4; color: color-mix(in srgb, var(--t) 40%, var(--primary-text-color));
+                 background: color-mix(in srgb, var(--t) 14%, transparent); }
+      .dlg .dw ha-icon { flex: none; --mdc-icon-size: 16px; }
+      .dlg .ub { --t: var(--oe-warn); font-size: 11px; font-weight: 500; padding: 0 6px; border-radius: 8px;
+                 color: color-mix(in srgb, var(--t) 40%, var(--primary-text-color)); background: color-mix(in srgb, var(--t) 16%, transparent); }
     `;
   }
 }

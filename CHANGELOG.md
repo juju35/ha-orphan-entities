@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 - 2026-11-07
+
+### What's new
+- **Used by**: before you remove orphans, the card shows what still uses each one. Every scan looks for the listed entities in the automations, scripts, scenes, groups and dashboards (storage mode) and adds a `used_by` list to each entity of the `entities` attribute. The full card shows an orange **Used by n** badge on those rows: its tooltip lists them, a click opens the list with links to the automation, script and scene editors and to the dashboards. When selected entities are still in use, the removal confirmation says how many and its button becomes **Remove anyway**. YAML dashboards are not scanned and templates are not resolved. Translated in every language.
+
 ## 1.1.0 - 2026-11-07
 
 ### What's new
