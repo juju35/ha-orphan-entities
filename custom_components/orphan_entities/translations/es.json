@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Entidades ignoradas"
+          },
+          "devices": {
+            "name": "Dispositivos"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID de las entidades que se ignorarán."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Eliminar dispositivos huérfanos",
+      "description": "Elimina los dispositivos cuyas entradas de integración se eliminaron todas, con sus entidades. Solo los dispositivos de la lista del último análisis.",
+      "fields": {
+        "devices": {
+          "name": "Dispositivos",
+          "description": "ID de dispositivos del atributo devices del sensor de huérfanos."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities no está cargado." },
-    "starting": { "message": "Home Assistant todavía está arrancando: vuelve a escanear cuando esté listo." },
-    "no_entities": { "message": "No hay ninguna entidad que eliminar." },
-    "too_many": { "message": "Como máximo {max} entidades a la vez." },
-    "not_orphan": { "message": "No están en la lista de entidades huérfanas: {entities}. Vuelve a escanear e inténtalo de nuevo." },
-    "not_registered": { "message": "No están en el registro de entidades: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities no está cargado."
+    },
+    "starting": {
+      "message": "Home Assistant todavía está arrancando: vuelve a escanear cuando esté listo."
+    },
+    "no_entities": {
+      "message": "No hay ninguna entidad que eliminar."
+    },
+    "too_many": {
+      "message": "Como máximo {max} entidades a la vez."
+    },
+    "not_orphan": {
+      "message": "No están en la lista de entidades huérfanas: {entities}. Vuelve a escanear e inténtalo de nuevo."
+    },
+    "not_registered": {
+      "message": "No están en el registro de entidades: {entities}."
+    },
+    "no_devices": {
+      "message": "No se indicó ningún dispositivo."
+    },
+    "not_orphan_device": {
+      "message": "No son dispositivos huérfanos (analice primero): {devices}"
+    }
   }
 }

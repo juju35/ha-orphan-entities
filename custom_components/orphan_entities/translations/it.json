@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Entità ignorate"
+          },
+          "devices": {
+            "name": "Dispositivi"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID delle entità da ignorare."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Rimuovi dispositivi orfani",
+      "description": "Rimuove i dispositivi le cui voci di integrazione sono state tutte rimosse, con le loro entità. Solo i dispositivi dell'elenco dell'ultima scansione.",
+      "fields": {
+        "devices": {
+          "name": "Dispositivi",
+          "description": "ID dei dispositivi dall'attributo devices del sensore degli orfani."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities non è caricato." },
-    "starting": { "message": "Home Assistant si sta ancora avviando: scansiona di nuovo una volta avviato." },
-    "no_entities": { "message": "Nessuna entità da rimuovere." },
-    "too_many": { "message": "Al massimo {max} entità alla volta." },
-    "not_orphan": { "message": "Non presenti nell'elenco delle entità orfane: {entities}. Esegui di nuovo la scansione e riprova." },
-    "not_registered": { "message": "Non presenti nel registro delle entità: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities non è caricato."
+    },
+    "starting": {
+      "message": "Home Assistant si sta ancora avviando: scansiona di nuovo una volta avviato."
+    },
+    "no_entities": {
+      "message": "Nessuna entità da rimuovere."
+    },
+    "too_many": {
+      "message": "Al massimo {max} entità alla volta."
+    },
+    "not_orphan": {
+      "message": "Non presenti nell'elenco delle entità orfane: {entities}. Esegui di nuovo la scansione e riprova."
+    },
+    "not_registered": {
+      "message": "Non presenti nel registro delle entità: {entities}."
+    },
+    "no_devices": {
+      "message": "Nessun dispositivo indicato."
+    },
+    "not_orphan_device": {
+      "message": "Non sono dispositivi orfani (eseguire prima una scansione): {devices}"
+    }
   }
 }

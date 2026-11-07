@@ -6,7 +6,7 @@ from typing import Final
 
 DOMAIN: Final = "orphan_entities"
 # Same as manifest.json and the card: the card URL carries it, so that browsers load a new release.
-VERSION: Final = "1.0.7"
+VERSION: Final = "1.1.0"
 
 CONF_SCAN_INTERVAL: Final = "scan_interval"
 CONF_GRACE_PERIOD: Final = "grace_period"
@@ -59,8 +59,11 @@ STATELESS_DOMAINS: Final = frozenset(
 SERVICE_SCAN: Final = "scan"
 SERVICE_REMOVE: Final = "remove"
 SERVICE_IGNORE: Final = "ignore"
+SERVICE_REMOVE_DEVICES: Final = "remove_devices"
+ATTR_DEVICES: Final = "devices"
 ATTR_ENTITIES: Final = "entities"
 EVENT_REMOVED: Final = f"{DOMAIN}_removed"
+EVENT_DEVICES_REMOVED: Final = f"{DOMAIN}_devices_removed"
 
 # A removal or an ignore request names at most this many entities.
 MAX_BATCH: Final = 1000

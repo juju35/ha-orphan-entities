@@ -49,6 +49,7 @@ COMMON = {
 
 # Material Design Icons paths used by the card (from @mdi/js).
 ICONS = {
+    "devices": "M3,6H21V4H3C1.9,4 1,4.9 1,6V18A2,2 0 0,0 3,20H7V18H3V6M13,12H9V13.78C8.39,14.33 8,15.11 8,16C8,16.89 8.39,17.67 9,18.22V20H13V18.22C13.61,17.67 14,16.88 14,16C14,15.12 13.61,14.33 13,13.78V12M11,17.5A1.5,1.5 0 0,1 9.5,16A1.5,1.5 0 0,1 11,14.5A1.5,1.5 0 0,1 12.5,16A1.5,1.5 0 0,1 11,17.5M22,8H16A1,1 0 0,0 15,9V19A1,1 0 0,0 16,20H22A1,1 0 0,0 23,19V9A1,1 0 0,0 22,8M21,18H17V10H21V18Z",
     "broom": "M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z",
     "ghost-outline": "M12 2C7.03 2 3 6.03 3 11V22L6 19L9 22L12 19L15 22L18 19L21 22V11C21 6.03 16.97 2 12 2M19 17.17L18 16.17L16.59 17.59L15 19.17L13.41 17.59L12 16.17L10.59 17.59L9 19.17L7.41 17.59L6 16.17L5 17.17V11C5 7.14 8.14 4 12 4S19 7.14 19 11V17.17M11 10C11 11.11 10.11 12 9 12S7 11.11 7 10 7.9 8 9 8 11 8.9 11 10M17 10C17 11.11 16.11 12 15 12S13 11.11 13 10 13.9 8 15 8 17 8.9 17 10Z",
     "refresh": "M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z",
@@ -128,7 +129,7 @@ ORPHANS_LIST = [
 ]
 
 
-def mock_hass(items, removed=3):
+def mock_hass(items, removed=3, devices=()):
     platform = {"platform": "orphan_entities", "device_id": "orphans"}
     return {
         "states": {
@@ -137,6 +138,7 @@ def mock_hass(items, removed=3):
                 "state": str(len(items)),
                 "attributes": {
                     "entities": items,
+                    "devices": list(devices),
                     "removed": removed,
                     "ignored_integrations": ["mobile_app"],
                     "ignored_entities": ["sensor.kept_on_purpose"],
@@ -157,6 +159,19 @@ def mock_hass(items, removed=3):
     }
 
 
+# Devices whose integration was removed, mock data.
+DEVICES = [
+    {
+        "device_id": "d1",
+        "name": "Old Zigbee hub",
+        "manufacturer": "Acme",
+        "model": "ZH-1",
+        "entities": 4,
+        "since": None,
+    },
+    {"device_id": "d2", "name": "Garage plug", "manufacturer": "Acme", "model": "P2", "entities": 0, "since": None},
+]
+
 MINI = "orphan-entities-mini-card"
 MINI_WIDTH = 400
 SELECTED = ["light.hallway_spot", "sensor.hallway_spot_power"]
@@ -175,6 +190,8 @@ SHOTS = [
     # Filtered on a reason.
     *both("card-filtered", hass=ORPHANS_LIST, reason="not_provided"),
     *both("card-ok", hass=[]),
+    # Orphan devices under the entities.
+    *both("card-devices", hass=ORPHANS_LIST[:2], devices=DEVICES),
     *both("mini", hass=ORPHANS_LIST, card=MINI, width=MINI_WIDTH),
     *both("mini-ok", hass=[], card=MINI, width=MINI_WIDTH),
     *both("mini-zoom", hass=ORPHANS_LIST, card=MINI, width=MINI_WIDTH, zoom=True),
@@ -250,7 +267,9 @@ def main():
             page.add_script_tag(content=CARD_JS)
             card = shot.get("card", "orphan-entities-card")
             opts = {k: shot[k] for k in ("zoom", "select", "confirm", "reason") if k in shot}
-            page.evaluate(MOUNT, [mock_hass(shot["hass"]), shot["theme"] == "dark", card, opts])
+            page.evaluate(
+                MOUNT, [mock_hass(shot["hass"], devices=shot.get("devices", ())), shot["theme"] == "dark", card, opts]
+            )
             page.wait_for_timeout(400)
             box = page.locator("#root").bounding_box()
             clip = {"x": 0, "y": 0, "width": width + 32, "height": int(box["height"] + 0.999) + 32}

@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ignorerade entiteter"
+          },
+          "devices": {
+            "name": "Enheter"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "Entitets-ID:n som ska ignoreras."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Ta bort föräldralösa enheter",
+      "description": "Tar bort enheter vars integrationsposter alla har tagits bort, med deras entiteter. Bara enheterna i listan från senaste skanningen.",
+      "fields": {
+        "devices": {
+          "name": "Enheter",
+          "description": "Enhets-id:n från attributet devices på sensorn för föräldralösa."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities är inte inläst." },
-    "starting": { "message": "Home Assistant startar fortfarande: skanna igen när det är igång." },
-    "no_entities": { "message": "Ingen entitet att ta bort." },
-    "too_many": { "message": "Högst {max} entiteter åt gången." },
-    "not_orphan": { "message": "Finns inte i listan över föräldralösa entiteter: {entities}. Skanna igen och försök på nytt." },
-    "not_registered": { "message": "Finns inte i entitetsregistret: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities är inte inläst."
+    },
+    "starting": {
+      "message": "Home Assistant startar fortfarande: skanna igen när det är igång."
+    },
+    "no_entities": {
+      "message": "Ingen entitet att ta bort."
+    },
+    "too_many": {
+      "message": "Högst {max} entiteter åt gången."
+    },
+    "not_orphan": {
+      "message": "Finns inte i listan över föräldralösa entiteter: {entities}. Skanna igen och försök på nytt."
+    },
+    "not_registered": {
+      "message": "Finns inte i entitetsregistret: {entities}."
+    },
+    "no_devices": {
+      "message": "Ingen enhet angiven."
+    },
+    "not_orphan_device": {
+      "message": "Inte föräldralösa enheter (skanna först): {devices}"
+    }
   }
 }

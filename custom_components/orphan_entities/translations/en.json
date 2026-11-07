@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ignored entities"
+          },
+          "devices": {
+            "name": "Devices"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "Entity IDs to ignore."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Remove orphan devices",
+      "description": "Removes devices whose integration entries were all removed, with their entities. Only the devices of the last scan's list.",
+      "fields": {
+        "devices": {
+          "name": "Devices",
+          "description": "Device IDs from the devices attribute of the orphans sensor."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities is not loaded." },
-    "starting": { "message": "Home Assistant is still starting: scan again once it is up." },
-    "no_entities": { "message": "No entity to remove." },
-    "too_many": { "message": "At most {max} entities at a time." },
-    "not_orphan": { "message": "Not in the list of orphaned entities: {entities}. Scan again and retry." },
-    "not_registered": { "message": "Not in the entity registry: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities is not loaded."
+    },
+    "starting": {
+      "message": "Home Assistant is still starting: scan again once it is up."
+    },
+    "no_entities": {
+      "message": "No entity to remove."
+    },
+    "too_many": {
+      "message": "At most {max} entities at a time."
+    },
+    "not_orphan": {
+      "message": "Not in the list of orphaned entities: {entities}. Scan again and retry."
+    },
+    "not_registered": {
+      "message": "Not in the entity registry: {entities}."
+    },
+    "no_devices": {
+      "message": "No device given."
+    },
+    "not_orphan_device": {
+      "message": "Not orphan devices (scan first): {devices}"
+    }
   }
 }

@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Genegeerde entiteiten"
+          },
+          "devices": {
+            "name": "Apparaten"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "Entiteit-ID's om te negeren."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Verweesde apparaten verwijderen",
+      "description": "Verwijdert apparaten waarvan alle integratie-items zijn verwijderd, met hun entiteiten. Alleen de apparaten uit de lijst van de laatste scan.",
+      "fields": {
+        "devices": {
+          "name": "Apparaten",
+          "description": "Apparaat-ID's uit het attribuut devices van de wezensensor."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities is niet geladen." },
-    "starting": { "message": "Home Assistant is nog aan het opstarten: scan opnieuw zodra het draait." },
-    "no_entities": { "message": "Geen entiteit om te verwijderen." },
-    "too_many": { "message": "Maximaal {max} entiteiten tegelijk." },
-    "not_orphan": { "message": "Niet in de lijst met verweesde entiteiten: {entities}. Scan opnieuw en probeer het nog eens." },
-    "not_registered": { "message": "Niet in het entiteitenregister: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities is niet geladen."
+    },
+    "starting": {
+      "message": "Home Assistant is nog aan het opstarten: scan opnieuw zodra het draait."
+    },
+    "no_entities": {
+      "message": "Geen entiteit om te verwijderen."
+    },
+    "too_many": {
+      "message": "Maximaal {max} entiteiten tegelijk."
+    },
+    "not_orphan": {
+      "message": "Niet in de lijst met verweesde entiteiten: {entities}. Scan opnieuw en probeer het nog eens."
+    },
+    "not_registered": {
+      "message": "Niet in het entiteitenregister: {entities}."
+    },
+    "no_devices": {
+      "message": "Geen apparaat opgegeven."
+    },
+    "not_orphan_device": {
+      "message": "Geen verweesde apparaten (eerst scannen): {devices}"
+    }
   }
 }

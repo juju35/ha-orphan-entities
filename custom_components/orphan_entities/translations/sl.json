@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Prezrte entitete"
+          },
+          "devices": {
+            "name": "Naprave"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID-ji entitet, ki jih želite prezreti."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Odstrani osirotele naprave",
+      "description": "Odstrani naprave, katerih vsi vnosi integracije so bili odstranjeni, skupaj z njihovimi entitetami. Samo naprave s seznama zadnjega pregleda.",
+      "fields": {
+        "devices": {
+          "name": "Naprave",
+          "description": "ID-ji naprav iz atributa devices senzorja sirot."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities ni naložen." },
-    "starting": { "message": "Home Assistant se še zaganja: po zagonu znova zaženite pregled." },
-    "no_entities": { "message": "Ni entitet za odstranitev." },
-    "too_many": { "message": "Največ {max} entitet naenkrat." },
-    "not_orphan": { "message": "Niso na seznamu osirotelih entitet: {entities}. Ponovno preglejte in poskusite znova." },
-    "not_registered": { "message": "Niso v registru entitet: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities ni naložen."
+    },
+    "starting": {
+      "message": "Home Assistant se še zaganja: po zagonu znova zaženite pregled."
+    },
+    "no_entities": {
+      "message": "Ni entitet za odstranitev."
+    },
+    "too_many": {
+      "message": "Največ {max} entitet naenkrat."
+    },
+    "not_orphan": {
+      "message": "Niso na seznamu osirotelih entitet: {entities}. Ponovno preglejte in poskusite znova."
+    },
+    "not_registered": {
+      "message": "Niso v registru entitet: {entities}."
+    },
+    "no_devices": {
+      "message": "Ni podane naprave."
+    },
+    "not_orphan_device": {
+      "message": "To niso osirotele naprave (najprej preglejte): {devices}"
+    }
   }
 }

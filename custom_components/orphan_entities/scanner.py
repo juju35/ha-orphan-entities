@@ -18,6 +18,7 @@ from homeassistant.util import dt as dt_util
 
 from .const import (
     DOMAIN,
+    EVENT_DEVICES_REMOVED,
     EVENT_REMOVED,
     MAX_BATCH,
     REASON_ENTRY_REMOVED,
@@ -33,6 +34,28 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, slots=True)
+class OrphanDevice:
+    """A device of the registry whose integration entries were all removed: nothing will ever provide it again."""
+
+    device_id: str
+    name: str
+    manufacturer: str | None
+    model: str | None
+    entities: int
+    since: datetime | None
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "device_id": self.device_id,
+            "name": self.name,
+            "manufacturer": self.manufacturer,
+            "model": self.model,
+            "entities": self.entities,
+            "since": self.since.isoformat() if self.since else None,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class Orphan:
     """An entity of the registry that its integration no longer provides (or that has been stale for too long)."""
 
@@ -45,6 +68,7 @@ class Orphan:
     entry_title: str | None
     device: str | None
     disabled: bool
+    device_id: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -82,6 +106,7 @@ class OrphanScanner:
         # When Home Assistant started: no scan before started_at + grace_period. Set by async_setup_entry.
         self.started_at: datetime | None = None
         self.orphans: list[Orphan] = []
+        self.devices: list[OrphanDevice] = []
         self.last_scan: datetime | None = None
         self.removed = 0
         self._listeners: list[Callable[[], None]] = []
@@ -155,10 +180,12 @@ class OrphanScanner:
                     entry_title=entry.title if entry else None,
                     device=(device.name_by_user or device.name) if device else None,
                     disabled=e.disabled_by is not None,
+                    device_id=e.device_id,
                 )
             )
         found.sort(key=lambda o: (REASONS.index(o.reason), o.platform, o.entity_id))
         self.orphans = found
+        self.devices = self._orphan_devices(registry, devices)
         self.last_scan = now
         self._notify()
         return True
@@ -189,6 +216,58 @@ class OrphanScanner:
         if self.include_unknown and state.state == STATE_UNKNOWN and e.domain not in STATELESS_DOMAINS:
             return REASON_UNKNOWN, state.last_changed
         return None, None
+
+    def _orphan_devices(self, registry: er.EntityRegistry, devices: dr.DeviceRegistry) -> list[OrphanDevice]:
+        """Devices tied to config entries that no longer exist, every one of them (a device shared with a live
+        entry is still provided). Their entities, if any, are listed above as `entry_removed`."""
+        found: list[OrphanDevice] = []
+        for device in list(devices.devices.values()):
+            if not device.config_entries or any(
+                self.hass.config_entries.async_get_entry(entry_id) for entry_id in device.config_entries
+            ):
+                continue
+            if device.id in self.ignored_entities:
+                continue
+            found.append(
+                OrphanDevice(
+                    device_id=device.id,
+                    name=device.name_by_user or device.name or device.model or device.id,
+                    manufacturer=device.manufacturer,
+                    model=device.model,
+                    entities=len(er.async_entries_for_device(registry, device.id, include_disabled_entities=True)),
+                    since=getattr(device, "modified_at", None) or getattr(device, "created_at", None),
+                )
+            )
+        return sorted(found, key=lambda d: d.name.casefold())
+
+    @callback
+    def async_remove_devices(self, device_ids: Iterable[str]) -> list[str]:
+        """Remove listed orphan devices (and their entities) from the registries; refuses the request if one isn't."""
+        wanted = list(dict.fromkeys(device_ids))
+        if not wanted:
+            raise ServiceValidationError(translation_domain=DOMAIN, translation_key="no_devices")
+        listed = {d.device_id for d in self.devices}
+        if unknown := [d for d in wanted if d not in listed]:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="not_orphan_device",
+                translation_placeholders={"devices": ", ".join(unknown[:10])},
+            )
+        registry = dr.async_get(self.hass)
+        removed: list[str] = []
+        for device_id in wanted:
+            if registry.async_get(device_id) is None:
+                continue
+            # The entity registry drops the device's entities with it.
+            registry.async_remove_device(device_id)
+            removed.append(device_id)
+        _LOGGER.info("Removed %d orphaned devices: %s", len(removed), ", ".join(removed))
+        self.hass.bus.async_fire(EVENT_DEVICES_REMOVED, {"devices": removed})
+        self.devices = [d for d in self.devices if d.device_id not in removed]
+        gone = set(removed)
+        self.orphans = [o for o in self.orphans if o.device_id not in gone]
+        self._notify()
+        return removed
 
     @callback
     def async_remove(self, entity_ids: Iterable[str]) -> list[str]:

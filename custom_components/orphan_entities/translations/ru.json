@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Игнорируемые объекты"
+          },
+          "devices": {
+            "name": "Устройства"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID объектов для игнорирования."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Удалить осиротевшие устройства",
+      "description": "Удаляет устройства, все записи интеграции которых удалены, вместе с их объектами. Только устройства из списка последнего сканирования.",
+      "fields": {
+        "devices": {
+          "name": "Устройства",
+          "description": "ID устройств из атрибута devices датчика сирот."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities не загружено." },
-    "starting": { "message": "Home Assistant ещё запускается: повторите сканирование после запуска." },
-    "no_entities": { "message": "Нет объектов для удаления." },
-    "too_many": { "message": "Не более {max} объектов за раз." },
-    "not_orphan": { "message": "Нет в списке осиротевших объектов: {entities}. Выполните сканирование и повторите попытку." },
-    "not_registered": { "message": "Нет в реестре объектов: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities не загружено."
+    },
+    "starting": {
+      "message": "Home Assistant ещё запускается: повторите сканирование после запуска."
+    },
+    "no_entities": {
+      "message": "Нет объектов для удаления."
+    },
+    "too_many": {
+      "message": "Не более {max} объектов за раз."
+    },
+    "not_orphan": {
+      "message": "Нет в списке осиротевших объектов: {entities}. Выполните сканирование и повторите попытку."
+    },
+    "not_registered": {
+      "message": "Нет в реестре объектов: {entities}."
+    },
+    "no_devices": {
+      "message": "Устройство не указано."
+    },
+    "not_orphan_device": {
+      "message": "Это не осиротевшие устройства (сначала выполните сканирование): {devices}"
+    }
   }
 }

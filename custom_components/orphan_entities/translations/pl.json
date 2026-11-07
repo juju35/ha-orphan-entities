@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ignorowane encje"
+          },
+          "devices": {
+            "name": "Urządzenia"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "Identyfikatory encji do zignorowania."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Usuń osierocone urządzenia",
+      "description": "Usuwa urządzenia, których wszystkie wpisy integracji zostały usunięte, razem z ich encjami. Tylko urządzenia z listy ostatniego skanowania.",
+      "fields": {
+        "devices": {
+          "name": "Urządzenia",
+          "description": "Identyfikatory urządzeń z atrybutu devices czujnika sierot."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities nie jest wczytany." },
-    "starting": { "message": "Home Assistant wciąż się uruchamia: skanuj ponownie, gdy będzie gotowy." },
-    "no_entities": { "message": "Brak encji do usunięcia." },
-    "too_many": { "message": "Maksymalnie {max} encji naraz." },
-    "not_orphan": { "message": "Nie ma na liście osieroconych encji: {entities}. Przeskanuj ponownie i spróbuj jeszcze raz." },
-    "not_registered": { "message": "Nie ma w rejestrze encji: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities nie jest wczytany."
+    },
+    "starting": {
+      "message": "Home Assistant wciąż się uruchamia: skanuj ponownie, gdy będzie gotowy."
+    },
+    "no_entities": {
+      "message": "Brak encji do usunięcia."
+    },
+    "too_many": {
+      "message": "Maksymalnie {max} encji naraz."
+    },
+    "not_orphan": {
+      "message": "Nie ma na liście osieroconych encji: {entities}. Przeskanuj ponownie i spróbuj jeszcze raz."
+    },
+    "not_registered": {
+      "message": "Nie ma w rejestrze encji: {entities}."
+    },
+    "no_devices": {
+      "message": "Nie podano urządzenia."
+    },
+    "not_orphan_device": {
+      "message": "To nie są osierocone urządzenia (najpierw przeskanuj): {devices}"
+    }
   }
 }

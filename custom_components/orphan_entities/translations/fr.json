@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Entités ignorées"
+          },
+          "devices": {
+            "name": "Appareils"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID des entités à ignorer."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Supprimer les appareils orphelins",
+      "description": "Supprime les appareils dont toutes les entrées d'intégration ont été supprimées, avec leurs entités. Seulement les appareils de la liste de la dernière analyse.",
+      "fields": {
+        "devices": {
+          "name": "Appareils",
+          "description": "ID d'appareils de l'attribut devices du capteur des orphelins."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities n'est pas chargé." },
-    "starting": { "message": "Home Assistant est encore en cours de démarrage : relancez l’analyse une fois démarré." },
-    "no_entities": { "message": "Aucune entité à supprimer." },
-    "too_many": { "message": "{max} entités au maximum à la fois." },
-    "not_orphan": { "message": "Absentes de la liste des entités orphelines : {entities}. Relancez une analyse et réessayez." },
-    "not_registered": { "message": "Absentes du registre des entités : {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities n'est pas chargé."
+    },
+    "starting": {
+      "message": "Home Assistant est encore en cours de démarrage : relancez l’analyse une fois démarré."
+    },
+    "no_entities": {
+      "message": "Aucune entité à supprimer."
+    },
+    "too_many": {
+      "message": "{max} entités au maximum à la fois."
+    },
+    "not_orphan": {
+      "message": "Absentes de la liste des entités orphelines : {entities}. Relancez une analyse et réessayez."
+    },
+    "not_registered": {
+      "message": "Absentes du registre des entités : {entities}."
+    },
+    "no_devices": {
+      "message": "Aucun appareil donné."
+    },
+    "not_orphan_device": {
+      "message": "Pas des appareils orphelins (lancez une analyse) : {devices}"
+    }
   }
 }

@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Entități ignorate"
+          },
+          "devices": {
+            "name": "Dispozitive"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID-urile entităților de ignorat."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Elimină dispozitivele orfane",
+      "description": "Elimină dispozitivele ale căror intrări de integrare au fost toate eliminate, împreună cu entitățile lor. Doar dispozitivele din lista ultimei scanări.",
+      "fields": {
+        "devices": {
+          "name": "Dispozitive",
+          "description": "ID-uri de dispozitive din atributul devices al senzorului de orfane."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities nu este încărcat." },
-    "starting": { "message": "Home Assistant încă pornește: scanați din nou după ce a pornit." },
-    "no_entities": { "message": "Nicio entitate de eliminat." },
-    "too_many": { "message": "Cel mult {max} entități odată." },
-    "not_orphan": { "message": "Nu sunt în lista entităților orfane: {entities}. Scanați din nou și reîncercați." },
-    "not_registered": { "message": "Nu sunt în registrul entităților: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities nu este încărcat."
+    },
+    "starting": {
+      "message": "Home Assistant încă pornește: scanați din nou după ce a pornit."
+    },
+    "no_entities": {
+      "message": "Nicio entitate de eliminat."
+    },
+    "too_many": {
+      "message": "Cel mult {max} entități odată."
+    },
+    "not_orphan": {
+      "message": "Nu sunt în lista entităților orfane: {entities}. Scanați din nou și reîncercați."
+    },
+    "not_registered": {
+      "message": "Nu sunt în registrul entităților: {entities}."
+    },
+    "no_devices": {
+      "message": "Niciun dispozitiv dat."
+    },
+    "not_orphan_device": {
+      "message": "Nu sunt dispozitive orfane (scanați mai întâi): {devices}"
+    }
   }
 }

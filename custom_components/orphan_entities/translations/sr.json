@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Игнорисани ентитети"
+          },
+          "devices": {
+            "name": "Уређаји"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ИД-ови ентитета за игнорисање."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Уклони напуштене уређаје",
+      "description": "Уклања уређаје чији су сви уноси интеграције уклоњени, заједно са њиховим ентитетима. Само уређаје са листе последњег скенирања.",
+      "fields": {
+        "devices": {
+          "name": "Уређаји",
+          "description": "Идентификатори уређаја из атрибута уређаја сензора напуштених."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities није учитан." },
-    "starting": { "message": "Home Assistant се још покреће: скенирајте поново када буде спреман." },
-    "no_entities": { "message": "Нема ентитета за уклањање." },
-    "too_many": { "message": "Највише {max} ентитета одједном." },
-    "not_orphan": { "message": "Нису на листи осироћених ентитета: {entities}. Скенирајте поново и покушајте опет." },
-    "not_registered": { "message": "Нису у регистру ентитета: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities није учитан."
+    },
+    "starting": {
+      "message": "Home Assistant се још покреће: скенирајте поново када буде спреман."
+    },
+    "no_entities": {
+      "message": "Нема ентитета за уклањање."
+    },
+    "too_many": {
+      "message": "Највише {max} ентитета одједном."
+    },
+    "not_orphan": {
+      "message": "Нису на листи осироћених ентитета: {entities}. Скенирајте поново и покушајте опет."
+    },
+    "not_registered": {
+      "message": "Нису у регистру ентитета: {entities}."
+    },
+    "no_devices": {
+      "message": "Није задат ниједан уређај."
+    },
+    "not_orphan_device": {
+      "message": "Нису напуштени уређаји (прво скенирајте): {devices}"
+    }
   }
 }
