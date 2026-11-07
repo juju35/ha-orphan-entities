@@ -256,6 +256,8 @@ It takes every option of the full card (they set its detail view), plus:
 
 At each interval, and 10 seconds after the last change of the entity registry or of a config entry, the integration goes through the entity registry, reads each entity's config entry and state, and classifies it. It then asks the automations, scripts, scenes and groups which listed entities they use, and searches the dashboards in storage mode for them (read once from storage, then from memory, after the scan). Entities only restored by Home Assistant carry `restored: true` in their state: their integration didn't create them. No automatic scan runs before Home Assistant has fully started and the grace period has passed; a scan asked for with the button or the action only waits for the start.
 
+To report a problem, attach the diagnostics (Settings → Devices & services → Orphan Entities → ⋮ → **Download diagnostics**): the options and the last scan (listed entities and devices, counts, what uses them), with config entry titles (often an account or a host) and any password, token, key, username, email, host, URL, address, GPS position, VIN, plate or tracking number redacted.
+
 To debug:
 
 ```yaml

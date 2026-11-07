@@ -17,3 +17,4 @@ async_setup_entry  # unused function (custom_components/orphan_entities/sensor.p
 _.native_value  # unused property (custom_components/orphan_entities/sensor.py:33)
 _.extra_state_attributes  # unused property (custom_components/orphan_entities/sensor.py:37)
 _.native_value  # unused property (custom_components/orphan_entities/sensor.py:56)
+async_get_config_entry_diagnostics  # unused function (custom_components/orphan_entities/diagnostics.py:46)

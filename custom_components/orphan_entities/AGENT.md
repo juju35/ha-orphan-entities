@@ -12,6 +12,7 @@ custom_components/orphan_entities/
 ├── references.py    # What uses each orphan: automations/scripts/scenes/groups (HA helpers, loaded integrations only), storage dashboards (JSON text, whole entity IDs)
 ├── config_flow.py   # Single entry; options: scan_interval, grace_period, stale_hours (0 = off), include_unknown, ignored_integrations, ignored_entities
 ├── button.py        # button.*_scan_now
+├── diagnostics.py   # Config entry diagnostics: options + last scan, entry titles and secrets redacted
 ├── sensor.py        # orphans (count + entities/counts/removed/stale_hours/include_unknown/ignored_*), last_scan
 ├── entity.py        # Shared service device, listener on OrphanScanner
 ├── frontend/orphan-entities-card.js   # custom:orphan-entities-card + custom:orphan-entities-mini-card (subclass: compact view, detail button toggling the full view)

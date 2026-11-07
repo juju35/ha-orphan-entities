@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0 - 2026-11-07
+
+### What's new
+- **Diagnostics**: *Download diagnostics* on the integration returns its options and the last scan (orphan entities with their reason and what uses them, orphan devices, counts), with config entry titles and any secret redacted.
+
 ## 1.2.0 - 2026-11-07
 
 ### What's new
