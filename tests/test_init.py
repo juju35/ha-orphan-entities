@@ -449,10 +449,8 @@ async def test_orphan_devices(hass: HomeAssistant):
     assert [(d["device_id"], d["name"], d["entities"]) for d in attributes["devices"]] == [(old.id, "Old hub", 1)]
     with pytest.raises(ServiceValidationError):
         await hass.services.async_call(DOMAIN, "remove_devices", {"devices": [kept.id]}, blocking=True)
-    response = await hass.services.async_call(
-        DOMAIN, "remove_devices", {"devices": [old.id]}, blocking=True, return_response=True
-    )
-    assert response == {"removed": [old.id]}
+    # Without return_response: before Home Assistant 2025.1 admin actions can't return one.
+    await hass.services.async_call(DOMAIN, "remove_devices", {"devices": [old.id]}, blocking=True)
     await hass.async_block_till_done()
     assert devices.async_get(old.id) is None
     assert devices.async_get(kept.id) is not None
