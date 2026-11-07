@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 - 2026-11-07
+
+### What's new
+- **Orphan devices**: the devices whose integration entries were all removed are listed (`devices` attribute of the orphans sensor) and shown under the entities in the full card, with **Remove devices** (administrators, after a confirmation) that deletes them from the device registry with their entities. New admin action `orphan_entities.remove_devices` (only the devices of the last scan) and event `orphan_entities_devices_removed`. Translated in every language.
+
 ## 1.0.7 - 2026-11-07
 
 ### Fixes

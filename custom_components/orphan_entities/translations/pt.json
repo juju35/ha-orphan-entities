@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Entidades ignoradas"
+          },
+          "devices": {
+            "name": "Dispositivos"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "IDs das entidades a ignorar."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Remover dispositivos órfãos",
+      "description": "Remove os dispositivos cujas entradas de integração foram todas removidas, com as suas entidades. Apenas os dispositivos da lista da última análise.",
+      "fields": {
+        "devices": {
+          "name": "Dispositivos",
+          "description": "ID de dispositivos do atributo devices do sensor de órfãos."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "O Orphan Entities não está carregado." },
-    "starting": { "message": "O Home Assistant ainda está a arrancar: analise de novo quando estiver pronto." },
-    "no_entities": { "message": "Nenhuma entidade a remover." },
-    "too_many": { "message": "No máximo {max} entidades de cada vez." },
-    "not_orphan": { "message": "Não estão na lista de entidades órfãs: {entities}. Analise novamente e tente outra vez." },
-    "not_registered": { "message": "Não estão no registo de entidades: {entities}." }
+    "not_loaded": {
+      "message": "O Orphan Entities não está carregado."
+    },
+    "starting": {
+      "message": "O Home Assistant ainda está a arrancar: analise de novo quando estiver pronto."
+    },
+    "no_entities": {
+      "message": "Nenhuma entidade a remover."
+    },
+    "too_many": {
+      "message": "No máximo {max} entidades de cada vez."
+    },
+    "not_orphan": {
+      "message": "Não estão na lista de entidades órfãs: {entities}. Analise novamente e tente outra vez."
+    },
+    "not_registered": {
+      "message": "Não estão no registo de entidades: {entities}."
+    },
+    "no_devices": {
+      "message": "Nenhum dispositivo indicado."
+    },
+    "not_orphan_device": {
+      "message": "Não são dispositivos órfãos (analise primeiro): {devices}"
+    }
   }
 }

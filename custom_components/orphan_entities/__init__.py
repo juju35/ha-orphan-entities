@@ -33,6 +33,7 @@ from homeassistant.helpers.typing import ConfigType
 from homeassistant.util import dt as dt_util
 
 from .const import (
+    ATTR_DEVICES,
     ATTR_ENTITIES,
     CARD_URL,
     CONF_GRACE_PERIOD,
@@ -50,6 +51,7 @@ from .const import (
     REGISTRY_DEBOUNCE,
     SERVICE_IGNORE,
     SERVICE_REMOVE,
+    SERVICE_REMOVE_DEVICES,
     SERVICE_SCAN,
     VERSION,
 )
@@ -60,6 +62,7 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = [Platform.BUTTON, Platform.SENSOR]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 ENTITIES_SCHEMA = vol.Schema({vol.Required(ATTR_ENTITIES): vol.All(cv.ensure_list, [cv.entity_id], vol.Length(min=1))})
+DEVICES_SCHEMA = vol.Schema({vol.Required(ATTR_DEVICES): vol.All(cv.ensure_list, [cv.string], vol.Length(min=1))})
 
 type OrphanEntitiesConfigEntry = ConfigEntry[OrphanScanner]
 
@@ -96,6 +99,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         removed = _entry(hass).runtime_data.async_remove(call.data[ATTR_ENTITIES])
         return {"removed": removed}
 
+    async def remove_devices(call: ServiceCall) -> ServiceResponse:
+        removed = _entry(hass).runtime_data.async_remove_devices(call.data[ATTR_DEVICES])
+        return {"removed": removed}
+
     async def ignore(call: ServiceCall) -> None:
         entry = _entry(hass)
         wanted = set(call.data[ATTR_ENTITIES])
@@ -126,6 +133,17 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     except TypeError:
         # Before Home Assistant 2025.1 admin actions can't return a response: the list removed is then not returned.
         async_register_admin_service(hass, DOMAIN, SERVICE_REMOVE, remove, ENTITIES_SCHEMA)
+    try:
+        async_register_admin_service(
+            hass,
+            DOMAIN,
+            SERVICE_REMOVE_DEVICES,
+            remove_devices,
+            DEVICES_SCHEMA,
+            supports_response=SupportsResponse.OPTIONAL,
+        )
+    except TypeError:
+        async_register_admin_service(hass, DOMAIN, SERVICE_REMOVE_DEVICES, remove_devices, DEVICES_SCHEMA)
     async_register_admin_service(hass, DOMAIN, SERVICE_IGNORE, ignore, ENTITIES_SCHEMA)
     return True
 

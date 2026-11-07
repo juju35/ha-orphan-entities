@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Figyelmen kívül hagyott entitások"
+          },
+          "devices": {
+            "name": "Eszközök"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "A figyelmen kívül hagyandó entitások azonosítói."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Árva eszközök eltávolítása",
+      "description": "Eltávolítja azokat az eszközöket, amelyek összes integrációs bejegyzését eltávolították, az entitásaikkal együtt. Csak a legutóbbi vizsgálat listájának eszközeit.",
+      "fields": {
+        "devices": {
+          "name": "Eszközök",
+          "description": "Eszközazonosítók az árva-érzékelő devices attribútumából."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Az Orphan Entities nincs betöltve." },
-    "starting": { "message": "A Home Assistant még indul: indítsa újra a vizsgálatot, ha elindult." },
-    "no_entities": { "message": "Nincs eltávolítandó entitás." },
-    "too_many": { "message": "Egyszerre legfeljebb {max} entitás." },
-    "not_orphan": { "message": "Nem szerepelnek az árva entitások listájában: {entities}. Vizsgáljon újra, és próbálja meg ismét." },
-    "not_registered": { "message": "Nem szerepelnek az entitásnyilvántartásban: {entities}." }
+    "not_loaded": {
+      "message": "Az Orphan Entities nincs betöltve."
+    },
+    "starting": {
+      "message": "A Home Assistant még indul: indítsa újra a vizsgálatot, ha elindult."
+    },
+    "no_entities": {
+      "message": "Nincs eltávolítandó entitás."
+    },
+    "too_many": {
+      "message": "Egyszerre legfeljebb {max} entitás."
+    },
+    "not_orphan": {
+      "message": "Nem szerepelnek az árva entitások listájában: {entities}. Vizsgáljon újra, és próbálja meg ismét."
+    },
+    "not_registered": {
+      "message": "Nem szerepelnek az entitásnyilvántartásban: {entities}."
+    },
+    "no_devices": {
+      "message": "Nincs megadva eszköz."
+    },
+    "not_orphan_device": {
+      "message": "Nem árva eszközök (először futtasson vizsgálatot): {devices}"
+    }
   }
 }

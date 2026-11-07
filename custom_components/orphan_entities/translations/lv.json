@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ignorētās vienības"
+          },
+          "devices": {
+            "name": "Ierīces"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "Ignorējamo vienību ID."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Noņemt bāreņu ierīces",
+      "description": "Noņem ierīces, kuru visi integrācijas ieraksti ir noņemti, kopā ar to entītijām. Tikai ierīces no pēdējās skenēšanas saraksta.",
+      "fields": {
+        "devices": {
+          "name": "Ierīces",
+          "description": "Ierīču ID no bāreņu sensora atribūta devices."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities nav ielādēts." },
-    "starting": { "message": "Home Assistant vēl startē: pēc startēšanas skenējiet vēlreiz." },
-    "no_entities": { "message": "Nav noņemamu vienību." },
-    "too_many": { "message": "Vienlaikus ne vairāk kā {max} vienības." },
-    "not_orphan": { "message": "Nav pamesto vienību sarakstā: {entities}. Skenējiet vēlreiz un mēģiniet vēlreiz." },
-    "not_registered": { "message": "Nav vienību reģistrā: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities nav ielādēts."
+    },
+    "starting": {
+      "message": "Home Assistant vēl startē: pēc startēšanas skenējiet vēlreiz."
+    },
+    "no_entities": {
+      "message": "Nav noņemamu vienību."
+    },
+    "too_many": {
+      "message": "Vienlaikus ne vairāk kā {max} vienības."
+    },
+    "not_orphan": {
+      "message": "Nav pamesto vienību sarakstā: {entities}. Skenējiet vēlreiz un mēģiniet vēlreiz."
+    },
+    "not_registered": {
+      "message": "Nav vienību reģistrā: {entities}."
+    },
+    "no_devices": {
+      "message": "Nav norādīta neviena ierīce."
+    },
+    "not_orphan_device": {
+      "message": "Nav bāreņu ierīces (vispirms skenējiet): {devices}"
+    }
   }
 }

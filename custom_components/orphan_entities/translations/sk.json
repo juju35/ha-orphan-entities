@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ignorované entity"
+          },
+          "devices": {
+            "name": "Zariadenia"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID entít na ignorovanie."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Odstrániť osirotené zariadenia",
+      "description": "Odstráni zariadenia, ktorých všetky položky integrácie boli odstránené, aj s ich entitami. Iba zariadenia zo zoznamu posledného skenovania.",
+      "fields": {
+        "devices": {
+          "name": "Zariadenia",
+          "description": "ID zariadení z atribútu devices senzora osirotených."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities nie je načítané." },
-    "starting": { "message": "Home Assistant sa ešte spúšťa: po spustení spustite skenovanie znova." },
-    "no_entities": { "message": "Žiadna entita na odstránenie." },
-    "too_many": { "message": "Naraz najviac {max} entít." },
-    "not_orphan": { "message": "Nie sú v zozname osirotených entít: {entities}. Skenujte znova a skúste to znova." },
-    "not_registered": { "message": "Nie sú v registri entít: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities nie je načítané."
+    },
+    "starting": {
+      "message": "Home Assistant sa ešte spúšťa: po spustení spustite skenovanie znova."
+    },
+    "no_entities": {
+      "message": "Žiadna entita na odstránenie."
+    },
+    "too_many": {
+      "message": "Naraz najviac {max} entít."
+    },
+    "not_orphan": {
+      "message": "Nie sú v zozname osirotených entít: {entities}. Skenujte znova a skúste to znova."
+    },
+    "not_registered": {
+      "message": "Nie sú v registri entít: {entities}."
+    },
+    "no_devices": {
+      "message": "Nebolo zadané žiadne zariadenie."
+    },
+    "not_orphan_device": {
+      "message": "Nie sú to osirotené zariadenia (najprv skenujte): {devices}"
+    }
   }
 }

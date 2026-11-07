@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ігноровані сутності"
+          },
+          "devices": {
+            "name": "Пристрої"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "ID сутностей для ігнорування."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Видалити осиротілі пристрої",
+      "description": "Видаляє пристрої, усі записи інтеграції яких видалено, разом з їхніми сутностями. Лише пристрої зі списку останнього сканування.",
+      "fields": {
+        "devices": {
+          "name": "Пристрої",
+          "description": "ID пристроїв з атрибута devices датчика сиріт."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities не завантажено." },
-    "starting": { "message": "Home Assistant ще запускається: повторіть сканування після запуску." },
-    "no_entities": { "message": "Немає сутностей для видалення." },
-    "too_many": { "message": "Не більше {max} сутностей за раз." },
-    "not_orphan": { "message": "Немає в списку осиротілих сутностей: {entities}. Виконайте сканування та спробуйте ще раз." },
-    "not_registered": { "message": "Немає в реєстрі сутностей: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities не завантажено."
+    },
+    "starting": {
+      "message": "Home Assistant ще запускається: повторіть сканування після запуску."
+    },
+    "no_entities": {
+      "message": "Немає сутностей для видалення."
+    },
+    "too_many": {
+      "message": "Не більше {max} сутностей за раз."
+    },
+    "not_orphan": {
+      "message": "Немає в списку осиротілих сутностей: {entities}. Виконайте сканування та спробуйте ще раз."
+    },
+    "not_registered": {
+      "message": "Немає в реєстрі сутностей: {entities}."
+    },
+    "no_devices": {
+      "message": "Пристрій не вказано."
+    },
+    "not_orphan_device": {
+      "message": "Це не осиротілі пристрої (спершу проскануйте): {devices}"
+    }
   }
 }

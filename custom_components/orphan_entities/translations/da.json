@@ -80,6 +80,9 @@
           },
           "ignored_entities": {
             "name": "Ignorerede entiteter"
+          },
+          "devices": {
+            "name": "Enheder"
           }
         }
       },
@@ -112,14 +115,42 @@
           "description": "Entitets-ID'er, der skal ignoreres."
         }
       }
+    },
+    "remove_devices": {
+      "name": "Fjern forældreløse enheder",
+      "description": "Fjerner enheder, hvis integrationsposter alle er fjernet, sammen med deres entiteter. Kun enhederne på listen fra den seneste scanning.",
+      "fields": {
+        "devices": {
+          "name": "Enheder",
+          "description": "Enheds-id'er fra attributten devices på sensoren for forældreløse."
+        }
+      }
     }
   },
   "exceptions": {
-    "not_loaded": { "message": "Orphan Entities er ikke indlæst." },
-    "starting": { "message": "Home Assistant starter stadig: scan igen, når det kører." },
-    "no_entities": { "message": "Ingen entiteter at fjerne." },
-    "too_many": { "message": "Højst {max} entiteter ad gangen." },
-    "not_orphan": { "message": "Ikke på listen over forældreløse entiteter: {entities}. Scan igen, og prøv igen." },
-    "not_registered": { "message": "Ikke i entitetsregistret: {entities}." }
+    "not_loaded": {
+      "message": "Orphan Entities er ikke indlæst."
+    },
+    "starting": {
+      "message": "Home Assistant starter stadig: scan igen, når det kører."
+    },
+    "no_entities": {
+      "message": "Ingen entiteter at fjerne."
+    },
+    "too_many": {
+      "message": "Højst {max} entiteter ad gangen."
+    },
+    "not_orphan": {
+      "message": "Ikke på listen over forældreløse entiteter: {entities}. Scan igen, og prøv igen."
+    },
+    "not_registered": {
+      "message": "Ikke i entitetsregistret: {entities}."
+    },
+    "no_devices": {
+      "message": "Ingen enhed angivet."
+    },
+    "not_orphan_device": {
+      "message": "Ikke forældreløse enheder (scan først): {devices}"
+    }
   }
 }

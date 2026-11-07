@@ -15,3 +15,11 @@ ignore:
       selector:
         text:
           multiple: true
+remove_devices:
+  fields:
+    devices:
+      required: true
+      example: "3b1f0c2e9d8a4f6b"
+      selector:
+        text:
+          multiple: true

@@ -590,3 +590,26 @@ test('hide_when_empty: the hidden card shows again in edit mode and in the edito
   assert.equal(card.style.display, '');
   assert.deepEqual(events, ['card-visibility-changed', 'card-visibility-changed', 'card-visibility-changed']);
 });
+
+test('orphan devices: listed under the entities, removed together after a confirmation (admins only)', async () => {
+  const hass = makeHass();
+  const devices = [
+    { device_id: 'd1', name: 'Old hub', manufacturer: 'Acme', model: 'H1', entities: 2, since: null },
+    { device_id: 'd2', name: 'Old plug', manufacturer: null, model: null, entities: 0, since: null },
+  ];
+  hass.states[Object.keys(hass.states).find((id) => hass.states[id].attributes?.entities)].attributes.devices = devices;
+  const card = render({}, hass);
+  let out = html(card);
+  assert.match(out, /class="section devs"/);
+  assert.match(out, /Orphan devices · 2/);
+  assert.match(out, /Old hub<\/span><span class="sub">Acme H1 · Entities: 2/);
+  assert.match(out, /data-act="remove_devices"/);
+  card._confirm = 'remove_devices';
+  card._sig = null;
+  card._render();
+  out = html(card);
+  assert.match(out, /Remove the orphan devices\?/);
+  await card._run();
+  const call = hass.calls.find((c) => c[1] === 'remove_devices');
+  assert.deepEqual(plain(call.slice(0, 3)), ['orphan_entities', 'remove_devices', { devices: ['d1', 'd2'] }]);
+});

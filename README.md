@@ -27,9 +27,10 @@ Removed integrations, renamed devices and old YAML platforms leave entities behi
 - **Five reasons**, from the most to the least certain orphan: *Integration removed*, *Integration not loaded*, *Not provided*, then, for entities still provided, *Unavailable* and *Unknown* for longer than a set delay (24 hours by default)
 - **Never during startup**: nothing is listed while Home Assistant starts, nor during the grace period after it has started (10 minutes by default), while the integrations set up their entities. The card then says when the first scan is due; **Scan now** does not wait for it
 - **Bulk removal** from the entity registry, limited to the listed entities, with a confirmation
+- **Orphan devices**: devices whose integration entries were all removed, listed under the entities and removed together (with their entities) from the device registry
 - **Ignored integrations and entities**, in the options or with the card's **Ignore** button
 - **Orphaned entities** sensor with the list, **Last scan** sensor, **Scan now** button
-- `orphan_entities.scan`, `orphan_entities.remove` and `orphan_entities.ignore` **actions** for administrators, `orphan_entities_removed` **event**
+- `orphan_entities.scan`, `orphan_entities.remove`, `orphan_entities.remove_devices` and `orphan_entities.ignore` **actions** for administrators, `orphan_entities_removed` and `orphan_entities_devices_removed` **events**
 - **Lovelace card** bundled with the integration: search, integration and reason filters, selection one by one or of every match, **Remove** and **Ignore** in bulk
 - **Mini card**: the orphans by reason on two lines, with a detail button showing the full card
 - English, French, German, Spanish, Italian, Dutch, European Portuguese, Polish, Serbian (Cyrillic and Latin), Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek; pt-BR uses the European Portuguese texts
@@ -87,6 +88,8 @@ Copy `custom_components/orphan_entities/` to `/config/custom_components/orphan_e
 
 Left out: disabled entities (but those of a removed integration), entities of a disabled integration or of one that failed to set up (they come back with it: that's the job of [Integration Watchdog](https://github.com/juju35/ha-integration-watchdog)), the ignored integrations and entities.
 
+**Orphan devices** are the devices of the device registry whose config entries no longer exist, all of them (a device shared with a live entry is still provided). Removing one deletes it from the device registry with its entities, as Home Assistant does when an integration is removed cleanly.
+
 Removing an entity deletes its entry from the entity registry, as its **Delete** button does in Home Assistant. Its history stays in the database. An *Unavailable* or *Unknown* entity is still provided by its integration: it comes back if the integration creates it again (after a reload or a restart).
 
 ### Entities
@@ -94,7 +97,7 @@ Removing an entity deletes its entry from the entity registry, as its **Delete**
 | Entity | Description |
 |---|---|
 | `button.orphan_entities_scan_now` | Scans now, even within the grace period (nothing while Home Assistant is starting) |
-| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`. The list is not recorded in the database |
+| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`, `devices` (orphan devices: `device_id`, `name`, `manufacturer`, `model`, `entities`, `since`). The lists are not recorded in the database |
 | `sensor.orphan_entities_last_scan` | End of the last scan |
 
 ### Action `orphan_entities.scan`
@@ -115,6 +118,17 @@ data:
   entities:
     - sensor.old_temperature
     - light.old_lamp
+```
+
+### Action `orphan_entities.remove_devices`
+
+Removes orphan devices, with their entities. Only the devices of the last scan's `devices` list: any other refuses the request. For administrators.
+
+```yaml
+action: orphan_entities.remove_devices
+data:
+  devices: 3b1f0c2e9d8a4f6b
+response_variable: result  # {"removed": ["3b1f0c2e9d8a4f6b"]}
 ```
 
 ### Action `orphan_entities.ignore`
@@ -160,6 +174,10 @@ type: custom:orphan-entities-card
 |---|---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card.png" alt="Card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected.png" alt="Card, two entities selected" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm.png" alt="Card, confirmation" width="400"> |
 | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-dark.png" alt="Card, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-selected-dark.png" alt="Card, two entities selected, dark theme" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-confirm-dark.png" alt="Card, confirmation, dark theme" width="400"> |
+
+| Orphan devices | |
+|---|---|
+| <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-devices.png" alt="Card, orphan devices" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/screenshots/card-devices-dark.png" alt="Card, orphan devices, dark theme" width="400"> |
 
 | Filtered on a reason | No orphan |
 |---|---|

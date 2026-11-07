@@ -428,3 +428,32 @@ async def test_card_resource_yaml_mode_untouched(hass: HomeAssistant):
         await _setup(hass)
         await hass.async_block_till_done()
     add_js.assert_called_once()
+
+
+async def test_orphan_devices(hass: HomeAssistant):
+    """A device whose config entries are all gone is listed and can be removed, with its entities."""
+    from homeassistant.exceptions import ServiceValidationError
+    from homeassistant.helpers import device_registry as dr
+
+    live = _integration(hass, "acme")
+    gone = _integration(hass, "delta")
+    devices = dr.async_get(hass)
+    old = devices.async_get_or_create(config_entry_id=gone.entry_id, identifiers={("delta", "1")}, name="Old hub")
+    kept = devices.async_get_or_create(config_entry_id=live.entry_id, identifiers={("acme", "1")}, name="Lamp")
+    node = _entity(hass, "delta", "node", None, gone, device_id=old.id)
+    hass.config_entries._entries.pop(gone.entry_id)
+    await _setup(hass)
+    await _scan(hass)
+
+    attributes = hass.states.get(ORPHANS).attributes
+    assert [(d["device_id"], d["name"], d["entities"]) for d in attributes["devices"]] == [(old.id, "Old hub", 1)]
+    with pytest.raises(ServiceValidationError):
+        await hass.services.async_call(DOMAIN, "remove_devices", {"devices": [kept.id]}, blocking=True)
+    # Without return_response: before Home Assistant 2025.1 admin actions can't return one.
+    await hass.services.async_call(DOMAIN, "remove_devices", {"devices": [old.id]}, blocking=True)
+    await hass.async_block_till_done()
+    assert devices.async_get(old.id) is None
+    assert devices.async_get(kept.id) is not None
+    assert er.async_get(hass).async_get(node) is None
+    assert hass.states.get(ORPHANS).attributes["devices"] == []
+    assert node not in _listed(hass)
