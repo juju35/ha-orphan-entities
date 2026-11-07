@@ -182,7 +182,7 @@ Every option is in the visual editor:
 | `show_filters` | `true` | Search, integration and reason filters |
 | `max_rows` | `25` | Rows shown before **Show all**, from 1 to 500 |
 | `scan_button` | `true` | **Scan now** button in the header. It presses the button entity, so any user who sees the card can scan |
-| `hide_when_empty` | `false` | Hide the card while there is no orphan |
+| `hide_when_empty` | `false` | Hide the card while there is no orphan (always shown while editing the dashboard) |
 | `language` | Home Assistant's | `en`, `fr`, `de`, `es`, `it`, `nl`, `pt`, `pl`, `sr`, `sr-Latn`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` |
 
 ### Mini card

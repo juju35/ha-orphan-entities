@@ -575,3 +575,18 @@ test('header: the pill keeps its dot alone when its text or the title would be c
   card._fitPill();
   assert.ok(classes.has('compact'), 'clamped text');
 });
+
+test('hide_when_empty: the hidden card shows again in edit mode and in the editor preview', () => {
+  const card = render({ hide_when_empty: true }, makeHass({ items: [] }));
+  const events = [];
+  card.dispatchEvent = (ev) => events.push(ev.type);
+  assert.equal(card.style.display, 'none');
+  card.editMode = true;
+  assert.equal(card.style.display, '');
+  assert.match(html(card), /No orphan/);
+  card.editMode = false;
+  assert.equal(card.style.display, 'none');
+  card.preview = true;
+  assert.equal(card.style.display, '');
+  assert.deepEqual(events, ['card-visibility-changed', 'card-visibility-changed', 'card-visibility-changed']);
+});
