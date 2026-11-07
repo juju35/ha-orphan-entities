@@ -1,6 +1,6 @@
 # ha-orphan-entities
 
-[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![Marketplace](https://img.shields.io/badge/Marketplace-Custom-41BDF5.svg)](https://www.home-assistant.io/integrations/marketplace/)
 [![HACS Validation](https://github.com/juju35/ha-orphan-entities/actions/workflows/hacs.yml/badge.svg)](https://github.com/juju35/ha-orphan-entities/actions/workflows/hacs.yml)
 [![Validate](https://github.com/juju35/ha-orphan-entities/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-orphan-entities/actions/workflows/validate.yml)
 [![Lint](https://github.com/juju35/ha-orphan-entities/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-orphan-entities/actions/workflows/lint.yml)
@@ -19,7 +19,7 @@ Home Assistant integration that tracks the orphaned entities of your entity regi
 
 Removed integrations, renamed devices and old YAML platforms leave entities behind in the registry. Home Assistant shows them one by one as "not provided"; Orphan Entities lists them all, tells you why each one is listed, and removes the ones you select in one go.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-orphan-entities&category=integration)
+[![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-orphan-entities&category=integration)
 
 ## Features
 
@@ -41,19 +41,19 @@ Removed integrations, renamed devices and old YAML platforms leave entities behi
 
 ## Installation
 
-### Via HACS (recommended)
+### Via the Marketplace (recommended)
 
 Click the button below to add the repository directly:
 
-[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-orphan-entities&category=integration)
+[![Add to the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-orphan-entities&category=integration)
 
-Then click **Download** and restart Home Assistant.
+Then click **Install** and restart Home Assistant.
 
 Or manually:
 
-1. Open HACS → **⋮** (top right) → **Custom repositories**
+1. Open **Settings → Marketplace → Add from link** (top right; this needs a GitHub account connected)
 2. Add `https://github.com/juju35/ha-orphan-entities` — Type: **Integration**
-3. Search for **Orphan Entities** and click **Download**
+3. Open **Orphan Entities** and click **Install**
 4. Restart Home Assistant
 
 ### Manual
