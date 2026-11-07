@@ -33,6 +33,13 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
+def _entry_ids(device: dr.DeviceEntry) -> list[str]:
+    """Config entries of a device: its single `config_entry_id` since 2026.8, its `config_entries` set before."""
+    if hasattr(device, "config_entry_id"):
+        return [device.config_entry_id] if device.config_entry_id else []
+    return list(device.config_entries)
+
+
 @dataclass(frozen=True, slots=True)
 class OrphanDevice:
     """A device of the registry whose integration entries were all removed: nothing will ever provide it again."""
@@ -221,10 +228,13 @@ class OrphanScanner:
         """Devices tied to config entries that no longer exist, every one of them (a device shared with a live
         entry is still provided). Their entities, if any, are listed above as `entry_removed`."""
         found: list[OrphanDevice] = []
-        for device in list(devices.devices.values()):
-            if not device.config_entries or any(
-                self.hass.config_entries.async_get_entry(entry_id) for entry_id in device.config_entries
-            ):
+        # Iterating the registry gives the device entries since 2026.11 (their IDs before): both are handled.
+        for item in list(devices.devices):
+            device = devices.async_get(item) if isinstance(item, str) else item
+            if device is None:
+                continue
+            entry_ids = _entry_ids(device)
+            if not entry_ids or any(self.hass.config_entries.async_get_entry(entry_id) for entry_id in entry_ids):
                 continue
             if device.id in self.ignored_entities:
                 continue
