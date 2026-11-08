@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Dispositivos",
-          "description": "ID de dispositivos del atributo devices del sensor de huérfanos."
+          "description": "ID de dispositivos del atributo devices del sensor de huérfanos. Déjelo vacío para todos los dispositivos huérfanos del último análisis."
         }
       }
     }

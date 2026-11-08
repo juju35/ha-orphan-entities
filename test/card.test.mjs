@@ -107,7 +107,7 @@ const ITEMS = [
   orphan('sensor.forecast', 'met', 'unknown'),
 ];
 
-function makeHass({ items = ITEMS, scanned = true, admin = true, language = 'en', entities = REGISTRY, fail = null } = {}) {
+function makeHass({ items = ITEMS, scanned = true, admin = true, language = 'en', entities = REGISTRY, fail = null, response = null, noResponse = false } = {}) {
   const calls = [];
   return {
     calls,
@@ -125,6 +125,9 @@ function makeHass({ items = ITEMS, scanned = true, admin = true, language = 'en'
     callService: async (...args) => {
       calls.push(args);
       if (fail) throw fail;
+      // Before Home Assistant 2025.1 admin actions refuse return_response.
+      if (args[5] && noResponse) throw { code: 'service_validation_error', translation_key: 'service_does_not_support_response', message: 'The action does not support responses' };
+      return args[5] ? { context: {}, response } : { context: {} };
     },
   };
 }
@@ -318,10 +321,38 @@ test('remove: confirmation at the top of the card, then the action with the sele
   assert.match(h, /<li><span class="name">hallway<\/span>/);
   assert.match(h, /ha-card class="lvl-warn dlg-open"/);
   await card._run();
-  assert.deepEqual(plain(hass.calls), [['orphan_entities', 'remove', { entities: ['light.hallway', 'sensor.garage_door'] }]]);
+  assert.deepEqual(plain(hass.calls), [['orphan_entities', 'remove', { entities: ['light.hallway', 'sensor.garage_door'] }, null, false, true]]);
   assert.equal(card._sel.size, 0);
   assert.equal(card._confirm, null);
   assert.equal(card.events.at(-1).detail.message, '2 entities removed');
+});
+
+test('remove: the toast counts what the action removed and kept, not the selection', async () => {
+  const hass = makeHass({ response: { removed: ['light.hallway'], skipped: ['sensor.garage_door'] } });
+  const card = render({}, hass);
+  card._toggle('light.hallway');
+  card._toggle('sensor.garage_door');
+  card._confirm = 'remove';
+  await card._run();
+  assert.equal(card.events.at(-1).detail.message, '1 entity removed · Kept, no longer orphaned: 1');
+  // Translated.
+  const fr = makeHass({ language: 'fr', response: { removed: [], skipped: ['sensor.forecast'] } });
+  const frCard = render({}, fr);
+  frCard._toggle('sensor.forecast');
+  frCard._confirm = 'remove';
+  await frCard._run();
+  assert.match(frCard.events.at(-1).detail.message, /^0 entité.* · Conservés, plus orphelins : 1$/);
+  // Before Home Assistant 2025.1 (no response): called again without asking for one, the selection is counted.
+  const old = makeHass({ noResponse: true });
+  const oldCard = render({}, old);
+  oldCard._toggle('sensor.forecast');
+  oldCard._confirm = 'remove';
+  await oldCard._run();
+  assert.deepEqual(plain(old.calls.map((c) => c.slice(0, 3))), [
+    ['orphan_entities', 'remove', { entities: ['sensor.forecast'] }],
+    ['orphan_entities', 'remove', { entities: ['sensor.forecast'] }],
+  ]);
+  assert.equal(oldCard.events.at(-1).detail.message, '1 entity removed');
 });
 
 test('ignore goes through the ignore action', async () => {
@@ -615,8 +646,54 @@ test('orphan devices: listed under the entities, removed together after a confir
   out = html(card);
   assert.match(out, /Remove the orphan devices\?/);
   await card._run();
+  // Without a selection the integration removes every orphan device, also those its sensor leaves out.
   const call = hass.calls.find((c) => c[1] === 'remove_devices');
-  assert.deepEqual(plain(call.slice(0, 3)), ['orphan_entities', 'remove_devices', { devices: ['d1', 'd2'] }]);
+  assert.deepEqual(plain(call.slice(0, 3)), ['orphan_entities', 'remove_devices', {}]);
+});
+
+test('orphan devices: the toast counts the devices removed and kept; a cut list says how many are left out', async () => {
+  const hass = makeHass({ response: { removed: ['d1'], skipped: ['d2'], entities: [] } });
+  hass.states[ORPHANS].attributes.devices = [
+    { device_id: 'd1', name: 'Old hub', manufacturer: 'Acme', model: 'H1', entities: 2, since: null },
+    { device_id: 'd2', name: 'Old plug', manufacturer: null, model: null, entities: 0, since: null },
+  ];
+  hass.states[ORPHANS].attributes.devices_truncated = 12;
+  const card = render({}, hass);
+  assert.match(html(card), /class="empty trunc">Orphan devices not listed here: 12/);
+  card._confirm = 'remove_devices';
+  card._render();
+  // All of them: the listed ones and those left out.
+  assert.match(html(card), /and 9 more/);
+  await card._run();
+  assert.equal(card.events.at(-1).detail.message, 'Orphan devices removed: 1 · Kept, no longer orphaned: 1');
+});
+
+test('orphan devices: a "Used by" badge and list, the confirmation counts them and asks to remove anyway', () => {
+  const hass = makeHass();
+  const uses = [{ type: 'automation', id: 'automation.hub_button', name: 'Hub button', path: '/config/automation/edit/hub' }];
+  hass.states[ORPHANS].attributes.devices = [
+    { device_id: 'd2', name: 'Old plug', manufacturer: null, model: null, entities: 0, since: null, used_by: [] },
+    { device_id: 'd1', name: 'Old hub', manufacturer: 'Acme', model: 'H1', entities: 2, since: null, used_by: uses },
+  ];
+  const card = render({}, hass);
+  let h = html(card);
+  assert.equal((h.match(/class="used"/g) || []).length, 1);
+  assert.match(h, /data-used="d1"[^>]*title="Automation: Hub button">.*<span>Used by 1<\/span>/);
+  card._open.add('d1');
+  card._render();
+  assert.match(html(card), /<a href="\/config\/automation\/edit\/hub" data-nav="\/config\/automation\/edit\/hub">Hub button<\/a>/);
+  // The open list of a listed device stays open.
+  assert.ok(card._open.has('d1'));
+  card._confirm = 'remove_devices';
+  card._render();
+  h = html(card);
+  assert.match(h, /Devices still used by automations or scripts: 1\. They may stop working\./);
+  assert.match(h, /<span>Remove anyway<\/span>/);
+  assert.match(h, /<ul><li><span class="name">Old hub<\/span> <span class="sub">Acme H1<\/span> <span class="ub">Used by 1<\/span>/);
+  // Only the selection: the device in use is not in it.
+  card._toggle('d2', card._dsel);
+  card._render();
+  assert.doesNotMatch(markup(card), /still used|Remove anyway/);
 });
 
 const USES = [

@@ -195,6 +195,8 @@ DEVICES = [
         "model": "ZH-1",
         "entities": 4,
         "since": None,
+        # An automation still uses the device itself (device trigger): its "Used by" badge.
+        "used_by": [{"type": "automation", "id": "automation.hub_button", "name": "Hub button", "path": None}],
     },
     {"device_id": "d2", "name": "Garage plug", "manufacturer": "Acme", "model": "P2", "entities": 0, "since": None},
 ]

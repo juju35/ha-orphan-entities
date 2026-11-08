@@ -30,7 +30,15 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
     _attr_state_class = SensorStateClass.MEASUREMENT
     # Rewritten at every scan and possibly long: kept out of the recorder database.
     _unrecorded_attributes = frozenset(
-        {"entities", "devices", "next_scan", "ignored_integrations", "ignored_entities", "truncated"}
+        {
+            "entities",
+            "devices",
+            "next_scan",
+            "ignored_integrations",
+            "ignored_entities",
+            "truncated",
+            "devices_truncated",
+        }
     )
 
     @property
@@ -46,9 +54,14 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
             "entities": [
                 {**o.as_dict(), "used_by": self.scanner.references.get(o.entity_id, [])} for o in orphans[:MAX_LISTED]
             ],
-            "devices": [d.as_dict() for d in devices[:MAX_LISTED]],
-            # How many orphan entities `entities` leaves out (0: complete).
+            # Each with the automations and scripts still using it (`used_by`).
+            "devices": [
+                {**d.as_dict(), "used_by": self.scanner.device_references.get(d.device_id, [])}
+                for d in devices[:MAX_LISTED]
+            ],
+            # How many orphan entities `entities` (and devices `devices`) leaves out (0: complete).
             "truncated": max(0, len(orphans) - MAX_LISTED),
+            "devices_truncated": max(0, len(devices) - MAX_LISTED),
             # End of the grace period after a start (None once it is over): the card says when the first scan is due.
             "next_scan": self.scanner.next_scan.isoformat() if self.scanner.next_scan else None,
             "counts": self.scanner.counts(),

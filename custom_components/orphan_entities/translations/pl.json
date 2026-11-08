@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Urządzenia",
-          "description": "Identyfikatory urządzeń z atrybutu devices czujnika sierot."
+          "description": "Identyfikatory urządzeń z atrybutu devices czujnika sierot. Pozostaw puste dla wszystkich osieroconych urządzeń z ostatniego skanowania."
         }
       }
     }

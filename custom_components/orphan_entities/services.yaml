@@ -22,7 +22,7 @@ ignore:
 remove_devices:
   fields:
     devices:
-      required: true
+      required: false
       example: "3b1f0c2e9d8a4f6b"
       selector:
         text:

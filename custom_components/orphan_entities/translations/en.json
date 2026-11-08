@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Devices",
-          "description": "Device IDs from the devices attribute of the orphans sensor."
+          "description": "Device IDs from the devices attribute of the orphans sensor. Leave empty for every orphan device of the last scan."
         }
       }
     }

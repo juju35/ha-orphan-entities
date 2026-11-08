@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Dispositivi",
-          "description": "ID dei dispositivi dall'attributo devices del sensore degli orfani."
+          "description": "ID dei dispositivi dall'attributo devices del sensore degli orfani. Lasciare vuoto per tutti i dispositivi orfani dell'ultima scansione."
         }
       }
     }

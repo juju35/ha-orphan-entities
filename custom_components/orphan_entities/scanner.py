@@ -29,7 +29,7 @@ from .const import (
     REASONS,
     STATELESS_DOMAINS,
 )
-from .references import async_dashboards, find_dashboard_references, find_references
+from .references import async_dashboards, find_dashboard_references, find_device_references, find_references
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -121,6 +121,8 @@ class OrphanScanner:
         # scan. The dashboards are read once, then again only when one is saved (`lovelace_updated`); the orphans they
         # use are looked for again only when the list or the dashboards changed.
         self.references: dict[str, list[dict[str, Any]]] = {}
+        # The automations and scripts still using each orphan device ({device_id: [...]}), found at each scan.
+        self.device_references: dict[str, list[dict[str, Any]]] = {}
         self._dashboards: list[dict[str, Any]] = []
         self._dashboards_version = 0
         self._dashboards_read: int | None = None
@@ -206,6 +208,7 @@ class OrphanScanner:
         self.devices = self._orphan_devices(registry, devices)
         self.last_scan = now
         self.references = self._references()
+        self.device_references = find_device_references(self.hass, [d.device_id for d in self.devices])
         self._notify()
         if self._dashboards_read is None:
             self._read_dashboards()
@@ -312,13 +315,19 @@ class OrphanScanner:
             )
 
     @callback
-    def async_remove_devices(self, device_ids: Iterable[str]) -> tuple[list[str], list[str], list[str]]:
+    def async_remove_devices(self, device_ids: Iterable[str] | None = None) -> tuple[list[str], list[str], list[str]]:
         """Remove listed orphan devices (and their entities) from the registries; refuses the request if one isn't.
 
+        None: every orphan device of the last scan (at most MAX_BATCH), even those the sensor leaves out.
         Each device is checked again first: one whose integration came back since the scan is kept (skipped).
         Returns the devices removed, the devices skipped and the entities removed with the devices.
         """
-        wanted = list(dict.fromkeys(device_ids))
+        if device_ids is None:
+            wanted = [d.device_id for d in self.devices[:MAX_BATCH]]
+            if not wanted:
+                return [], [], []
+        else:
+            wanted = list(dict.fromkeys(device_ids))
         if not wanted:
             raise ServiceValidationError(translation_domain=DOMAIN, translation_key="no_devices")
         self._too_many(wanted)

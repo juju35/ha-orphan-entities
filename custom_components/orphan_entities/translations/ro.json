@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Dispozitive",
-          "description": "ID-uri de dispozitive din atributul devices al senzorului de orfane."
+          "description": "ID-uri de dispozitive din atributul devices al senzorului de orfane. Lăsați gol pentru toate dispozitivele orfane din ultima scanare."
         }
       }
     }

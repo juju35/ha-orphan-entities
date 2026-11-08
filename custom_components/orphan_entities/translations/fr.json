@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Appareils",
-          "description": "ID d'appareils de l'attribut devices du capteur des orphelins."
+          "description": "ID d'appareils de l'attribut devices du capteur des orphelins. Laisser vide pour tous les appareils orphelins de la dernière analyse."
         }
       }
     }

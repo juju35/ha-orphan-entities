@@ -105,6 +105,8 @@ Before you remove an orphan, the integration tells you what still uses it, so th
 
 Only the loaded integrations are asked: without automations, for instance, none is listed. Each entity gets a `used_by` list in the `entities` attribute (`type`: `automation`, `script`, `scene`, `group` or `dashboard`, `id`, `name`, `path`: the editor page or dashboard, or `null`).
 
+Orphan devices get one too, in the `devices` attribute: the automations and scripts that use the device itself (device triggers, conditions and actions, or a `device_id` target). The card shows the same **Used by n** badge on their rows, and the confirmation asks to **Remove anyway** when devices still in use would be removed.
+
 Limits:
 
 - **YAML dashboards** (and the dashboards of a YAML-mode Lovelace) are not scanned, nor are the YAML files themselves: a card defined there is not found
@@ -118,7 +120,7 @@ Removing an entity deletes its entry from the entity registry, as its **Delete**
 | Entity | Description |
 |---|---|
 | `button.orphan_entities_scan_now` | Scans now, even within the grace period (nothing while Home Assistant is starting) |
-| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`, `used_by`: what still uses it, see [Used by](#used-by)), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`, `devices` (orphan devices: `device_id`, `name`, `manufacturer`, `model`, `entities`, `since`), `truncated` (orphans left out of `entities`). `entities` and `devices` hold at most 250 items each, the most certain orphans first; the state keeps the full count. The lists are not recorded in the database |
+| `sensor.orphan_entities_orphaned_entities` | Number of orphaned entities (unknown until the first scan). Attributes: `entities` (list of `entity_id`, `name`, `platform`, `reason`, `since`, `entry_id`, `entry_title`, `device`, `disabled`, `used_by`: what still uses it, see [Used by](#used-by)), `next_scan` (end of the grace period after a start, until then), `counts` (per reason), `removed` (since Home Assistant started), `stale_hours`, `include_unknown`, `ignored_integrations`, `ignored_entities`, `devices` (orphan devices: `device_id`, `name`, `manufacturer`, `model`, `entities`, `since`, `used_by`), `truncated` (orphans left out of `entities`), `devices_truncated` (orphan devices left out of `devices`). `entities` and `devices` hold at most 250 items each, the most certain orphans first; the state keeps the full count. The lists are not recorded in the database |
 | `sensor.orphan_entities_last_scan` | End of the last scan |
 
 ### Action `orphan_entities.scan`
@@ -144,7 +146,7 @@ response_variable: result  # {"removed": ["sensor.old_temperature"], "skipped": 
 
 ### Action `orphan_entities.remove_devices`
 
-Removes orphan devices, with their entities. Only the devices of the last scan's `devices` list: any other refuses the request. Each device is checked again just before: one whose integration is back is kept and returned in `skipped`. At most 1000 at a time. For administrators. Fires `orphan_entities_devices_removed`, and `orphan_entities_removed` with the entities removed with the devices.
+Removes orphan devices, with their entities. Only the devices of the last scan's list: any other refuses the request. Without `devices`, every orphan device of the last scan is removed (also those the `devices` attribute leaves out, at most 1000). Each device is checked again just before: one whose integration is back is kept and returned in `skipped`. At most 1000 at a time. For administrators. Fires `orphan_entities_devices_removed`, and `orphan_entities_removed` with the entities removed with the devices.
 
 ```yaml
 action: orphan_entities.remove_devices
@@ -217,7 +219,7 @@ type: custom:orphan-entities-card
 - **List**: for each entity, its integration's logo, name, entity ID, device, reason and for how long. No longer provided in red, stale in orange. A long list stops at **Rows shown**, then **Show all**. Past 250 orphans, a note says how many more there are: remove or ignore the first ones to see them
 - **Used by**: an entity that an automation, a script, a scene, a group or a dashboard still uses gets an orange **Used by n** badge; its tooltip lists them, a click opens the list under the row, with links to their editors. When some selected entities are still in use, the removal confirmation says how many and asks to **Remove anyway**
 - **Selection** (administrators only): click a row to select it; **Select the n shown** selects every entity matching the filters, including those past **Rows shown**. **Ignore** and **Remove** then act on the selection, after a confirmation at the top of the card (Escape cancels). Other users see the list without checkboxes
-- **Orphan devices**: **Remove devices** removes them all; administrators can also select some (click a row), then **Ignore** or **Remove devices** act on the selection only
+- **Orphan devices**: **Remove devices** removes them all (also those the list leaves out, which a note under the list counts); administrators can also select some (click a row), then **Ignore** or **Remove devices** act on the selection only
 
 Every option is in the visual editor:
 

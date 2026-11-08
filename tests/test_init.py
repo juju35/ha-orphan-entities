@@ -706,3 +706,59 @@ async def test_options_show_ignored_devices_by_name(hass: HomeAssistant):
     selector = result["data_schema"].schema[next(k for k in result["data_schema"].schema if k == CONF_IGNORED_ENTITIES)]
     labels = {o["value"]: o["label"] for o in selector.config["options"]}
     assert labels == {old.id: f"Delta ({old.id})", "sensor.kept": "sensor.kept"}
+
+
+async def test_remove_devices_without_ids_removes_every_orphan_device(hass: HomeAssistant):
+    """`remove_devices` without `devices`: every orphan device of the last scan, also those the sensor leaves out."""
+    from homeassistant.helpers import device_registry as dr  # noqa: PLC0415
+
+    first, _, _ = _orphan_device(hass, "delta", entities=1)
+    second, _, _ = _orphan_device(hass, "omega")
+    with patch("custom_components.orphan_entities.sensor.MAX_LISTED", 1):
+        await _setup(hass)
+        await _scan(hass)
+        attributes = hass.states.get(ORPHANS).attributes
+        assert len(attributes["devices"]) == 1
+        assert attributes["devices_truncated"] == 1
+        if RESPONSE:
+            response = await hass.services.async_call(DOMAIN, "remove_devices", {}, blocking=True, return_response=True)
+            assert sorted(response["removed"]) == sorted([first.id, second.id])
+            assert response["skipped"] == []
+        else:
+            await hass.services.async_call(DOMAIN, "remove_devices", {}, blocking=True)
+        await hass.async_block_till_done()
+        devices = dr.async_get(hass)
+        assert devices.async_get(first.id) is None
+        assert devices.async_get(second.id) is None
+        attributes = hass.states.get(ORPHANS).attributes
+        assert attributes["devices"] == []
+        assert attributes["devices_truncated"] == 0
+        # Nothing left: nothing to do, no error.
+        await hass.services.async_call(DOMAIN, "remove_devices", {}, blocking=True)
+    from custom_components.orphan_entities.sensor import OrphansSensor  # noqa: PLC0415
+
+    assert "devices_truncated" in OrphansSensor._unrecorded_attributes
+
+
+async def test_devices_used_by(hass: HomeAssistant):
+    """Each orphan device lists the automations and scripts still using it."""
+    used, _, _ = _orphan_device(hass, "delta")
+    unused, _, _ = _orphan_device(hass, "omega")
+    target = {"action": "homeassistant.turn_off", "target": {"device_id": used.id}}
+    assert await async_setup_component(
+        hass,
+        "automation",
+        {"automation": {"id": "hub_alert", "alias": "Hub alert", "triggers": [], "actions": [target]}},
+    )
+    assert await async_setup_component(
+        hass, "script", {"script": {"hub_off": {"alias": "Hub off", "sequence": [target]}}}
+    )
+    await hass.async_block_till_done()
+    await _setup(hass)
+    await _scan(hass)
+    devices = {d["device_id"]: d for d in hass.states.get(ORPHANS).attributes["devices"]}
+    assert devices[unused.id]["used_by"] == []
+    assert [(r["type"], r["name"], r["path"]) for r in devices[used.id]["used_by"]] == [
+        ("automation", "Hub alert", "/config/automation/edit/hub_alert"),
+        ("script", "Hub off", "/config/script/edit/hub_off"),
+    ]

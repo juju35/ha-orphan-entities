@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Geräte",
-          "description": "Geräte-IDs aus dem Attribut devices des Waisen-Sensors."
+          "description": "Geräte-IDs aus dem Attribut devices des Waisen-Sensors. Leer lassen für alle verwaisten Geräte des letzten Scans."
         }
       }
     }

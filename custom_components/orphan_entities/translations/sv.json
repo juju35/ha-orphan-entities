@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Enheter",
-          "description": "Enhets-id:n från attributet devices på sensorn för föräldralösa."
+          "description": "Enhets-id:n från attributet devices på sensorn för föräldralösa. Lämna tomt för alla föräldralösa enheter från den senaste skanningen."
         }
       }
     }

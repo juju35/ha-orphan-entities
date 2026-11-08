@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Eszközök",
-          "description": "Eszközazonosítók az árva-érzékelő devices attribútumából."
+          "description": "Eszközazonosítók az árva-érzékelő devices attribútumából. Hagyja üresen a legutóbbi vizsgálat összes árva eszközéhez."
         }
       }
     }

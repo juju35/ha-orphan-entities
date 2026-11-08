@@ -64,7 +64,8 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = [Platform.BUTTON, Platform.SENSOR]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 ENTITIES_SCHEMA = vol.Schema({vol.Required(ATTR_ENTITIES): vol.All(cv.ensure_list, [cv.entity_id], vol.Length(min=1))})
-DEVICES_SCHEMA = vol.Schema({vol.Required(ATTR_DEVICES): vol.All(cv.ensure_list, [cv.string], vol.Length(min=1))})
+# Without `devices`: every orphan device of the last scan.
+DEVICES_SCHEMA = vol.Schema({vol.Optional(ATTR_DEVICES): vol.All(cv.ensure_list, [cv.string], vol.Length(min=1))})
 # Entities, devices or both.
 IGNORE_SCHEMA = vol.All(
     vol.Schema(
@@ -113,7 +114,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         return {"removed": removed, "skipped": skipped}
 
     async def remove_devices(call: ServiceCall) -> ServiceResponse:
-        removed, skipped, entities = _entry(hass).runtime_data.async_remove_devices(call.data[ATTR_DEVICES])
+        removed, skipped, entities = _entry(hass).runtime_data.async_remove_devices(call.data.get(ATTR_DEVICES))
         return {"removed": removed, "skipped": skipped, "entities": entities}
 
     async def ignore(call: ServiceCall) -> None:

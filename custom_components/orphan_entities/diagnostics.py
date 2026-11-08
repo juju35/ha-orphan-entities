@@ -58,7 +58,9 @@ async def async_get_config_entry_diagnostics(hass: HomeAssistant, entry: OrphanE
                 "entities": [
                     {**o.as_dict(), "used_by": scanner.references.get(o.entity_id, [])} for o in scanner.orphans
                 ],
-                "devices": [d.as_dict() for d in scanner.devices],
+                "devices": [
+                    {**d.as_dict(), "used_by": scanner.device_references.get(d.device_id, [])} for d in scanner.devices
+                ],
             },
         },
         TO_REDACT,

@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Zařízení",
-          "description": "ID zařízení z atributu devices senzoru osiřelých."
+          "description": "ID zařízení z atributu devices senzoru osiřelých. Ponechte prázdné pro všechna osiřelá zařízení z poslední kontroly."
         }
       }
     }

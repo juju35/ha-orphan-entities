@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.0 - 2026-11-08
+
+### What's new
+- **Used by, for devices too**: each orphan device lists the automations and scripts that still use it (`used_by` in the `devices` attribute), shown with a **Used by n** badge in the card, and the removal confirmation asks to **Remove anyway** when some are in use. Translated in every language.
+- **Remove every orphan device**: `orphan_entities.remove_devices` without `devices` removes every orphan device of the last scan, and the card's **Remove devices** without a selection now does so, including the devices the sensor leaves out; the new `devices_truncated` attribute and a note in the card say how many are left out of the list.
+
+### Fixes
+- After a removal, the card's message counts the entities or devices actually removed and those kept because they are no longer orphaned, instead of the number selected.
+
 ## 1.4.0 - 2026-11-07
 
 ### What's new
