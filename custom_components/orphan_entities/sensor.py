@@ -11,6 +11,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import OrphanEntitiesConfigEntry
+from .const import MAX_LISTED
 from .entity import OrphanEntitiesEntity
 
 
@@ -28,7 +29,9 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
 
     _attr_state_class = SensorStateClass.MEASUREMENT
     # Rewritten at every scan and possibly long: kept out of the recorder database.
-    _unrecorded_attributes = frozenset({"entities", "devices", "next_scan", "ignored_integrations", "ignored_entities"})
+    _unrecorded_attributes = frozenset(
+        {"entities", "devices", "next_scan", "ignored_integrations", "ignored_entities", "truncated"}
+    )
 
     @property
     def native_value(self) -> int | None:
@@ -36,12 +39,16 @@ class OrphansSensor(OrphanEntitiesEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
+        orphans, devices = self.scanner.orphans, self.scanner.devices
         return {
-            # Each with what still uses it (`used_by`): automations, scripts, scenes, groups, dashboards.
+            # Each with what still uses it (`used_by`): automations, scripts, scenes, groups, dashboards. Capped: the
+            # attributes go to every open dashboard at each change.
             "entities": [
-                {**o.as_dict(), "used_by": self.scanner.references.get(o.entity_id, [])} for o in self.scanner.orphans
+                {**o.as_dict(), "used_by": self.scanner.references.get(o.entity_id, [])} for o in orphans[:MAX_LISTED]
             ],
-            "devices": [d.as_dict() for d in self.scanner.devices],
+            "devices": [d.as_dict() for d in devices[:MAX_LISTED]],
+            # How many orphan entities `entities` leaves out (0: complete).
+            "truncated": max(0, len(orphans) - MAX_LISTED),
             # End of the grace period after a start (None once it is over): the card says when the first scan is due.
             "next_scan": self.scanner.next_scan.isoformat() if self.scanner.next_scan else None,
             "counts": self.scanner.counts(),

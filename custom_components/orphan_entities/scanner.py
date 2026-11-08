@@ -29,7 +29,7 @@ from .const import (
     REASONS,
     STATELESS_DOMAINS,
 )
-from .references import async_dashboards, find_references
+from .references import async_dashboards, find_dashboard_references, find_references
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -118,10 +118,15 @@ class OrphanScanner:
         self.last_scan: datetime | None = None
         self.removed = 0
         # What still uses each orphan ({entity_id: [automation, script, scene, group or dashboard]}), found at each
-        # scan; the dashboards (read asynchronously) are those of the previous scan until they have been read again.
+        # scan. The dashboards are read once, then again only when one is saved (`lovelace_updated`); the orphans they
+        # use are looked for again only when the list or the dashboards changed.
         self.references: dict[str, list[dict[str, Any]]] = {}
         self._dashboards: list[dict[str, Any]] = []
-        self._generation = 0
+        self._dashboards_version = 0
+        self._dashboards_read: int | None = None
+        self._reading = False
+        self._dashboard_key: tuple[frozenset[str], int | None] | None = None
+        self._dashboard_refs: dict[str, list[dict[str, Any]]] = {}
         self._listeners: list[Callable[[], None]] = []
 
     @callback
@@ -200,19 +205,45 @@ class OrphanScanner:
         self.orphans = found
         self.devices = self._orphan_devices(registry, devices)
         self.last_scan = now
-        self.references = find_references(self.hass, (o.entity_id for o in found), self._dashboards)
+        self.references = self._references()
         self._notify()
-        self._generation += 1
-        self.hass.async_create_task(self._async_dashboard_references(self._generation))
+        if self._dashboards_read is None:
+            self._read_dashboards()
         return True
 
-    async def _async_dashboard_references(self, generation: int) -> None:
-        """Read the dashboards again, then update the references if they changed (a newer scan wins)."""
-        dashboards = await async_dashboards(self.hass)
-        if generation != self._generation:
+    def _references(self) -> dict[str, list[dict[str, Any]]]:
+        """What uses each orphan; the dashboards' part is cached until the list or a dashboard changes."""
+        ids = [o.entity_id for o in self.orphans]
+        key = (frozenset(ids), self._dashboards_read)
+        if key != self._dashboard_key:
+            self._dashboard_key = key
+            self._dashboard_refs = find_dashboard_references(ids, self._dashboards)
+        return find_references(self.hass, ids, self._dashboard_refs)
+
+    @callback
+    def async_dashboards_changed(self) -> None:
+        """A dashboard was saved (`lovelace_updated`): read the dashboards again."""
+        self._dashboards_version += 1
+        self._read_dashboards()
+
+    @callback
+    def _read_dashboards(self) -> None:
+        if not self._reading:
+            self._reading = True
+            self.hass.async_create_task(self._async_read_dashboards())
+
+    async def _async_read_dashboards(self) -> None:
+        """Read the dashboards (again while one is saved meanwhile), then update the references if they changed."""
+        try:
+            while self._dashboards_read != self._dashboards_version:
+                version = self._dashboards_version
+                self._dashboards = await async_dashboards(self.hass)
+                self._dashboards_read = version
+        finally:
+            self._reading = False
+        if self.last_scan is None:
             return
-        self._dashboards = dashboards
-        references = find_references(self.hass, (o.entity_id for o in self.orphans), dashboards)
+        references = self._references()
         if references != self.references:
             self.references = references
             self._notify()
@@ -244,6 +275,11 @@ class OrphanScanner:
             return REASON_UNKNOWN, state.last_changed
         return None, None
 
+    def _device_orphaned(self, device: dr.DeviceEntry) -> bool:
+        """The device has config entries and none of them exists any more."""
+        entry_ids = _entry_ids(device)
+        return bool(entry_ids) and not any(self.hass.config_entries.async_get_entry(e) for e in entry_ids)
+
     def _orphan_devices(self, registry: er.EntityRegistry, devices: dr.DeviceRegistry) -> list[OrphanDevice]:
         """Devices tied to config entries that no longer exist, every one of them (a device shared with a live
         entry is still provided). Their entities, if any, are listed above as `entry_removed`."""
@@ -253,8 +289,7 @@ class OrphanScanner:
             device = devices.async_get(item) if isinstance(item, str) else item
             if device is None:
                 continue
-            entry_ids = _entry_ids(device)
-            if not entry_ids or any(self.hass.config_entries.async_get_entry(entry_id) for entry_id in entry_ids):
+            if not self._device_orphaned(device):
                 continue
             if device.id in self.ignored_entities:
                 continue
@@ -270,12 +305,23 @@ class OrphanScanner:
             )
         return sorted(found, key=lambda d: d.name.casefold())
 
+    def _too_many(self, wanted: list[str]) -> None:
+        if len(wanted) > MAX_BATCH:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN, translation_key="too_many", translation_placeholders={"max": str(MAX_BATCH)}
+            )
+
     @callback
-    def async_remove_devices(self, device_ids: Iterable[str]) -> list[str]:
-        """Remove listed orphan devices (and their entities) from the registries; refuses the request if one isn't."""
+    def async_remove_devices(self, device_ids: Iterable[str]) -> tuple[list[str], list[str], list[str]]:
+        """Remove listed orphan devices (and their entities) from the registries; refuses the request if one isn't.
+
+        Each device is checked again first: one whose integration came back since the scan is kept (skipped).
+        Returns the devices removed, the devices skipped and the entities removed with the devices.
+        """
         wanted = list(dict.fromkeys(device_ids))
         if not wanted:
             raise ServiceValidationError(translation_domain=DOMAIN, translation_key="no_devices")
+        self._too_many(wanted)
         listed = {d.device_id for d in self.devices}
         if unknown := [d for d in wanted if d not in listed]:
             raise ServiceValidationError(
@@ -284,31 +330,46 @@ class OrphanScanner:
                 translation_placeholders={"devices": ", ".join(unknown[:10])},
             )
         registry = dr.async_get(self.hass)
+        entities = er.async_get(self.hass)
         removed: list[str] = []
+        skipped: list[str] = []
+        dropped: list[str] = []
         for device_id in wanted:
-            if registry.async_get(device_id) is None:
+            device = registry.async_get(device_id)
+            if device is None:
                 continue
+            if not self._device_orphaned(device):
+                skipped.append(device_id)
+                continue
+            dropped.extend(
+                e.entity_id for e in er.async_entries_for_device(entities, device_id, include_disabled_entities=True)
+            )
             # The entity registry drops the device's entities with it.
             registry.async_remove_device(device_id)
             removed.append(device_id)
         _LOGGER.info("Removed %d orphaned devices: %s", len(removed), ", ".join(removed))
+        if skipped:
+            _LOGGER.info("Kept %d devices no longer orphaned: %s", len(skipped), ", ".join(skipped))
+        self.removed += len(dropped)
         self.hass.bus.async_fire(EVENT_DEVICES_REMOVED, {"devices": removed})
-        self.devices = [d for d in self.devices if d.device_id not in removed]
-        gone = set(removed)
-        self.orphans = [o for o in self.orphans if o.device_id not in gone]
+        if dropped:
+            self.hass.bus.async_fire(EVENT_REMOVED, {"entities": dropped})
+        self.devices = [d for d in self.devices if d.device_id not in set(removed) | set(skipped)]
+        self.orphans = [o for o in self.orphans if o.device_id not in set(removed)]
         self._notify()
-        return removed
+        return removed, skipped, dropped
 
     @callback
-    def async_remove(self, entity_ids: Iterable[str]) -> list[str]:
-        """Remove listed entities from the entity registry; refuses the whole request if one isn't listed."""
+    def async_remove(self, entity_ids: Iterable[str]) -> tuple[list[str], list[str]]:
+        """Remove listed entities from the entity registry; refuses the whole request if one isn't listed.
+
+        Each entity is classified again first: one no longer orphaned since the scan (its integration is back, it is
+        available again) is kept and returned as skipped.
+        """
         wanted = list(dict.fromkeys(entity_ids))
         if not wanted:
             raise ServiceValidationError(translation_domain=DOMAIN, translation_key="no_entities")
-        if len(wanted) > MAX_BATCH:
-            raise ServiceValidationError(
-                translation_domain=DOMAIN, translation_key="too_many", translation_placeholders={"max": str(MAX_BATCH)}
-            )
+        self._too_many(wanted)
         listed = {o.entity_id for o in self.orphans}
         if unknown := [e for e in wanted if e not in listed]:
             # Only what the last scan listed can go: never an entity the user didn't see as an orphan.
@@ -318,20 +379,30 @@ class OrphanScanner:
                 translation_placeholders={"entities": ", ".join(unknown[:10])},
             )
         registry = er.async_get(self.hass)
+        loaded = self.hass.config.components
+        now = dt_util.utcnow()
         removed: list[str] = []
+        skipped: list[str] = []
         for entity_id in wanted:
-            if registry.async_get(entity_id) is None:
+            entry = registry.async_get(entity_id)
+            if entry is None:
+                continue
+            if self._classify(entry, loaded, now)[0] is None:
+                skipped.append(entity_id)
                 continue
             # Home Assistant drops the restored placeholder state with the registry entry.
             registry.async_remove(entity_id)
             removed.append(entity_id)
         _LOGGER.info("Removed %d orphaned entities: %s", len(removed), ", ".join(removed))
+        if skipped:
+            _LOGGER.info("Kept %d entities no longer orphaned: %s", len(skipped), ", ".join(skipped))
         self.removed += len(removed)
         self.hass.bus.async_fire(EVENT_REMOVED, {"entities": removed})
         # The list is refreshed at once, even within the grace period (only what was listed is gone).
-        self.orphans = [o for o in self.orphans if o.entity_id not in removed]
+        gone = set(removed) | set(skipped)
+        self.orphans = [o for o in self.orphans if o.entity_id not in gone]
         self._notify()
-        return removed
+        return removed, skipped
 
     def counts(self) -> dict[str, int]:
         counts = dict.fromkeys(REASONS, 0)

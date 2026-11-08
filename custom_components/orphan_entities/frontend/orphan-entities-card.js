@@ -4,7 +4,7 @@
  * Served and added to the dashboard resources by the integration.
  * https://github.com/juju35/ha-orphan-entities
  */
-var ORPHAN_ENTITIES_CARD_VERSION = '1.3.0';
+var ORPHAN_ENTITIES_CARD_VERSION = '1.4.0';
 
 const OE_I18N = {
   en: {
@@ -67,6 +67,9 @@ const OE_I18N = {
     confirm_devices: 'Remove the orphan devices?',
     confirm_devices_text: 'They leave the device registry with their entities. Their history stays in the database.',
     devices_removed: 'Orphan devices removed: {n}',
+    confirm_ignore_devices: 'Ignore the selected devices?',
+    devices_ignored: 'Orphan devices ignored: {n}',
+    truncated: '{n} more orphans are not listed here: remove or ignore these first.',
     dev_entities: 'Entities: {n}',
     ignored_one: '{n} entity ignored',
     ignored_many: '{n} entities ignored',
@@ -154,6 +157,9 @@ const OE_I18N = {
     confirm_devices: 'Supprimer les appareils orphelins ?',
     confirm_devices_text: 'Ils quittent le registre des appareils avec leurs entités. Leur historique reste dans la base.',
     devices_removed: 'Appareils orphelins supprimés : {n}',
+    confirm_ignore_devices: 'Ignorer les appareils sélectionnés ?',
+    devices_ignored: 'Appareils orphelins ignorés : {n}',
+    truncated: '{n} autres orphelins ne sont pas listés ici : supprimez ou ignorez d’abord ceux-ci.',
     dev_entities: 'Entités : {n}',
     ignored_one: '{n} entité ignorée',
     ignored_many: '{n} entités ignorées',
@@ -241,6 +247,9 @@ const OE_I18N = {
     confirm_devices: 'Verwaiste Geräte entfernen?',
     confirm_devices_text: 'Sie verlassen die Geräteregistrierung mit ihren Entitäten. Ihr Verlauf bleibt in der Datenbank.',
     devices_removed: 'Verwaiste Geräte entfernt: {n}',
+    confirm_ignore_devices: 'Ausgewählte Geräte ignorieren?',
+    devices_ignored: 'Verwaiste Geräte ignoriert: {n}',
+    truncated: '{n} weitere verwaiste Entitäten werden hier nicht angezeigt: entferne oder ignoriere zuerst diese.',
     dev_entities: 'Entitäten: {n}',
     ignored_one: '{n} Entität ignoriert',
     ignored_many: '{n} Entitäten ignoriert',
@@ -328,6 +337,9 @@ const OE_I18N = {
     confirm_devices: '¿Eliminar los dispositivos huérfanos?',
     confirm_devices_text: 'Salen del registro de dispositivos con sus entidades. Su historial permanece en la base de datos.',
     devices_removed: 'Dispositivos huérfanos eliminados: {n}',
+    confirm_ignore_devices: '¿Ignorar los dispositivos seleccionados?',
+    devices_ignored: 'Dispositivos huérfanos ignorados: {n}',
+    truncated: '{n} huérfanas más no se muestran aquí: elimina o ignora primero estas.',
     dev_entities: 'Entidades: {n}',
     ignored_one: '{n} entidad ignorada',
     ignored_many: '{n} entidades ignoradas',
@@ -415,6 +427,9 @@ const OE_I18N = {
     confirm_devices: 'Rimuovere i dispositivi orfani?',
     confirm_devices_text: 'Escono dal registro dei dispositivi con le loro entità. La cronologia resta nel database.',
     devices_removed: 'Dispositivi orfani rimossi: {n}',
+    confirm_ignore_devices: 'Ignorare i dispositivi selezionati?',
+    devices_ignored: 'Dispositivi orfani ignorati: {n}',
+    truncated: 'Altre {n} entità orfane non sono elencate qui: rimuovi o ignora prima queste.',
     dev_entities: 'Entità: {n}',
     ignored_one: '{n} entità ignorata',
     ignored_many: '{n} entità ignorate',
@@ -502,6 +517,9 @@ const OE_I18N = {
     confirm_devices: 'De verweesde apparaten verwijderen?',
     confirm_devices_text: 'Ze verdwijnen met hun entiteiten uit het apparaatregister. Hun geschiedenis blijft in de database.',
     devices_removed: 'Verweesde apparaten verwijderd: {n}',
+    confirm_ignore_devices: 'De geselecteerde apparaten negeren?',
+    devices_ignored: 'Verweesde apparaten genegeerd: {n}',
+    truncated: 'Nog {n} verweesde entiteiten staan hier niet: verwijder of negeer eerst deze.',
     dev_entities: 'Entiteiten: {n}',
     ignored_one: '{n} entiteit genegeerd',
     ignored_many: '{n} entiteiten genegeerd',
@@ -589,6 +607,9 @@ const OE_I18N = {
     confirm_devices: 'Remover os dispositivos órfãos?',
     confirm_devices_text: 'Saem do registo de dispositivos com as suas entidades. O histórico fica na base de dados.',
     devices_removed: 'Dispositivos órfãos removidos: {n}',
+    confirm_ignore_devices: 'Ignorar os dispositivos selecionados?',
+    devices_ignored: 'Dispositivos órfãos ignorados: {n}',
+    truncated: 'Mais {n} órfãs não estão listadas aqui: remova ou ignore primeiro estas.',
     dev_entities: 'Entidades: {n}',
     ignored_one: '{n} entidade ignorada',
     ignored_many: '{n} entidades ignoradas',
@@ -682,6 +703,9 @@ const OE_I18N = {
     confirm_devices: 'Usunąć osierocone urządzenia?',
     confirm_devices_text: 'Znikają z rejestru urządzeń razem z encjami. Ich historia zostaje w bazie danych.',
     devices_removed: 'Usunięte osierocone urządzenia: {n}',
+    confirm_ignore_devices: 'Zignorować wybrane urządzenia?',
+    devices_ignored: 'Zignorowane osierocone urządzenia: {n}',
+    truncated: 'Kolejne osierocone encje ({n}) nie są tu wyświetlane: najpierw usuń lub zignoruj te.',
     dev_entities: 'Encje: {n}',
     ignored_one: 'Zignorowano {n} encję',
     ignored_few: 'Zignorowano {n} encje',
@@ -776,6 +800,9 @@ const OE_I18N = {
     confirm_devices: 'Уклонити напуштене уређаје?',
     confirm_devices_text: 'Напуштају регистар уређаја заједно са својим ентитетима. Њихова историја остаје у бази.',
     devices_removed: 'Уклоњени напуштени уређаји: {n}',
+    confirm_ignore_devices: 'Игнорисати изабране уређаје?',
+    devices_ignored: 'Игнорисани напуштени уређаји: {n}',
+    truncated: 'Још {n} напуштених ентитета није приказано овде: прво уклоните или игноришите ове.',
     dev_entities: 'Ентитети: {n}',
     ignored_one: '{n} ентитет игнорисан',
     ignored_few: '{n} ентитета игнорисана',
@@ -870,6 +897,9 @@ const OE_I18N = {
     confirm_devices: 'Ukloniti napuštene uređaje?',
     confirm_devices_text: 'Napuštaju registar uređaja zajedno sa svojim entitetima. Njihova istorija ostaje u bazi.',
     devices_removed: 'Uklonjeni napušteni uređaji: {n}',
+    confirm_ignore_devices: 'Ignorisati izabrane uređaje?',
+    devices_ignored: 'Ignorisani napušteni uređaji: {n}',
+    truncated: 'Još {n} napuštenih entiteta nije prikazano ovde: prvo uklonite ili ignorišite ove.',
     dev_entities: 'Entiteti: {n}',
     ignored_one: '{n} entitet ignorisan',
     ignored_few: '{n} entiteta ignorisana',
@@ -964,6 +994,9 @@ const OE_I18N = {
     confirm_devices: 'Eliminați dispozitivele orfane?',
     confirm_devices_text: 'Ies din registrul de dispozitive împreună cu entitățile lor. Istoricul rămâne în baza de date.',
     devices_removed: 'Dispozitive orfane eliminate: {n}',
+    confirm_ignore_devices: 'Ignorați dispozitivele selectate?',
+    devices_ignored: 'Dispozitive orfane ignorate: {n}',
+    truncated: 'Încă {n} entități orfane nu sunt listate aici: eliminați sau ignorați mai întâi acestea.',
     dev_entities: 'Entități: {n}',
     ignored_one: '{n} entitate ignorată',
     ignored_few: '{n} entități ignorate',
@@ -1052,6 +1085,9 @@ const OE_I18N = {
     confirm_devices: 'Fjern de forældreløse enheder?',
     confirm_devices_text: 'De forlader enhedsregistret sammen med deres entiteter. Deres historik bliver i databasen.',
     devices_removed: 'Forældreløse enheder fjernet: {n}',
+    confirm_ignore_devices: 'Ignorer de valgte enheder?',
+    devices_ignored: 'Forældreløse enheder ignoreret: {n}',
+    truncated: '{n} flere forældreløse entiteter vises ikke her: fjern eller ignorer disse først.',
     dev_entities: 'Entiteter: {n}',
     ignored_one: '{n} entitet ignoreret',
     ignored_many: '{n} entiteter ignoreret',
@@ -1139,6 +1175,9 @@ const OE_I18N = {
     confirm_devices: 'Ta bort de föräldralösa enheterna?',
     confirm_devices_text: 'De lämnar enhetsregistret med sina entiteter. Deras historik stannar i databasen.',
     devices_removed: 'Föräldralösa enheter borttagna: {n}',
+    confirm_ignore_devices: 'Ignorera de valda enheterna?',
+    devices_ignored: 'Föräldralösa enheter ignorerade: {n}',
+    truncated: '{n} fler föräldralösa entiteter visas inte här: ta bort eller ignorera dessa först.',
     dev_entities: 'Entiteter: {n}',
     ignored_one: '{n} entitet ignorerad',
     ignored_many: '{n} entiteter ignorerade',
@@ -1226,6 +1265,9 @@ const OE_I18N = {
     confirm_devices: 'Да се премахнат ли осиротелите устройства?',
     confirm_devices_text: 'Излизат от регистъра на устройствата заедно с обектите си. Историята им остава в базата данни.',
     devices_removed: 'Премахнати осиротели устройства: {n}',
+    confirm_ignore_devices: 'Да се игнорират ли избраните устройства?',
+    devices_ignored: 'Игнорирани осиротели устройства: {n}',
+    truncated: 'Още {n} осиротели обекта не са показани тук: първо премахнете или игнорирайте тези.',
     dev_entities: 'Обекти: {n}',
     ignored_one: '{n} обект е игнориран',
     ignored_many: '{n} обекта са игнорирани',
@@ -1319,6 +1361,9 @@ const OE_I18N = {
     confirm_devices: 'Удалить осиротевшие устройства?',
     confirm_devices_text: 'Они удаляются из реестра устройств вместе с объектами. Их история остаётся в базе данных.',
     devices_removed: 'Удалено осиротевших устройств: {n}',
+    confirm_ignore_devices: 'Игнорировать выбранные устройства?',
+    devices_ignored: 'Игнорировано осиротевших устройств: {n}',
+    truncated: 'Ещё {n} осиротевших объектов здесь не показаны: сначала удалите или игнорируйте эти.',
     dev_entities: 'Объекты: {n}',
     ignored_one: 'Проигнорирован {n} объект',
     ignored_few: 'Проигнорировано {n} объекта',
@@ -1413,6 +1458,9 @@ const OE_I18N = {
     confirm_devices: 'Видалити осиротілі пристрої?',
     confirm_devices_text: 'Вони зникають з реєстру пристроїв разом із сутностями. Їхня історія лишається в базі даних.',
     devices_removed: 'Видалено осиротілих пристроїв: {n}',
+    confirm_ignore_devices: 'Ігнорувати вибрані пристрої?',
+    devices_ignored: 'Проігноровано осиротілих пристроїв: {n}',
+    truncated: 'Ще {n} осиротілих сутностей тут не показано: спершу видаліть або проігноруйте ці.',
     dev_entities: 'Сутності: {n}',
     ignored_one: 'Проігноровано {n} сутність',
     ignored_few: 'Проігноровано {n} сутності',
@@ -1501,6 +1549,9 @@ const OE_I18N = {
     confirm_devices: 'Eltávolítja az árva eszközöket?',
     confirm_devices_text: 'Entitásaikkal együtt kikerülnek az eszköznyilvántartásból. Az előzményeik az adatbázisban maradnak.',
     devices_removed: 'Eltávolított árva eszközök: {n}',
+    confirm_ignore_devices: 'Figyelmen kívül hagyja a kijelölt eszközöket?',
+    devices_ignored: 'Figyelmen kívül hagyott árva eszközök: {n}',
+    truncated: 'További {n} árva entitás nem látható itt: előbb távolítsa el vagy hagyja figyelmen kívül ezeket.',
     dev_entities: 'Entitások: {n}',
     ignored_one: '{n} entitás figyelmen kívül hagyva',
     ignored_many: '{n} entitás figyelmen kívül hagyva',
@@ -1594,6 +1645,9 @@ const OE_I18N = {
     confirm_devices: 'Odstrániť osirotené zariadenia?',
     confirm_devices_text: 'Odídu z registra zariadení spolu s entitami. Ich história zostane v databáze.',
     devices_removed: 'Odstránené osirotené zariadenia: {n}',
+    confirm_ignore_devices: 'Ignorovať vybrané zariadenia?',
+    devices_ignored: 'Ignorované osirelé zariadenia: {n}',
+    truncated: 'Ďalších {n} osirelých entít tu nie je uvedených: najprv odstráňte alebo ignorujte tieto.',
     dev_entities: 'Entity: {n}',
     ignored_one: 'Ignorovaná {n} entita',
     ignored_few: 'Ignorované {n} entity',
@@ -1688,6 +1742,9 @@ const OE_I18N = {
     confirm_devices: 'Odebrat osiřelá zařízení?',
     confirm_devices_text: 'Odejdou z registru zařízení i s entitami. Jejich historie zůstane v databázi.',
     devices_removed: 'Odebraná osiřelá zařízení: {n}',
+    confirm_ignore_devices: 'Ignorovat vybraná zařízení?',
+    devices_ignored: 'Ignorovaná osiřelá zařízení: {n}',
+    truncated: 'Dalších {n} osiřelých entit zde není uvedeno: nejprve odstraňte nebo ignorujte tyto.',
     dev_entities: 'Entity: {n}',
     ignored_one: 'Ignorována {n} entita',
     ignored_few: 'Ignorovány {n} entity',
@@ -1776,6 +1833,9 @@ const OE_I18N = {
     confirm_devices: 'Odstranim osirotele naprave?',
     confirm_devices_text: 'Iz registra naprav odidejo skupaj s svojimi entitetami. Njihova zgodovina ostane v bazi.',
     devices_removed: 'Odstranjene osirotele naprave: {n}',
+    confirm_ignore_devices: 'Prezrem izbrane naprave?',
+    devices_ignored: 'Prezrte osirotele naprave: {n}',
+    truncated: 'Še {n} osirotelih entitet tu ni prikazanih: najprej odstranite ali prezrite te.',
     dev_entities: 'Entitete: {n}',
     ignored_one: 'Prezrta {n} entiteta',
     ignored_many: 'Prezrte entitete: {n}',
@@ -1863,6 +1923,9 @@ const OE_I18N = {
     confirm_devices: 'Noņemt bāreņu ierīces?',
     confirm_devices_text: 'Tās pazūd no ierīču reģistra kopā ar entītijām. To vēsture paliek datubāzē.',
     devices_removed: 'Noņemtās bāreņu ierīces: {n}',
+    confirm_ignore_devices: 'Ignorēt atlasītās ierīces?',
+    devices_ignored: 'Ignorētas bāreņu ierīces: {n}',
+    truncated: 'Vēl {n} pamestas vienības šeit nav uzskaitītas: vispirms noņemiet vai ignorējiet šīs.',
     dev_entities: 'Entītijas: {n}',
     ignored_one: '{n} vienība ignorēta',
     ignored_many: '{n} vienības ignorētas',
@@ -1950,6 +2013,9 @@ const OE_I18N = {
     confirm_devices: 'Αφαίρεση των ορφανών συσκευών;',
     confirm_devices_text: 'Φεύγουν από το μητρώο συσκευών μαζί με τις οντότητές τους. Το ιστορικό τους μένει στη βάση δεδομένων.',
     devices_removed: 'Ορφανές συσκευές που αφαιρέθηκαν: {n}',
+    confirm_ignore_devices: 'Παράβλεψη των επιλεγμένων συσκευών;',
+    devices_ignored: 'Ορφανές συσκευές σε παράβλεψη: {n}',
+    truncated: 'Άλλες {n} ορφανές οντότητες δεν εμφανίζονται εδώ: αφαιρέστε ή αγνοήστε πρώτα αυτές.',
     dev_entities: 'Οντότητες: {n}',
     ignored_one: '{n} οντότητα σε παράβλεψη',
     ignored_many: '{n} οντότητες σε παράβλεψη',
@@ -2108,6 +2174,8 @@ class OrphanEntitiesCard extends HTMLElement {
     this._platform = '';
     this._reason = '';
     this._sel = new Set();
+    // The orphan devices selected (by device ID).
+    this._dsel = new Set();
     // The rows whose "Used by" list is open.
     this._open = new Set();
     this._showAll = false;
@@ -2323,7 +2391,7 @@ class OrphanEntitiesCard extends HTMLElement {
     this._sigMinute = minute;
     // Only administrators can remove or ignore entities (admin actions), or open Settings.
     this._admin = this._hass.user?.is_admin === true;
-    const ui = [this._q, this._platform, this._reason, [...this._sel], [...this._open], this._showAll, this._confirm, this._busy, this._zoomed];
+    const ui = [this._q, this._platform, this._reason, [...this._sel], [...this._dsel], [...this._open], this._showAll, this._confirm, this._busy, this._zoomed];
     const sig = JSON.stringify([c, oeLang(this._hass, c), ids, sensorSt, scanSt, minute, this._admin, ui]);
     if (sig === this._sig) return null;
     this._sig = sig;
@@ -2341,6 +2409,8 @@ class OrphanEntitiesCard extends HTMLElement {
     const listed = new Set(items.map((i) => i.entity_id));
     for (const id of this._sel) if (!listed.has(id)) this._sel.delete(id);
     for (const id of this._open) if (!listed.has(id)) this._open.delete(id);
+    const devs = new Set((Array.isArray(st?.attributes?.devices) ? st.attributes.devices : []).map((d) => d?.device_id));
+    for (const id of this._dsel) if (!devs.has(id)) this._dsel.delete(id);
     if (this._platform && !items.some((i) => i.platform === this._platform)) this._platform = '';
     if (this._reason && !items.some((i) => i.reason === this._reason)) this._reason = '';
 
@@ -2369,6 +2439,7 @@ class OrphanEntitiesCard extends HTMLElement {
         ${c.show_stats && scanned ? this._stats(items.length, Number(a.removed) || 0, ignored, a) : ''}
         ${scanned && items.length && c.show_filters ? this._filters(items) : ''}
         ${scanned ? this._list(items, shown, visible) : ''}
+        ${scanned && Number(a.truncated) > 0 ? `<div class="empty trunc">${oeEsc(this._t('truncated', { n: Number(a.truncated) }))}</div>` : ''}
         ${scanned ? this._devices(a.devices) : ''}
         ${this._confirm ? this._dialog() : ''}
       </ha-card>`;
@@ -2409,6 +2480,7 @@ class OrphanEntitiesCard extends HTMLElement {
       this._render();
     });
     on('.row[data-id]', 'click', (el) => this._toggle(el.dataset.id));
+    on('.row[data-dev]', 'click', (el) => this._toggle(el.dataset.dev, this._dsel));
     on('.used[data-used]', 'click', (el) => {
       const id = el.dataset.used;
       if (this._open.has(id)) this._open.delete(id);
@@ -2430,6 +2502,7 @@ class OrphanEntitiesCard extends HTMLElement {
     on('.act[data-act]', 'click', (el) => {
       const act = el.dataset.act;
       if (act === 'clear') this._sel.clear();
+      else if (act === 'clear_devices') this._dsel.clear();
       else this._confirm = act;
       this._render();
     });
@@ -2446,10 +2519,10 @@ class OrphanEntitiesCard extends HTMLElement {
     this._render();
   }
 
-  _toggle(id) {
+  _toggle(id, set = this._sel) {
     if (!this._admin || !id) return;
-    if (this._sel.has(id)) this._sel.delete(id);
-    else this._sel.add(id);
+    if (set.has(id)) set.delete(id);
+    else set.add(id);
     this._render();
   }
 
@@ -2512,7 +2585,7 @@ class OrphanEntitiesCard extends HTMLElement {
   // The confirmed action on the selection: remove or ignore (admin actions of the integration).
   async _run() {
     const act = this._confirm;
-    if (act === 'remove_devices') return this._runDevices();
+    if (act === 'remove_devices' || act === 'ignore_devices') return this._runDevices(act);
     const entities = [...this._sel];
     if (!entities.length || !act || this._busy) return;
     this._busy = true;
@@ -2530,15 +2603,23 @@ class OrphanEntitiesCard extends HTMLElement {
     }
   }
 
-  async _runDevices() {
-    const devices = (this._hass.states[this._ids.orphans]?.attributes?.devices || []).map((d) => d.device_id);
-    if (!devices.length || this._busy) return;
+  // The selected devices, or every listed one when none is selected (Remove devices only).
+  _deviceTargets() {
+    const listed = this._hass.states[this._ids.orphans]?.attributes?.devices || [];
+    return this._dsel.size ? listed.filter((d) => this._dsel.has(d.device_id)) : listed;
+  }
+
+  async _runDevices(act) {
+    const devices = this._deviceTargets().map((d) => d.device_id);
+    if (!devices.length || this._busy || (act === 'ignore_devices' && !this._dsel.size)) return;
     this._busy = true;
     this._confirm = null;
     this._render();
     try {
-      await this._hass.callService('orphan_entities', 'remove_devices', { devices });
-      this._toast(this._t('devices_removed', { n: devices.length }));
+      const remove = act === 'remove_devices';
+      await this._hass.callService('orphan_entities', remove ? 'remove_devices' : 'ignore', { devices });
+      for (const id of devices) this._dsel.delete(id);
+      this._toast(this._t(remove ? 'devices_removed' : 'devices_ignored', { n: devices.length }));
     } catch (err) {
       this._fail(err);
     } finally {
@@ -2609,7 +2690,8 @@ class OrphanEntitiesCard extends HTMLElement {
         </div>`;
   }
 
-  // Devices whose integration entries were all removed: listed under the entities, removed together (admin).
+  // Devices whose integration entries were all removed: listed under the entities. Administrators select some to
+  // remove or ignore them, or remove them all.
   _devices(devices) {
     const list = Array.isArray(devices) ? devices : [];
     if (!list.length) return '';
@@ -2618,18 +2700,28 @@ class OrphanEntitiesCard extends HTMLElement {
         const sub = [[d.manufacturer, d.model].filter(Boolean).join(' '), d.entities ? this._t('dev_entities', { n: d.entities }) : '']
           .filter(Boolean)
           .join(' · ');
-        return `<div class="row alert" title="${oeEsc(d.name)}">
-            <span class="ic nobrand"><ha-icon icon="mdi:devices"></ha-icon></span>
-            <span class="txt"><span class="name">${oeEsc(d.name)}</span>${sub ? `<span class="sub">${oeEsc(sub)}</span>` : ''}</span>
-          </div>`;
+        const body = `<span class="ic nobrand"><ha-icon icon="mdi:devices"></ha-icon></span>
+            <span class="txt"><span class="name">${oeEsc(d.name)}</span>${sub ? `<span class="sub">${oeEsc(sub)}</span>` : ''}</span>`;
+        if (!this._admin) return `<div class="row alert" title="${oeEsc(d.name)}">${body}</div>`;
+        const on = this._dsel.has(d.device_id);
+        return `<button class="row alert${on ? ' sel' : ''}" role="checkbox" aria-checked="${on}" data-dev="${oeEsc(d.device_id)}" data-focus="v:${oeEsc(d.device_id)}" title="${oeEsc(d.name)}">
+            <span class="box${on ? ' on' : ''}"><ha-icon icon="${on ? 'mdi:check' : ''}"></ha-icon></span>${body}
+          </button>`;
       })
       .join('');
-    const label = oeEsc(this._t('remove_devices'));
-    const button = this._admin
-      ? `<button class="act danger" data-act="remove_devices" data-focus="a:remove_devices" title="${label}"${this._busy ? ' disabled' : ''}><ha-icon icon="mdi:delete-outline"></ha-icon><span>${label}</span></button>`
-      : '';
+    const btn = (act, icon, cls, key = act) => {
+      const label = oeEsc(this._t(key));
+      return `<button class="act ${cls}" data-act="${act}" data-focus="a:${act}" title="${label}" aria-label="${label}"${this._busy ? ' disabled' : ''}><ha-icon icon="${icon}"></ha-icon><span>${cls === 'icon' ? '' : label}</span></button>`;
+    };
+    let actions = '';
+    if (this._admin && this._dsel.size) {
+      actions = `<div class="bar">${btn('ignore_devices', 'mdi:eye-off-outline', 'neutral', 'ignore')}${btn('remove_devices', 'mdi:delete-outline', 'danger')}${btn('clear_devices', 'mdi:close', 'icon', 'clear')}</div>`;
+    } else if (this._admin) {
+      actions = btn('remove_devices', 'mdi:delete-outline', 'danger');
+    }
+    const count = this._dsel.size ? `${this._dsel.size}/${list.length}` : list.length;
     return `<div class="section devs">
-          <div class="lhead"><div class="stitle" title="${oeEsc(this._t('devices_hint'))}">${oeEsc(this._t('devices_title'))} · ${list.length}</div>${button}</div>
+          <div class="lhead"><div class="stitle" title="${oeEsc(this._t('devices_hint'))}">${oeEsc(this._t('devices_title'))} · ${count}</div>${actions}</div>
           <div class="list">${rows}</div>
         </div>`;
   }
@@ -2695,7 +2787,7 @@ class OrphanEntitiesCard extends HTMLElement {
   // The confirmation, at the top of the card over a scrim: the action, its consequences and the first entities.
   _dialog() {
     const act = this._confirm;
-    if (act === 'remove_devices') return this._devicesDialog();
+    if (act === 'remove_devices' || act === 'ignore_devices') return this._devicesDialog(act);
     const ids = [...this._sel];
     const items = this._hass.states[this._ids.orphans]?.attributes?.entities || [];
     const byId = new Map(items.map((i) => [i.entity_id, i]));
@@ -2724,18 +2816,19 @@ class OrphanEntitiesCard extends HTMLElement {
         </div>`;
   }
 
-  _devicesDialog() {
-    const devices = this._hass.states[this._ids.orphans]?.attributes?.devices || [];
+  _devicesDialog(act) {
+    const devices = this._deviceTargets();
+    const remove = act === 'remove_devices';
     const first = devices.slice(0, 5).map((d) => `<li><span class="name">${oeEsc(d.name)}</span> <span class="sub">${oeEsc([d.manufacturer, d.model].filter(Boolean).join(' '))}</span></li>`);
     if (devices.length > 5) first.push(`<li class="sub">${oeEsc(this._t('and_more', { n: devices.length - 5 }))}</li>`);
     return `<div class="scrim"></div>
-        <div class="dlg danger" role="alertdialog" aria-modal="true" aria-labelledby="dlg-t">
-          <div class="dt" id="dlg-t">${oeEsc(this._t('confirm_devices'))}</div>
-          <div class="dx">${oeEsc(this._t('confirm_devices_text'))}</div>
+        <div class="dlg ${remove ? 'danger' : 'neutral'}" role="alertdialog" aria-modal="true" aria-labelledby="dlg-t">
+          <div class="dt" id="dlg-t">${oeEsc(this._t(remove ? 'confirm_devices' : 'confirm_ignore_devices'))}</div>
+          <div class="dx">${oeEsc(this._t(remove ? 'confirm_devices_text' : 'confirm_ignore_text'))}</div>
           <ul>${first.join('')}</ul>
           <div class="db">
             <button class="act icon-text" data-dlg="cancel" data-focus="d:cancel">${oeEsc(this._t('cancel'))}</button>
-            <button class="act danger" data-dlg="ok" data-focus="d:ok"><ha-icon icon="mdi:delete-outline"></ha-icon><span>${oeEsc(this._t('remove_devices'))}</span></button>
+            <button class="act ${remove ? 'danger' : 'neutral'}" data-dlg="ok" data-focus="d:ok"><ha-icon icon="${remove ? 'mdi:delete-outline' : 'mdi:eye-off-outline'}"></ha-icon><span>${oeEsc(this._t(remove ? 'remove_devices' : 'ignore'))}</span></button>
           </div>
         </div>`;
   }
@@ -2848,7 +2941,8 @@ class OrphanEntitiesCard extends HTMLElement {
 
       .section { margin-top: 12px; }
       .lhead { display: flex; align-items: center; margin: 0 2px 6px; }
-      .devs .lhead .act { margin-left: auto; }
+      .devs .lhead > .act { margin-left: auto; }
+      .empty.trunc { margin-top: 6px; }
       .stitle { font-size: 12px; font-weight: 500; color: var(--secondary-text-color);
                 text-transform: uppercase; letter-spacing: .04em; }
       .all { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 2px 4px 2px 3px;

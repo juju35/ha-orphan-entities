@@ -24,6 +24,7 @@ from homeassistant.core import (
 )
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import async_call_later, async_track_time_interval
@@ -47,6 +48,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_STALE_HOURS,
     DOMAIN,
+    EVENT_LOVELACE_UPDATED,
     MAX_BATCH,
     REGISTRY_DEBOUNCE,
     SERVICE_IGNORE,
@@ -63,6 +65,16 @@ PLATFORMS = [Platform.BUTTON, Platform.SENSOR]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 ENTITIES_SCHEMA = vol.Schema({vol.Required(ATTR_ENTITIES): vol.All(cv.ensure_list, [cv.entity_id], vol.Length(min=1))})
 DEVICES_SCHEMA = vol.Schema({vol.Required(ATTR_DEVICES): vol.All(cv.ensure_list, [cv.string], vol.Length(min=1))})
+# Entities, devices or both.
+IGNORE_SCHEMA = vol.All(
+    vol.Schema(
+        {
+            vol.Optional(ATTR_ENTITIES): vol.All(cv.ensure_list, [cv.entity_id]),
+            vol.Optional(ATTR_DEVICES): vol.All(cv.ensure_list, [cv.string]),
+        }
+    ),
+    cv.has_at_least_one_key(ATTR_ENTITIES, ATTR_DEVICES),
+)
 
 type OrphanEntitiesConfigEntry = ConfigEntry[OrphanScanner]
 
@@ -96,27 +108,38 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             raise ServiceValidationError(translation_domain=DOMAIN, translation_key="starting")
 
     async def remove(call: ServiceCall) -> ServiceResponse:
-        removed = _entry(hass).runtime_data.async_remove(call.data[ATTR_ENTITIES])
-        return {"removed": removed}
+        # `skipped`: listed by the last scan but no longer orphaned, kept.
+        removed, skipped = _entry(hass).runtime_data.async_remove(call.data[ATTR_ENTITIES])
+        return {"removed": removed, "skipped": skipped}
 
     async def remove_devices(call: ServiceCall) -> ServiceResponse:
-        removed = _entry(hass).runtime_data.async_remove_devices(call.data[ATTR_DEVICES])
-        return {"removed": removed}
+        removed, skipped, entities = _entry(hass).runtime_data.async_remove_devices(call.data[ATTR_DEVICES])
+        return {"removed": removed, "skipped": skipped, "entities": entities}
 
     async def ignore(call: ServiceCall) -> None:
         entry = _entry(hass)
-        wanted = set(call.data[ATTR_ENTITIES])
-        if len(wanted) > MAX_BATCH:
+        entities = set(call.data.get(ATTR_ENTITIES, []))
+        devices = set(call.data.get(ATTR_DEVICES, []))
+        if len(entities) + len(devices) > MAX_BATCH:
             raise ServiceValidationError(
                 translation_domain=DOMAIN, translation_key="too_many", translation_placeholders={"max": str(MAX_BATCH)}
             )
         registry = er.async_get(hass)
-        if unknown := sorted(e for e in wanted if registry.async_get(e) is None):
+        if unknown := sorted(e for e in entities if registry.async_get(e) is None):
             raise ServiceValidationError(
                 translation_domain=DOMAIN,
                 translation_key="not_registered",
                 translation_placeholders={"entities": ", ".join(unknown[:10])},
             )
+        device_registry = dr.async_get(hass)
+        if unknown := sorted(d for d in devices if device_registry.async_get(d) is None):
+            raise ServiceValidationError(
+                translation_domain=DOMAIN,
+                translation_key="device_not_registered",
+                translation_placeholders={"devices": ", ".join(unknown[:10])},
+            )
+        # Device IDs share the ignored entities option: the scan skips a device whose ID is there.
+        wanted = entities | devices
         current = set(entry.options.get(CONF_IGNORED_ENTITIES, []))
         if wanted <= current:
             return
@@ -144,7 +167,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         )
     except TypeError:
         async_register_admin_service(hass, DOMAIN, SERVICE_REMOVE_DEVICES, remove_devices, DEVICES_SCHEMA)
-    async_register_admin_service(hass, DOMAIN, SERVICE_IGNORE, ignore, ENTITIES_SCHEMA)
+    async_register_admin_service(hass, DOMAIN, SERVICE_IGNORE, ignore, IGNORE_SCHEMA)
     return True
 
 
@@ -229,6 +252,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: OrphanEntitiesConfigEntr
     entry.async_on_unload(_cancel)
     entry.async_on_unload(hass.bus.async_listen(er.EVENT_ENTITY_REGISTRY_UPDATED, _scan_later))
     entry.async_on_unload(async_dispatcher_connect(hass, SIGNAL_CONFIG_ENTRY_CHANGED, _scan_later))
+
+    @callback
+    def _dashboard_saved(_event: Event) -> None:
+        scanner.async_dashboards_changed()
+
+    entry.async_on_unload(hass.bus.async_listen(EVENT_LOVELACE_UPDATED, _dashboard_saved))
 
     @callback
     def scheduled(_now: datetime) -> None:

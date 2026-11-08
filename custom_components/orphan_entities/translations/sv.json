@@ -18,7 +18,7 @@
           "stale_hours": "Timmar som en entitet som fortfarande tillhandahålls av sin integration måste ha varit otillgänglig (eller okänd) för att listas. 0 listar bara de entiteter som inte längre tillhandahålls.",
           "include_unknown": "Lista även de entiteter som har varit okända lika länge. Knappar, scener och händelser, som är okända till sin natur, listas aldrig.",
           "ignored_integrations": "Integrationer vars entiteter aldrig listas. Skriv en domän för att lägga till en som inte finns i listan.",
-          "ignored_entities": "Entiteter som aldrig listas (entitets-ID:n). Kortet lägger till dem här med sin Ignorera-knapp."
+          "ignored_entities": "Entiteter (entitets-ID) och enheter (enhets-ID) som aldrig listas. Kortet lägger till dem här med sin Ignorera-knapp."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Timmar som en entitet som fortfarande tillhandahålls av sin integration måste ha varit otillgänglig (eller okänd) för att listas. 0 listar bara de entiteter som inte längre tillhandahålls.",
           "include_unknown": "Lista även de entiteter som har varit okända lika länge. Knappar, scener och händelser, som är okända till sin natur, listas aldrig.",
           "ignored_integrations": "Integrationer vars entiteter aldrig listas. Skriv en domän för att lägga till en som inte finns i listan.",
-          "ignored_entities": "Entiteter som aldrig listas (entitets-ID:n). Kortet lägger till dem här med sin Ignorera-knapp."
+          "ignored_entities": "Entiteter (entitets-ID) och enheter (enhets-ID) som aldrig listas. Kortet lägger till dem här med sin Ignorera-knapp."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Enheter"
+          },
+          "truncated": {
+            "name": "Utanför listan"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignorera entiteter",
-      "description": "Lägger till entiteter bland de ignorerade entiteterna: de listas inte längre.",
+      "description": "Lägger till entiteter eller enheter bland de ignorerade: de listas inte längre.",
       "fields": {
         "entities": {
           "name": "Entiteter",
           "description": "Entitets-ID:n som ska ignoreras."
+        },
+        "devices": {
+          "name": "Enheter",
+          "description": "Enhets-ID att ignorera (föräldralösa enheter)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Inte föräldralösa enheter (skanna först): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Finns inte i enhetsregistret: {devices}."
     }
   }
 }

@@ -18,7 +18,7 @@
           "stale_hours": "Broj sati tokom kojih entitet koji njegova integracija još obezbeđuje mora biti nedostupan (ili nepoznat) da bi bio prikazan. 0 prikazuje samo entitete koji se više ne obezbeđuju.",
           "include_unknown": "Prikaži i entitete koji su toliko dugo nepoznati. Dugmad, scene i događaji, nepoznati po prirodi, nikada se ne prikazuju.",
           "ignored_integrations": "Integracije čiji se entiteti nikada ne prikazuju. Unesite domen da biste dodali neku koja nije na listi.",
-          "ignored_entities": "Entiteti koji se nikada ne prikazuju (ID-ovi entiteta). Kartica ih dodaje ovde svojim dugmetom Ignoriši."
+          "ignored_entities": "Entiteti (ID entiteta) i uređaji (ID uređaja) koji se nikad ne prikazuju. Kartica ih ovde dodaje svojim dugmetom Ignoriši."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Broj sati tokom kojih entitet koji njegova integracija još obezbeđuje mora biti nedostupan (ili nepoznat) da bi bio prikazan. 0 prikazuje samo entitete koji se više ne obezbeđuju.",
           "include_unknown": "Prikaži i entitete koji su toliko dugo nepoznati. Dugmad, scene i događaji, nepoznati po prirodi, nikada se ne prikazuju.",
           "ignored_integrations": "Integracije čiji se entiteti nikada ne prikazuju. Unesite domen da biste dodali neku koja nije na listi.",
-          "ignored_entities": "Entiteti koji se nikada ne prikazuju (ID-ovi entiteta). Kartica ih dodaje ovde svojim dugmetom Ignoriši."
+          "ignored_entities": "Entiteti (ID entiteta) i uređaji (ID uređaja) koji se nikad ne prikazuju. Kartica ih ovde dodaje svojim dugmetom Ignoriši."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Uređaji"
+          },
+          "truncated": {
+            "name": "Van liste"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignoriši entitete",
-      "description": "Dodaje entitete u ignorisane entitete: više se ne prikazuju.",
+      "description": "Dodaje entitete ili uređaje u ignorisane: više se ne prikazuju.",
       "fields": {
         "entities": {
           "name": "Entiteti",
           "description": "ID-ovi entiteta za ignorisanje."
+        },
+        "devices": {
+          "name": "Uređaji",
+          "description": "ID uređaja za ignorisanje (napušteni uređaji)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Nisu napušteni uređaji (prvo skenirajte): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Nema u registru uređaja: {devices}."
     }
   }
 }

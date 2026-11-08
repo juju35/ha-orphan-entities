@@ -6,7 +6,7 @@ from typing import Final
 
 DOMAIN: Final = "orphan_entities"
 # Same as manifest.json and the card: the card URL carries it, so that browsers load a new release.
-VERSION: Final = "1.3.0"
+VERSION: Final = "1.4.0"
 
 CONF_SCAN_INTERVAL: Final = "scan_interval"
 CONF_GRACE_PERIOD: Final = "grace_period"
@@ -65,8 +65,13 @@ ATTR_ENTITIES: Final = "entities"
 EVENT_REMOVED: Final = f"{DOMAIN}_removed"
 EVENT_DEVICES_REMOVED: Final = f"{DOMAIN}_devices_removed"
 
-# A removal or an ignore request names at most this many entities.
+# A removal or an ignore request names at most this many entities (or devices).
 MAX_BATCH: Final = 1000
+# At most this many entities (and devices) in the orphans sensor's attributes, the most certain orphans first: the
+# state keeps the full count, `truncated` says how many were left out.
+MAX_LISTED: Final = 250
+# Fired by Home Assistant when a dashboard is saved: the dashboards are read again for the references.
+EVENT_LOVELACE_UPDATED: Final = "lovelace_updated"
 # Seconds after an entity registry change before scanning again (several changes come in a burst).
 REGISTRY_DEBOUNCE: Final = 10
 

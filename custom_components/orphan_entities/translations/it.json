@@ -18,7 +18,7 @@
           "stale_hours": "Ore durante le quali un'entità ancora fornita dalla sua integrazione deve essere stata non disponibile (o sconosciuta) per essere elencata. 0 elenca solo le entità non più fornite.",
           "include_unknown": "Elenca anche le entità sconosciute da altrettanto tempo. Pulsanti, scene ed eventi, sconosciuti per natura, non vengono mai elencati.",
           "ignored_integrations": "Integrazioni le cui entità non vengono mai elencate. Digita un dominio per aggiungerne una non presente nell'elenco.",
-          "ignored_entities": "Entità mai elencate (ID entità). La scheda le aggiunge qui con il suo pulsante Ignora."
+          "ignored_entities": "Entità (ID entità) e dispositivi (ID dispositivo) mai elencati. La scheda li aggiunge qui con il pulsante Ignora."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Ore durante le quali un'entità ancora fornita dalla sua integrazione deve essere stata non disponibile (o sconosciuta) per essere elencata. 0 elenca solo le entità non più fornite.",
           "include_unknown": "Elenca anche le entità sconosciute da altrettanto tempo. Pulsanti, scene ed eventi, sconosciuti per natura, non vengono mai elencati.",
           "ignored_integrations": "Integrazioni le cui entità non vengono mai elencate. Digita un dominio per aggiungerne una non presente nell'elenco.",
-          "ignored_entities": "Entità mai elencate (ID entità). La scheda le aggiunge qui con il suo pulsante Ignora."
+          "ignored_entities": "Entità (ID entità) e dispositivi (ID dispositivo) mai elencati. La scheda li aggiunge qui con il pulsante Ignora."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Dispositivi"
+          },
+          "truncated": {
+            "name": "Fuori dall'elenco"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignora entità",
-      "description": "Aggiunge entità alle entità ignorate: non vengono più elencate.",
+      "description": "Aggiunge entità o dispositivi a quelli ignorati: non vengono più elencati.",
       "fields": {
         "entities": {
           "name": "Entità",
           "description": "ID delle entità da ignorare."
+        },
+        "devices": {
+          "name": "Dispositivi",
+          "description": "ID dei dispositivi da ignorare (dispositivi orfani)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Non sono dispositivi orfani (eseguire prima una scansione): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Non presente nel registro dei dispositivi: {devices}."
     }
   }
 }

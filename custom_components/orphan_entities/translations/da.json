@@ -18,7 +18,7 @@
           "stale_hours": "Timer, en entitet, der stadig leveres af sin integration, skal have været utilgængelig (eller ukendt) for at blive vist. 0 viser kun de entiteter, der ikke længere leveres.",
           "include_unknown": "Vis også de entiteter, der har været ukendte lige så længe. Knapper, scener og hændelser, der er ukendte af natur, vises aldrig.",
           "ignored_integrations": "Integrationer, hvis entiteter aldrig vises. Skriv et domæne for at tilføje en, der ikke er på listen.",
-          "ignored_entities": "Entiteter, der aldrig vises (entitets-ID'er). Kortet tilføjer dem her med sin Ignorer-knap."
+          "ignored_entities": "Entiteter (entitets-id'er) og enheder (enheds-id'er), der aldrig vises. Kortet tilføjer dem her med sin Ignorer-knap."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Timer, en entitet, der stadig leveres af sin integration, skal have været utilgængelig (eller ukendt) for at blive vist. 0 viser kun de entiteter, der ikke længere leveres.",
           "include_unknown": "Vis også de entiteter, der har været ukendte lige så længe. Knapper, scener og hændelser, der er ukendte af natur, vises aldrig.",
           "ignored_integrations": "Integrationer, hvis entiteter aldrig vises. Skriv et domæne for at tilføje en, der ikke er på listen.",
-          "ignored_entities": "Entiteter, der aldrig vises (entitets-ID'er). Kortet tilføjer dem her med sin Ignorer-knap."
+          "ignored_entities": "Entiteter (entitets-id'er) og enheder (enheds-id'er), der aldrig vises. Kortet tilføjer dem her med sin Ignorer-knap."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Enheder"
+          },
+          "truncated": {
+            "name": "Uden for listen"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignorer entiteter",
-      "description": "Føjer entiteter til de ignorerede entiteter: de vises ikke længere.",
+      "description": "Føjer entiteter eller enheder til de ignorerede: de vises ikke længere.",
       "fields": {
         "entities": {
           "name": "Entiteter",
           "description": "Entitets-ID'er, der skal ignoreres."
+        },
+        "devices": {
+          "name": "Enheder",
+          "description": "Enheds-id'er, der skal ignoreres (forældreløse enheder)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Ikke forældreløse enheder (scan først): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Ikke i enhedsregistret: {devices}."
     }
   }
 }

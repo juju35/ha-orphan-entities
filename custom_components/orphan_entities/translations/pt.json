@@ -18,7 +18,7 @@
           "stale_hours": "Horas durante as quais uma entidade ainda fornecida pela sua integração tem de ter estado indisponível (ou desconhecida) para ser listada. 0 lista apenas as entidades que já não são fornecidas.",
           "include_unknown": "Listar também as entidades desconhecidas durante esse tempo. Botões, cenas e eventos, desconhecidos por natureza, nunca são listados.",
           "ignored_integrations": "Integrações cujas entidades nunca são listadas. Escreva um domínio para adicionar uma que não esteja na lista.",
-          "ignored_entities": "Entidades nunca listadas (IDs de entidade). O cartão adiciona-as aqui com o seu botão Ignorar."
+          "ignored_entities": "Entidades (ID de entidade) e dispositivos (ID de dispositivo) nunca listados. O cartão adiciona-os aqui com o botão Ignorar."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Horas durante as quais uma entidade ainda fornecida pela sua integração tem de ter estado indisponível (ou desconhecida) para ser listada. 0 lista apenas as entidades que já não são fornecidas.",
           "include_unknown": "Listar também as entidades desconhecidas durante esse tempo. Botões, cenas e eventos, desconhecidos por natureza, nunca são listados.",
           "ignored_integrations": "Integrações cujas entidades nunca são listadas. Escreva um domínio para adicionar uma que não esteja na lista.",
-          "ignored_entities": "Entidades nunca listadas (IDs de entidade). O cartão adiciona-as aqui com o seu botão Ignorar."
+          "ignored_entities": "Entidades (ID de entidade) e dispositivos (ID de dispositivo) nunca listados. O cartão adiciona-os aqui com o botão Ignorar."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Dispositivos"
+          },
+          "truncated": {
+            "name": "Fora da lista"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignorar entidades",
-      "description": "Adiciona entidades às entidades ignoradas: deixam de ser listadas.",
+      "description": "Adiciona entidades ou dispositivos aos ignorados: deixam de ser listados.",
       "fields": {
         "entities": {
           "name": "Entidades",
           "description": "IDs das entidades a ignorar."
+        },
+        "devices": {
+          "name": "Dispositivos",
+          "description": "ID dos dispositivos a ignorar (dispositivos órfãos)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Não são dispositivos órfãos (analise primeiro): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Não está no registo de dispositivos: {devices}."
     }
   }
 }

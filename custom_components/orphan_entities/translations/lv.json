@@ -18,7 +18,7 @@
           "stale_hours": "Stundas, cik ilgi vienībai, ko tās integrācija joprojām nodrošina, jābūt nepieejamai (vai nezināmai), lai tā tiktu parādīta. 0 parāda tikai vienības, kas vairs netiek nodrošinātas.",
           "include_unknown": "Rādīt arī vienības, kas tikpat ilgi ir nezināmas. Pogas, ainas un notikumi, kas pēc būtības ir nezināmi, nekad netiek rādīti.",
           "ignored_integrations": "Integrācijas, kuru vienības nekad netiek rādītas. Ievadiet domēnu, lai pievienotu integrāciju, kuras nav sarakstā.",
-          "ignored_entities": "Vienības, kas nekad netiek rādītas (vienību ID). Karte tās šeit pievieno ar savu pogu Ignorēt."
+          "ignored_entities": "Vienības (vienību ID) un ierīces (ierīču ID), kas nekad netiek uzskaitītas. Kartīte tās šeit pievieno ar pogu Ignorēt."
         }
       }
     },
@@ -45,7 +45,7 @@
           "stale_hours": "Stundas, cik ilgi vienībai, ko tās integrācija joprojām nodrošina, jābūt nepieejamai (vai nezināmai), lai tā tiktu parādīta. 0 parāda tikai vienības, kas vairs netiek nodrošinātas.",
           "include_unknown": "Rādīt arī vienības, kas tikpat ilgi ir nezināmas. Pogas, ainas un notikumi, kas pēc būtības ir nezināmi, nekad netiek rādīti.",
           "ignored_integrations": "Integrācijas, kuru vienības nekad netiek rādītas. Ievadiet domēnu, lai pievienotu integrāciju, kuras nav sarakstā.",
-          "ignored_entities": "Vienības, kas nekad netiek rādītas (vienību ID). Karte tās šeit pievieno ar savu pogu Ignorēt."
+          "ignored_entities": "Vienības (vienību ID) un ierīces (ierīču ID), kas nekad netiek uzskaitītas. Kartīte tās šeit pievieno ar pogu Ignorēt."
         }
       }
     }
@@ -83,6 +83,9 @@
           },
           "devices": {
             "name": "Ierīces"
+          },
+          "truncated": {
+            "name": "Ārpus saraksta"
           }
         }
       },
@@ -108,11 +111,15 @@
     },
     "ignore": {
       "name": "Ignorēt vienības",
-      "description": "Pievieno vienības ignorētajām vienībām: tās vairs netiek rādītas.",
+      "description": "Pievieno vienības vai ierīces ignorētajām: tās vairs netiek uzskaitītas.",
       "fields": {
         "entities": {
           "name": "Vienības",
           "description": "Ignorējamo vienību ID."
+        },
+        "devices": {
+          "name": "Ierīces",
+          "description": "Ignorējamo ierīču ID (bāreņu ierīces)."
         }
       }
     },
@@ -151,6 +158,9 @@
     },
     "not_orphan_device": {
       "message": "Nav bāreņu ierīces (vispirms skenējiet): {devices}"
+    },
+    "device_not_registered": {
+      "message": "Nav ierīču reģistrā: {devices}."
     }
   }
 }
