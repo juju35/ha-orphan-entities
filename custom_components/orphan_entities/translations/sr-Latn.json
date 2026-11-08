@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Uređaji",
-          "description": "Identifikatori uređaja iz atributa uređaja senzora napuštenih."
+          "description": "Identifikatori uređaja iz atributa uređaja senzora napuštenih. Ostavite prazno za sve napuštene uređaje poslednjeg skeniranja."
         }
       }
     }

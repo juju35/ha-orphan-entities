@@ -7,10 +7,10 @@ import re
 from collections.abc import Iterable
 from typing import Any
 
-from homeassistant.components.automation import automations_with_entity
+from homeassistant.components.automation import automations_with_device, automations_with_entity
 from homeassistant.components.group import groups_with_entity
 from homeassistant.components.homeassistant.scene import scenes_with_entity
-from homeassistant.components.script import scripts_with_entity
+from homeassistant.components.script import scripts_with_device, scripts_with_entity
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.json import json_dumps
@@ -142,4 +142,28 @@ def find_references(
         refs.extend(in_dashboards.get(entity_id, []))
         if refs:
             found[entity_id] = refs
+    return found
+
+
+@callback
+def find_device_references(hass: HomeAssistant, device_ids: Iterable[str]) -> dict[str, list[dict[str, Any]]]:
+    """{device_id: automations and scripts using it (device triggers, conditions, actions)}, for the devices used."""
+    loaded = hass.config.components
+    finders = [
+        (kind, finder)
+        for kind, finder in ((REF_AUTOMATION, automations_with_device), (REF_SCRIPT, scripts_with_device))
+        if kind in loaded
+    ]
+    found: dict[str, list[dict[str, Any]]] = {}
+    for device_id in dict.fromkeys(device_ids):
+        refs: list[dict[str, Any]] = []
+        for kind, finder in finders:
+            try:
+                users = finder(hass, device_id)
+            except Exception:  # noqa: BLE001 - never fail a scan on another integration's data
+                _LOGGER.debug("Could not list the %ss using device %s", kind, device_id, exc_info=True)
+                continue
+            refs.extend(_ref(hass, kind, user) for user in sorted(users))
+        if refs:
+            found[device_id] = refs
     return found

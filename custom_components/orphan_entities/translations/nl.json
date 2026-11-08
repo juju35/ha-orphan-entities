@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Apparaten",
-          "description": "Apparaat-ID's uit het attribuut devices van de wezensensor."
+          "description": "Apparaat-ID's uit het attribuut devices van de wezensensor. Leeg laten voor alle verweesde apparaten van de laatste scan."
         }
       }
     }

@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Zariadenia",
-          "description": "ID zariadení z atribútu devices senzora osirotených."
+          "description": "ID zariadení z atribútu devices senzora osirotených. Ponechajte prázdne pre všetky osirotené zariadenia z poslednej kontroly."
         }
       }
     }

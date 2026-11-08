@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Ierīces",
-          "description": "Ierīču ID no bāreņu sensora atribūta devices."
+          "description": "Ierīču ID no bāreņu sensora atribūta devices. Atstājiet tukšu visām pēdējās skenēšanas bāreņu ierīcēm."
         }
       }
     }

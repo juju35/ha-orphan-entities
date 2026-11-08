@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Naprave",
-          "description": "ID-ji naprav iz atributa devices senzorja sirot."
+          "description": "ID-ji naprav iz atributa devices senzorja sirot. Pustite prazno za vse osirotele naprave zadnjega pregleda."
         }
       }
     }

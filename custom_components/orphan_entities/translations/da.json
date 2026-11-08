@@ -129,7 +129,7 @@
       "fields": {
         "devices": {
           "name": "Enheder",
-          "description": "Enheds-id'er fra attributten devices på sensoren for forældreløse."
+          "description": "Enheds-id'er fra attributten devices på sensoren for forældreløse. Lad stå tom for alle forældreløse enheder fra den seneste scanning."
         }
       }
     }
