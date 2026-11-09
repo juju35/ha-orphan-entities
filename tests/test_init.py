@@ -333,6 +333,22 @@ async def test_remove(hass: HomeAssistant):
     assert state.attributes["removed"] == 2
 
 
+async def test_an_entity_provided_again_gets_its_settings_back(hass: HomeAssistant):
+    """Home Assistant keeps a removed entity's settings: the integration providing it again restores them."""
+    acme = _integration(hass, "acme")
+    a = _entity(hass, "acme", "a", STATE_UNAVAILABLE, acme, attributes=RESTORED)
+    registry = er.async_get(hass)
+    registry.async_update_entity(a, new_entity_id="sensor.kitchen_temperature", name="Kitchen", icon="mdi:fridge")
+    a = "sensor.kitchen_temperature"
+    await _setup(hass)
+    await hass.services.async_call(DOMAIN, "remove", {"entities": [a]}, blocking=True)
+    await hass.async_block_till_done()
+    assert registry.async_get(a) is None
+
+    back = registry.async_get_or_create("sensor", "acme", "a", config_entry=acme, suggested_object_id="a")
+    assert (back.entity_id, back.name, back.icon) == (a, "Kitchen", "mdi:fridge")
+
+
 async def test_remove_validation(hass: HomeAssistant):
     await _setup(hass)
     for entities in ([], ["not an id"]):
