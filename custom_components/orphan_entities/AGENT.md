@@ -35,3 +35,6 @@ Bump `version` in manifest.json, `VERSION` in const.py and `ORPHAN_ENTITIES_CARD
 
 ## Tests
 `pip install -r requirements_test.txt && pytest` (registry entities + `MockConfigEntry` with mock domains: a real domain would be loaded). Card: `node --test test/*.test.mjs` (the card file is evaluated in a `vm` context with stubs; compare its objects with `plain()`). Screenshots: `python scripts/screenshots.py` (Playwright, mock data with neutral names, English, brand images blocked, 16 px frame).
+
+## Translations
+The frontend files keep every language in the sources. The release runs `scripts/split-frontend.mjs` before building the zip: English stays in each file, every other language goes to `<file>.i18n.<lang>.js` next to it, fetched when a card or the panel first needs it (`scripts/i18n-split.mjs`; it rebuilds every table to check the split, and the Validate job runs it on a copy with `--check`). `_language_files()` in `__init__.py` serves those files next to the card; a git checkout has none (the sources hold every language).
