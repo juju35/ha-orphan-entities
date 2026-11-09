@@ -333,6 +333,10 @@ async def test_remove(hass: HomeAssistant):
     assert state.attributes["removed"] == 2
 
 
+@pytest.mark.skipif(
+    "name" not in {a.name for a in er.DeletedRegistryEntry.__attrs_attrs__},
+    reason="Home Assistant keeps no settings of a removed entity before this version",
+)
 async def test_an_entity_provided_again_gets_its_settings_back(hass: HomeAssistant):
     """Home Assistant keeps a removed entity's settings: the integration providing it again restores them."""
     acme = _integration(hass, "acme")
