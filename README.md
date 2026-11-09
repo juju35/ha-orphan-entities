@@ -26,7 +26,7 @@ Removed integrations, renamed devices and old YAML platforms leave entities behi
 - **Scan** of the entity registry at a set interval (15 minutes by default), and a few seconds after the registry changes
 - **Five reasons**, from the most to the least certain orphan: *Integration removed*, *Integration not loaded*, *Not provided*, then, for entities still provided, *Unavailable* and *Unknown* for longer than a set delay (24 hours by default)
 - **Never during startup**: nothing is listed while Home Assistant starts, nor during the grace period after it has started (10 minutes by default), while the integrations set up their entities. The card then says when the first scan is due; **Scan now** does not wait for it
-- **Bulk removal** from the entity registry, limited to the listed entities, with a confirmation. Each entity is checked again just before: one no longer orphaned is kept
+- **Bulk removal** from the entity registry, limited to the listed entities, with a confirmation. Each entity is checked again just before: one no longer orphaned is kept. A removal is not lost work: recent Home Assistant versions keep the removed entity's settings (entity ID, name, icon, area, labels), and gives them back if its integration ever provides it again
 - **Used by**: each orphan shows what still uses it (automations, scripts, scenes, groups, dashboards), with links to their editors, and the confirmation warns before removing entities still in use
 - **Orphan devices**: devices whose integration entries were all removed, listed under the entities; select some to remove (with their entities) or ignore, or remove them all
 - **Ignored integrations, entities and devices**, in the options or with the card's **Ignore** button
