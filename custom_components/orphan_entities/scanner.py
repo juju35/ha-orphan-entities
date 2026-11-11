@@ -30,6 +30,7 @@ from .const import (
     STATELESS_DOMAINS,
 )
 from .references import async_dashboards, find_dashboard_references, find_device_references, find_references
+from .registry_compat import device_attr
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -296,12 +297,13 @@ class OrphanScanner:
                 continue
             if device.id in self.ignored_entities:
                 continue
+            model = device_attr(devices, device, "model")
             found.append(
                 OrphanDevice(
                     device_id=device.id,
-                    name=device.name_by_user or device.name or device.model or device.id,
-                    manufacturer=device.manufacturer,
-                    model=device.model,
+                    name=device.name_by_user or device.name or model or device.id,
+                    manufacturer=device_attr(devices, device, "manufacturer"),
+                    model=model,
                     entities=len(er.async_entries_for_device(registry, device.id, include_disabled_entities=True)),
                     since=getattr(device, "modified_at", None) or getattr(device, "created_at", None),
                 )
