@@ -33,6 +33,7 @@ from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.util import dt as dt_util
 
+from . import system_hub_notice
 from .const import (
     ATTR_DEVICES,
     ATTR_ENTITIES,
@@ -220,6 +221,8 @@ async def _async_register_resource(hass: HomeAssistant) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: OrphanEntitiesConfigEntry) -> bool:
+    # Replaced by a System Hub module: a repair while System Hub is set up too.
+    entry.async_on_unload(system_hub_notice.async_watch(hass, entry, "Orphan Entities"))
     if hass.state is CoreState.running:
         # async_setup runs once per start: after the entry was removed (which drops the card resource) and
         # added again, the resource has to come back without a restart.

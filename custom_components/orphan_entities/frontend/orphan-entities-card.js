@@ -4,7 +4,7 @@
  * Served and added to the dashboard resources by the integration.
  * https://github.com/juju35/ha-orphan-entities
  */
-var ORPHAN_ENTITIES_CARD_VERSION = '1.6.2';
+var ORPHAN_ENTITIES_CARD_VERSION = '1.7.0';
 
 const OE_I18N = {
   en: {
