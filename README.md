@@ -1,5 +1,7 @@
 # ha-orphan-entities
 
+<p align="center"><img src="https://raw.githubusercontent.com/juju35/ha-orphan-entities/main/images/archived.svg" alt="Archived: no longer updated, now part of System Hub" width="800"></p>
+
 > [!WARNING]
 > **Deprecated, this repository is archived.** Orphan Entities is now part of [System Hub](https://github.com/juju35/ha-system-hub), which takes over its settings and keeps its cards. No more updates are published here: install System Hub, then remove Orphan Entities. See [Migrating](https://github.com/juju35/ha-system-hub#migrating).
 
