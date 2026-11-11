@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.2 - 2026-11-11
+
+### Fixes
+- No more deprecation warning `accesses ChildDeviceEntry.model` / `.manufacturer` in the log (it would fail from Home Assistant 2027.9) for an orphaned sub-device: its model and manufacturer are read from its parent device (reported on juju35/ha-smart-comfort#58 by @FredM67).
+
 ## 1.6.1 - 2026-11-09
 
 ### Maintenance
