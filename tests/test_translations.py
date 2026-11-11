@@ -49,7 +49,7 @@ def test_translation_parity(language: str):
 
 
 # Serbian: brands, placeholders and identifiers stay in Latin script in the Cyrillic translation.
-_SR_LATIN_ALLOWED = re.compile(r"Orphan Entities|Home Assistant|\{\w+\}")
+_SR_LATIN_ALLOWED = re.compile(r"Orphan Entities|System Hub|Home Assistant|\{\w+\}")
 
 
 @pytest.mark.parametrize(
